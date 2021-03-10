@@ -28,7 +28,7 @@ static void ft_parceres(t_args *s_args, const char *arglist)
 			while (ft_isalnum(point[i]))
 				++i;
         }
-		if (s_args->res_x && ft_isalnum(point[i]))
+		if (s_args->res_x && ft_isalnum(point[i]) && !s_args->res_y)
 			s_args->res_y = ft_atoi(point + i);
 	}
 }
@@ -53,7 +53,7 @@ static char*   ft_parcepath(const char *arglist, const char *side)
 	path = malloc((j + 1) * sizeof(char));
 	path[j] = '\0';
 	while (j)
-		path[j--] = point[i--];
+		path[--j] = point[i--];
 	return (path);
 }
 
@@ -62,7 +62,7 @@ static void		ft_parcecolor(t_args *s_args, char *arglist, char fc)
 	char *point;
 
 	point = ft_strchr(arglist, fc);
-	if (fc == 'f')
+	if (fc == 'F')
 	{
 		s_args->floor_r = ft_atoi(point + 1);
 		s_args->floor_g = ft_atoi(ft_strchr(point, ',') + 1);
