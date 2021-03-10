@@ -6,8 +6,8 @@
 // include opengl needed before mlx_int.h
 //
 
-#import <Cocoa/Cocoa.h>
-#import "mlx_int.h"
+#include <Cocoa/Cocoa.h>
+#include "mlx_int.h"
 
 @interface NSWindowEvent : NSWindow
 {

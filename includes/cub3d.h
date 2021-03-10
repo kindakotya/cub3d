@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/02/25 22:46:28 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/10 19:18:21 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@
 #include <math.h>
 #include <string.h>
 #include "libft.h"
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
+#include <GLUT/glut.h>
+#include "mlx.h"
+#include "mlx_int.h"
+#include "mlx_new_window.h"
+#include "mlx_opengl.h"
+#include "mlx_png.h"
+
 typedef struct         s_struct
 {
 	size_t			res_x;

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/02/25 23:01:51 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/10 18:41:22 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,24 +72,35 @@ static char    *ft_readfile(int fd)
     return (s);
 }
 
-int             main(int argc, char **argv)
+static int ft_getparam(char *str, t_args *s_args)
 {
     int     fd;
     char    *arglist;
-    t_args  s_args;
 
-    ft_clearstruct(&s_args);
+    ft_clearstruct(s_args);
+    fd = open(str, O_RDONLY);
+    if (fd == -1)
+        return(-1);
+    arglist = ft_readfile(fd);
+    close(fd);
+    ft_parcecub(s_args, arglist);
+    free(arglist);
+    return (1);
+}
+
+int             main(int argc, char **argv)
+{
+    t_args  s_args;
+    void *mlx;
+    void *mlx_win;
     if (argc == 1)
     {
         perror("Gimme card");
         return (-1);
     }
-    fd = open(argv[1], O_RDONLY);
-    if (fd == -1)
-        return(-1);
-    arglist = ft_readfile(fd);
-    close(fd);
-    ft_parcecub(&s_args, arglist);
+    ft_getparam(argv[1], &s_args);
+    mlx = mlx_init();
+    mlx_win = mlx_new_window(mlx, s_args.res_x, s_args.res_y, "meow");
     return (0);
 
 }
