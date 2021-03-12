@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 17:59:10 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/02/24 21:25:22 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/11 19:45:10 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void    *ft_realloc(char *s, size_t size);
+int		ft_isspace(int c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/10 19:18:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/11 20:51:21 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
 #include "mlx.h"
-#include "mlx_int.h"
-#include "mlx_new_window.h"
-#include "mlx_opengl.h"
-#include "mlx_png.h"
+// #include "mlx_int.h"
+// #include "mlx_new_window.h"
+// #include "mlx_opengl.h"
+// #include "mlx_png.h"
 
 typedef struct         s_struct
 {
@@ -47,5 +47,13 @@ typedef struct         s_struct
 	unsigned char	ceil_b;
 	const char		*map;
 }                     t_args;
+
+typedef struct  s_data {
+    void        *img;
+    char        *addr;
+    int         bits_per_pixel;
+    int         line_length;
+    int         endian;
+}               t_data;
 int     ft_parcecub(t_args *s_args, char *arglist);
 #endif

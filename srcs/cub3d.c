@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/10 18:41:22 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/11 23:34:42 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,22 @@ static int ft_getparam(char *str, t_args *s_args)
     return (1);
 }
 
+void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+    char    *dst;
+
+    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
+}
+
 int             main(int argc, char **argv)
 {
     t_args  s_args;
+    t_data  img;
     void *mlx;
     void *mlx_win;
+    int x = 0;
+    int y = 0;
     if (argc == 1)
     {
         perror("Gimme card");
@@ -100,7 +111,20 @@ int             main(int argc, char **argv)
     }
     ft_getparam(argv[1], &s_args);
     mlx = mlx_init();
+    img.img = mlx_new_image(mlx, s_args.res_x, s_args.res_y);
+    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
+                                &img.endian);
     mlx_win = mlx_new_window(mlx, s_args.res_x, s_args.res_y, "meow");
+    while (x < 100)
+    {
+        y = 0;
+        while (y < 100)
+            my_mlx_pixel_put(&img, x, y++, 0x00FFF000);
+        ++x;
+    }
+
+    mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+    mlx_loop(mlx);
     return (0);
 
 }

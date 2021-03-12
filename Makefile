@@ -6,15 +6,13 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/03/10 18:30:32 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/03/11 20:32:33 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
 LIBFT = libft/libft.a
-
-MLX = mlx/libmlx.a
 
 SRCS =					cub3d.c\
 						cub_parser.c
@@ -25,27 +23,26 @@ OBJS = $(SRCS:.c=.o)
 
 OBJDIR = objs
 
-СOMP = clang
-
 OBJSPATH = $(addprefix objs/, $(OBJS))
 
 vpath %.o objs
 vpath %.c srcs
 vpath %.h includes
 
-.Phony: all $(NAME) clean fclean re libft.a libmlx.a $(OBJDIR)
+.Phony: all $(NAME) clean fclean re libft.a libmlx.dylib $(OBJDIR)
 
-all: libft.a libmlx.a $(NAME)
+all: libft.a libmlx.dylib $(NAME)
 
 libft.a:
 	$(MAKE) -C libft
 
-libmlx.a:
+libmlx.dylib:
 	$(MAKE) -C mlx
+	cp mlx/libmlx.dylib .
 
-$(NAME): $(LIBFT) $(MLX) $(OBJDIR) $(OBJS)
+$(NAME): $(LIBFT) libmlx.dylib $(OBJDIR) $(OBJS)
 	clang -g -Iincludes -framework OpenGL -framework AppKit -Wall -Wextra -Werror\
- 	-o $(NAME) $(OBJSPATH) libft/libft.a mlx/libmlx.a
+		-o $(NAME) $(OBJSPATH) libft/libft.a libmlx.dylib
 
 %.o : %.c $(HEAD)
 	clang -g -Wall -Wextra -Werror -Iincludes -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
@@ -60,7 +57,7 @@ clean:
 
 fclean:
 	$(MAKE) -C libft fclean
-	$(MAKE) -C mlx fclean
+	$(MAKE) -C mlx clean
 	rm -rf $(OBJDIR) $(NAME)
 
 re: fclean all
