@@ -58,6 +58,6 @@ clean:
 fclean:
 	$(MAKE) -C libft fclean
 	$(MAKE) -C mlx clean
-	rm -rf $(OBJDIR) $(NAME)
+	rm -rf $(OBJDIR) $(NAME) libmlx.dylib
 
 re: fclean all
