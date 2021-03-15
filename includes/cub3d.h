@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/11 20:51:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/15 18:37:22 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 // #include "mlx_opengl.h"
 // #include "mlx_png.h"
 
-typedef struct         s_struct
+typedef struct         s_args
 {
 	size_t			res_x;
 	size_t			res_y;
@@ -48,6 +48,9 @@ typedef struct         s_struct
 	const char		*map;
 }                     t_args;
 
+
+
+
 typedef struct  s_data {
     void        *img;
     char        *addr;
@@ -55,5 +58,12 @@ typedef struct  s_data {
     int         line_length;
     int         endian;
 }               t_data;
+
+typedef struct	s_vars
+{
+	void *mlx;
+	void *win;
+	t_data *img;
+}				t_vars;
 int     ft_parcecub(t_args *s_args, char *arglist);
 #endif
