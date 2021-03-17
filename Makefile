@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/03/11 20:32:33 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/03/17 19:20:46 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME = cub3d
 LIBFT = libft/libft.a
 
 SRCS =					cub3d.c\
-						cub_parser.c
+						cub_parser.c\
+						main.c
 
 HEAD = cub3d.h
 

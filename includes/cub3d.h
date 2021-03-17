@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/15 18:37:22 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/17 19:48:11 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,30 @@
 #include <math.h>
 #include <string.h>
 #include "libft.h"
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <GLUT/glut.h>
+// #include <OpenGL/gl.h>
+// #include <OpenGL/glu.h>
+// #include <OpenGL/glext.h>
+// #include <GLUT/glut.h>
 #include "mlx.h"
-// #include "mlx_int.h"
-// #include "mlx_new_window.h"
-// #include "mlx_opengl.h"
-// #include "mlx_png.h"
+
+#define KEY_W 13
+#define KEY_A 0
+#define KEY_S 1
+#define KEY_D 2
+#define KEY_ESC 53
 
 typedef struct         s_args
 {
 	size_t			res_x;
 	size_t			res_y;
-	const char		*path_no;
-	const char		*path_so;
-	const char		*path_ea;
-	const char		*path_we;
-	const char		*path_s;
-	unsigned char	floor_r;
-	unsigned char	floor_g;
-	unsigned char	floor_b;
-	unsigned char	ceil_r;
-	unsigned char	ceil_g;
-	unsigned char	ceil_b;
-	const char		*map;
+	char		*path_no;
+	char		*path_so;
+	char		*path_ea;
+	char		*path_we;
+	char		*path_s;
+	unsigned int	floor;
+	unsigned int	ceil;
+	char		*map;
 }                     t_args;
 
 
@@ -65,5 +63,8 @@ typedef struct	s_vars
 	void *win;
 	t_data *img;
 }				t_vars;
+
+
 int     ft_parcecub(t_args *s_args, char *arglist);
+int		cub_init(char *input);
 #endif

@@ -6,13 +6,38 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 21:31:38 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/02/25 23:04:46 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/17 19:52:33 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void ft_parceres(t_args *s_args, const char *arglist)
+static void		ft_parcemap(char *point, t_args *args)
+{
+	int i;
+
+	i = 0;
+	while (*point && *point != '\n')
+		++point;
+	while (*point && *point == '\n')
+		++point;
+	if (*point == ' ' || *point == '1')
+	{
+		while (point[i])
+			++i;
+		args->map = malloc((i + 1) * sizeof(char));
+		i = 0;
+		while(point[i])
+		{
+			args->map[i] = point[i];
+			++i;
+		}
+		args->map[i] = '\0';
+	}
+
+}
+
+static void		ft_parceres(t_args *args, const char *arglist)
 {
 	char	*point;
 	size_t	i;
@@ -22,18 +47,19 @@ static void ft_parceres(t_args *s_args, const char *arglist)
 	while (point[i] && point[i] != '\n')
 	{
 		++i;
-		if (!s_args->res_x && ft_isalnum(point[i]))
+		if (!args->res_x && ft_isalnum(point[i]))
 		{
-			s_args->res_x = ft_atoi(point + i);
+			args->res_x = ft_atoi(point + i);
 			while (ft_isalnum(point[i]))
 				++i;
         }
-		if (s_args->res_x && ft_isalnum(point[i]) && !s_args->res_y)
-			s_args->res_y = ft_atoi(point + i);
+		if (args->res_x && ft_isalnum(point[i]) && !args->res_y)
+			args->res_y = ft_atoi(point + i);
 	}
+	ft_parcemap(point, args);
 }
 
-static char*   ft_parcepath(const char *arglist, const char *side)
+static char*   ft_parcepath(t_args *args, const char *arglist, const char *side)
 {
 	size_t	i;
 	size_t	j;
@@ -54,40 +80,39 @@ static char*   ft_parcepath(const char *arglist, const char *side)
 	path[j] = '\0';
 	while (j)
 		path[--j] = point[i--];
+	ft_parcemap(point, args);
 	return (path);
 }
 
-static void		ft_parcecolor(t_args *s_args, char *arglist, char fc)
+static void		ft_parcecolor(t_args *args, char *arglist, char fc)
 {
 	char *point;
 
 	point = ft_strchr(arglist, fc);
 	if (fc == 'F')
 	{
-		s_args->floor_r = ft_atoi(point + 1);
-		s_args->floor_g = ft_atoi(ft_strchr(point, ',') + 1);
-		s_args->floor_b = ft_atoi(ft_strchr(
-			ft_strchr(point, ',') + 1, ',') + 1);
+		args->floor = (ft_atoi(point + 1) << 16) + 
+			(ft_atoi(ft_strchr(point, ',')+ 1) << 8) + 
+			ft_atoi(ft_strchr(ft_strchr(point, ',') + 1, ',') + 1);
 	}
 	else
 	{
-		s_args->ceil_r = ft_atoi(point + 1);
-		s_args->ceil_g = ft_atoi(ft_strchr(point, ',') + 1);
-		s_args->ceil_b = ft_atoi(ft_strchr(
-			ft_strchr(point, ',') + 1, ',') + 1);
+		args->ceil = (ft_atoi(point + 1) << 16) + 
+			(ft_atoi(ft_strchr(point, ',')+ 1) << 8) + 
+			ft_atoi(ft_strchr(ft_strchr(point, ',') + 1, ',') + 1);
 	}
-
+	ft_parcemap(point, args);
 }
 
-int     ft_parcecub(t_args *s_args, char *arglist)
+int     ft_parcecub(t_args *args, char *arglist)
 {
-	ft_parceres(s_args, arglist);
-	ft_parcecolor(s_args, arglist, 'F');
-	ft_parcecolor(s_args, arglist, 'C');
-	s_args->path_no = ft_parcepath(arglist, "NO");
-	s_args->path_so = ft_parcepath(arglist, "SO");
-	s_args->path_ea = ft_parcepath(arglist, "EA");
-	s_args->path_we = ft_parcepath(arglist, "WE");
-	s_args->path_s = ft_parcepath(arglist, "S");
+	ft_parceres(args, arglist);
+	ft_parcecolor(args, arglist, 'F');
+	ft_parcecolor(args, arglist, 'C');
+	args->path_no = ft_parcepath(args, arglist, "NO");
+	args->path_so = ft_parcepath(args, arglist, "SO");
+	args->path_ea = ft_parcepath(args, arglist, "EA");
+	args->path_we = ft_parcepath(args, arglist, "WE");
+	args->path_s = ft_parcepath(args, arglist, "S");
 	return (1);
 }
