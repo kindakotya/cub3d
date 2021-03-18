@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/17 19:48:11 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/18 17:16:04 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,39 +32,38 @@
 #define KEY_D 2
 #define KEY_ESC 53
 
-typedef struct         s_args
+typedef struct		s_args
 {
 	size_t			res_x;
 	size_t			res_y;
-	char		*path_no;
-	char		*path_so;
-	char		*path_ea;
-	char		*path_we;
-	char		*path_s;
+	char			*path_no;
+	char			*path_so;
+	char			*path_ea;
+	char			*path_we;
+	char			*path_s;
 	unsigned int	floor;
 	unsigned int	ceil;
-	char		*map;
-}                     t_args;
+	char			**map;
+}					t_args;
 
-
-
-
-typedef struct  s_data {
+typedef struct  s_img {
     void        *img;
     char        *addr;
     int         bits_per_pixel;
-    int         line_length;
+    int         size_line;
     int         endian;
-}               t_data;
+}               t_img;
 
-typedef struct	s_vars
+typedef struct	s_mlx
 {
 	void *mlx;
 	void *win;
-	t_data *img;
-}				t_vars;
+	t_img *img;
+}				t_mlx;
 
 
 int     ft_parcecub(t_args *s_args, char *arglist);
 int		cub_init(char *input);
+int		ft_getparam(char *input, t_args *s_args);
+char	**ft_writemap(char *point);
 #endif

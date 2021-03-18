@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/17 19:29:42 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/18 17:45:10 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,72 +26,38 @@ static void     ft_clearstruct(t_args *s_args)
 	s_args->map = NULL;
 }
 
-static char     *ft_joinread(char *s, char *buf)
+void            my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
-	char *meow;
-	size_t i;
-	if (!s)
-		meow = ft_strdup(buf);
-	else
-		meow = ft_strjoin(s, buf);
-	if (!meow)
-		return (NULL);
-	free (s);
-	i = 0;
-	while (i < 42)
-		buf[i++] = '\0';
-	return (meow);
+    char    *dst;
+
+    dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
 }
 
-static char    *ft_readfile(int fd)
+static int print_2dmap(t_args s_args, t_mlx s_mlx)
 {
-	char    *s;
-	char    buf[42];
-	size_t  i;
-	int  n;
+	int x;
+	int y;
 
-	i = 0;
-	s = NULL;
-	while (i < 42)
-		buf[i++] = '\0';
-	i = 0;
-	n = 1;
-	while (n > 0)
-	{
-		n = read(fd, buf, 41);
-		if (n == -1)
-			return (NULL);
-		if (n == 0)
-			break ;
-		s = ft_joinread(s , buf);
-	}
-	return (s);
-}
-
-static int ft_getparam(char *str, t_args *s_args)
-{
-	int     fd;
-	char    *arglist;
-
-	ft_clearstruct(s_args);
-	fd = open(str, O_RDONLY);
-	if (fd == -1)
-		return(-1);
-	arglist = ft_readfile(fd);
-	close(fd);
-	ft_parcecub(s_args, arglist);
-	free(arglist);
-	return (1);
+	x = 0;
+	y = 0;
+	while (s_args.)
 }
 
 int             cub_init(char *input)
 {
-	t_args args;
+	t_args s_args;
+	t_mlx s_mlx;
+	t_img img;
 	// int x = 0;
 	// int y = 0;
-	
-	ft_clearstruct(&args);
-	ft_getparam(input, &args);
-	return (0);
 
+	ft_clearstruct(&s_args);
+	ft_getparam(input, &s_args);
+	s_mlx.img = &img;
+	mlx_init(s_mlx.mlx);
+	mlx_new_image(s_mlx.mlx, s_args.res_x, s_args.res_y);
+	mlx_get_data_addr(s_mlx.img->img, &s_mlx.img->bits_per_pixel,
+						&s_mlx.img->size_line, &s_mlx.img->endian);
+	return (0);
 }

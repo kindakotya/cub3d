@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 21:31:38 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/17 19:52:33 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/18 17:16:06 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 static void		ft_parcemap(char *point, t_args *args)
 {
 	int i;
+	int j;
 
+	j = 0;
 	i = 0;
 	while (*point && *point != '\n')
 		++point;
@@ -23,18 +25,8 @@ static void		ft_parcemap(char *point, t_args *args)
 		++point;
 	if (*point == ' ' || *point == '1')
 	{
-		while (point[i])
-			++i;
-		args->map = malloc((i + 1) * sizeof(char));
-		i = 0;
-		while(point[i])
-		{
-			args->map[i] = point[i];
-			++i;
-		}
-		args->map[i] = '\0';
+		args->map = ft_writemap(point);
 	}
-
 }
 
 static void		ft_parceres(t_args *args, const char *arglist)
