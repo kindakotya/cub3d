@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/18 17:16:04 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/22 01:17:54 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 
 typedef struct		s_args
 {
-	size_t			res_x;
-	size_t			res_y;
+	int			win_w;
+	int			win_h;
 	char			*path_no;
 	char			*path_so;
 	char			*path_ea;
@@ -44,6 +44,9 @@ typedef struct		s_args
 	unsigned int	floor;
 	unsigned int	ceil;
 	char			**map;
+	int				map_w;
+	int				map_h;
+	char			**win;
 }					t_args;
 
 typedef struct  s_img {
@@ -61,9 +64,15 @@ typedef struct	s_mlx
 	t_img *img;
 }				t_mlx;
 
+typedef struct s_player
+{
+	float x;
+	float y;
+	float look_dir;
+}				t_player;
 
 int     ft_parcecub(t_args *s_args, char *arglist);
 int		cub_init(char *input);
 int		ft_getparam(char *input, t_args *s_args);
-char	**ft_writemap(char *point);
+void			raycast(t_args *s_args, int x, int y, t_mlx *s_mlx);
 #endif
