@@ -6,12 +6,14 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/23 03:08:48 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/23 17:34:05 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef CUB3D_H
 #define CUB3D_H
+
+#include <stdio.h>
 
 #include <fcntl.h>
 #include <stdlib.h>
@@ -30,7 +32,13 @@
 #define KEY_A 0
 #define KEY_S 1
 #define KEY_D 2
+#define KEY_ARROW_LEFT 123
+#define KEY_ARROW_RIGTH 124
 #define KEY_ESC 53
+#define AOV_N M_PI / 2. * 3.
+#define AOV_S M_PI / 2.
+#define AOV_W M_PI
+#define AOV_E M_PI * 2.
 
 typedef struct s_rect
 {

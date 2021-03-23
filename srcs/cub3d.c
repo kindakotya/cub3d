@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/23 03:18:41 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/24 00:01:36 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ static void     ft_clearstruct(t_args *s_args)
 void            my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
     char    *dst;
-
-    dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
+    if (x > 0 && y > 0)
+    {
+	    dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
+	    *(unsigned int *) dst = color;
+    }
 }
 
 void		draw_rect(t_args *s_args, t_rect rect, t_mlx *s_mlx)
@@ -86,6 +88,11 @@ void		fill_map(t_args *s_args, t_rect rect, int x, int y)
 		}
 		++i;
 	}
+	i = 0;
+	// while (s_args->win[i])
+	// {
+	// 	printf("%s\n", s_args->win[i++]);
+	// }
 }
 t_rect 		fill_rect(int x, int y, int w, int h)
 {
@@ -150,6 +157,11 @@ void        black_screen(t_args *s_args, t_mlx *s_mlx)
 	return (1);
 }
 
+//  void			draw_column(t_args *s_args, t_mlx *s_mlx)
+// {
+
+// }
+
 void			raycast(t_args *s_args, t_rect s_rect, t_mlx *s_mlx)
 {
 	float c;
@@ -158,12 +170,13 @@ void			raycast(t_args *s_args, t_rect s_rect, t_mlx *s_mlx)
 	float fov;
 	int x;
 	int y;
+	t_rect column;
 	// int mapx;
 	// int mapy;
-	diff = M_PI / 3 / 100;
+	diff = M_PI / 3 / s_args->win_w * 2;
 	fov = s_args->player.aov - M_PI / 3 / 2;
 	i = 0;
-	while (i < 100)
+	while (i < s_args->win_w / 2)
 	{
 		c = 0.1;
 		while (c)
@@ -178,20 +191,176 @@ void			raycast(t_args *s_args, t_rect s_rect, t_mlx *s_mlx)
 			my_mlx_pixel_put(s_mlx->img, x, y, s_args->ceil);
 			c += 0.05;
 		}
-		draw_rect(s_args, s_args->win_w / 2 + i, s_args->map_h / (1 - 1 / c) / 2, s_mlx, 1, s_args->win_h / (c * cos(fov - player.look_dir)), s_args->ceil);
+		column = fill_rect(s_args->win_w / 2 + i, s_args->win_h / 2 - s_args->win_h * 10 / (c * cos(fov - s_args->player.aov)) / 2, 1, s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)));
+		column.color = s_args->ceil;
+		draw_rect(s_args, column, s_mlx);
 		++i;
 		fov += diff;
 	}
 }
-int key()
+
+void		key_a_pressed(t_args *s_args)
 {
+	// s_args->map[player.y][play]
+	if (fabs(s_args->player.aov - AOV_N) < 0.001)
+	{
+		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
+			--s_args->player.x;
+	}
+	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
+	{
+		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
+			++s_args->player.x;
+	}
+	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
+	{
+		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
+		++s_args->player.y;
+	}
+	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
+			--s_args->player.y;
+}
+
+void		key_w_pressed(t_args *s_args)
+{
+	if (fabs(s_args->player.aov - AOV_N) < 0.001)
+	{
+		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
+			--s_args->player.y;
+	}
+	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
+	{
+		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
+			++s_args->player.y;
+	}
+	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
+	{
+		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
+		--s_args->player.x;
+	}
+	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
+			++s_args->player.x;
+}
+
+void		key_d_pressed(t_args *s_args)
+{
+	if (fabs(s_args->player.aov - AOV_N) < 0.001)
+	{
+		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
+			++s_args->player.x;
+	}
+	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
+	{
+		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
+			--s_args->player.x;
+	}
+	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
+	{
+		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
+		--s_args->player.y;
+	}
+	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
+			++s_args->player.y;
+}
+
+void		key_s_pressed(t_args *s_args)
+{
+	if (fabs(s_args->player.aov - AOV_N) < 0.001)
+	{
+		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
+			++s_args->player.y;
+	}
+	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
+	{
+		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
+			--s_args->player.y;
+	}
+	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
+	{
+		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
+		++s_args->player.x;
+	}
+	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
+			--s_args->player.x;
+}
+
+void	key_arrow_left_pressed(t_args *s_args)
+{
+	if (fabs(s_args->player.aov - AOV_N) < 0.001)
+		s_args->player.aov = AOV_W;
+	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
+		s_args->player.aov = AOV_S;
+	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
+		s_args->player.aov = AOV_E;
+	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		s_args->player.aov = AOV_N;
+}
+
+void	key_arrow_rigth_pressed(t_args *s_args)
+{
+	if (fabs(s_args->player.aov - AOV_N) < 0.001)
+		s_args->player.aov = AOV_E;
+	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		s_args->player.aov = AOV_S;
+	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
+		s_args->player.aov = AOV_W;
+	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
+		s_args->player.aov = AOV_N;
+}
+
+void		ft_free(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+		++i;
+	while (i)
+		free(arr[--i]);
+	free(arr);
+}
+
+void		ft_exit(t_args *s_args, t_mlx *s_mlx)
+{
+	ft_free(s_args->map);
+	ft_free(s_args->win);
+	free(s_args->path_ea);
+	free(s_args->path_no);
+	free(s_args->path_s);
+	free(s_args->path_so);
+	free(s_args->path_we);
+	mlx_destroy_image(s_mlx->mlx, s_mlx->img->img);
+	mlx_destroy_window(s_mlx->mlx, s_mlx->win);
 	exit(0);
+}
+
+int key_pressed(int keycode, t_loop *s_hook)
+{
+	if (keycode == KEY_A)
+		key_a_pressed(s_hook->s_args);
+	else if (keycode == KEY_D)
+		key_d_pressed(s_hook->s_args);
+	else if (keycode == KEY_W)
+		key_w_pressed(s_hook->s_args);
+	else if (keycode == KEY_S)
+		key_s_pressed(s_hook->s_args);
+	else if (keycode == KEY_ARROW_LEFT)
+		key_arrow_left_pressed(s_hook->s_args);
+	else if (keycode == KEY_ARROW_RIGTH)
+		key_arrow_rigth_pressed(s_hook->s_args);
+	else if (keycode == KEY_ESC)
+		ft_exit(s_hook->s_args, s_hook->s_mlx);
+	print_2dmap(s_hook->s_args, s_hook->s_mlx);
 	return (1);
 }
 
 int				ft_loop(t_loop *s_loop)
 {
-	 sleep(1);
+	// sleep(1);
 	s_loop->s_args->player.aov += M_PI / 12;
 	print_2dmap(s_loop->s_args, s_loop->s_mlx);
 	return (0);
@@ -206,6 +375,7 @@ int             cub_init(char *input)
 	int i = 0;
 	// int y = 0;
 
+	sleep(2);
 	ft_clearstruct(&s_args);
 	ft_getparam(input, &s_args);
 	s_mlx.img = &img;
@@ -218,8 +388,8 @@ int             cub_init(char *input)
 	print_2dmap(&s_args, &s_mlx);
 	s_loop.s_args = &s_args;
 	s_loop.s_mlx = &s_mlx;
-	s_args.player.aov += M_PI / 12;
-	mlx_loop_hook(s_mlx.mlx, ft_loop, &s_loop);
+	mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
+	//mlx_loop_hook(s_mlx.mlx, ft_loop, &s_loop);
 		mlx_loop(s_mlx.mlx);
 	++i;
 	return (0);
