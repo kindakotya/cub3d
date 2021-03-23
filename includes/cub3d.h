@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/22 01:17:54 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/23 03:08:48 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,25 @@
 #define KEY_D 2
 #define KEY_ESC 53
 
+typedef struct s_rect
+{
+	int x;
+	int y;
+	int w;
+	int h;
+	unsigned int color;
+}				t_rect;
+
+typedef struct s_player
+{
+	int x;
+	int y;
+	int win_x;
+	int win_y;
+	float aov;
+	float fov;
+}				t_player;
+
 typedef struct		s_args
 {
 	int			win_w;
@@ -47,6 +66,7 @@ typedef struct		s_args
 	int				map_w;
 	int				map_h;
 	char			**win;
+	t_player		player;
 }					t_args;
 
 typedef struct  s_img {
@@ -64,15 +84,15 @@ typedef struct	s_mlx
 	t_img *img;
 }				t_mlx;
 
-typedef struct s_player
+typedef struct s_loop
 {
-	float x;
-	float y;
-	float look_dir;
-}				t_player;
+	t_mlx *s_mlx;
+	t_args *s_args;
+}				t_loop;
 
 int     ft_parcecub(t_args *s_args, char *arglist);
 int		cub_init(char *input);
 int		ft_getparam(char *input, t_args *s_args);
-void			raycast(t_args *s_args, int x, int y, t_mlx *s_mlx);
+void			raycast(t_args *s_args,t_rect s_rect, t_mlx *s_mlx);
+t_player			ft_find_player(t_args *s_args);
 #endif

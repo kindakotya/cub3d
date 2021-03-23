@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 21:31:38 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/22 01:18:48 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/22 20:26:43 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ int     ft_parcecub(t_args *s_args, char *arglist)
 	s_args->path_ea = ft_parcepath(s_args, arglist, "EA");
 	s_args->path_we = ft_parcepath(s_args, arglist, "WE");
 	s_args->path_s = ft_parcepath(s_args, arglist, "S");
+	s_args->player = ft_find_player(s_args);
 	s_args->win = malloc((s_args->win_h + 1) * sizeof(char*));
 	s_args->win[s_args->win_h] = NULL;
 	while (i < s_args->win_h)

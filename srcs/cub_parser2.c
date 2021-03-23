@@ -6,11 +6,46 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:44:34 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/20 21:54:24 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/23 00:37:49 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+t_player			ft_find_player(t_args *s_args)
+{
+	int i;
+	int j;
+	t_player player;
+
+	i = 0;
+	while (s_args->map[i])
+	{
+		j = 0;
+		while (s_args->map[i][j])
+			if (s_args->map[i][j] == 'N' || s_args->map[i][j] == 'W' ||
+				s_args->map[i][j] == 'S' || s_args->map[i][j] == 'E')
+				break ;
+			else
+				++j;
+		if (s_args->map[i][j] == 'N' || s_args->map[i][j] == 'W' ||
+				s_args->map[i][j] == 'S' || s_args->map[i][j] == 'E')
+				break ;
+			else
+				++i;
+	}
+	player.x = j;
+	player.y = i;
+	if (s_args->map[i][j] == 'N')
+		player.aov = M_PI / 2. * 3.;
+	else if (s_args->map[i][j] == 'S')
+		player.aov = M_PI / 2.;
+	else if (s_args->map[i][j] == 'E')
+		player.aov = M_PI;
+	else if (s_args->map[i][j] == 'W')
+		player.aov = M_PI * 2.;
+	return (player);
+}
 
 static char     *ft_joinread(char *s, char *buf)
 {
