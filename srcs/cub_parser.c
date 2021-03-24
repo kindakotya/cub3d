@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 21:31:38 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/22 20:26:43 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:26:46 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static char*   ft_parcepath(t_args *s_args, const char *arglist, const char *sid
 	point = ft_strnstr(arglist, side, ft_strlen(arglist)) + ft_strlen(side);
 	while (point[i] && point[i] != '\n' && ft_isspace(point[i]))
 		++i;
-	while (point[i] && point[i + 1] != '\n')
+	while (point[i] && point[i] != '\n')
 	{
 		++j;
 		++i;
@@ -91,7 +91,7 @@ static char*   ft_parcepath(t_args *s_args, const char *arglist, const char *sid
 	path = malloc((j + 1) * sizeof(char));
 	path[j] = '\0';
 	while (j)
-		path[--j] = point[i--];
+		path[--j] = point[--i];
 	ft_parcemap(point, s_args);
 	return (path);
 }

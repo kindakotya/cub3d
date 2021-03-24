@@ -1,6 +1,6 @@
 R 1280 768
 
-NO ./path_to_the_north_texture
+NO /Users/gmayweat/Desktop/cub3d/textures/WALL14.xpm
 
 SO ./path_to_the_south_texture
 

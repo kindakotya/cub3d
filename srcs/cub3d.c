@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/24 00:01:36 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/24 18:58:33 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_rect 		fill_rect(int x, int y, int w, int h)
 	return (rect);
 }
 
-void        black_screen(t_args *s_args, t_mlx *s_mlx)
+void        add_floor_ceil(t_args *s_args, t_mlx *s_mlx)
 {
 	int x;
 	int y;
@@ -114,8 +114,11 @@ void        black_screen(t_args *s_args, t_mlx *s_mlx)
 	{
 		x = 0;
 		while (x < s_args->win_w)
-		{
-			my_mlx_pixel_put(s_mlx->img, x++, y, 0);
+		{	
+			if (y < s_args->win_h / 2)
+				my_mlx_pixel_put(s_mlx->img, x++, y, s_args->floor);
+			else
+				my_mlx_pixel_put(s_mlx->img, x++, y, s_args->ceil);
 		}
 		++y;
 	}
@@ -129,7 +132,7 @@ void        black_screen(t_args *s_args, t_mlx *s_mlx)
 
 	rect.h = s_args->win_h / s_args->map_h - 1;
 	rect.w = s_args->win_w / s_args->map_w / 2 - 1;
-	black_screen(s_args, s_mlx);
+	add_floor_ceil(s_args, s_mlx);
 	y = 0;
 	while (s_args->map[y])
     {
@@ -141,7 +144,7 @@ void        black_screen(t_args *s_args, t_mlx *s_mlx)
 			{
 				rect.x = x * rect.w;
 				rect.y = y * rect.h;
-				rect.color = s_args->floor;
+				rect.color = 0x00FFFF00;
 				draw_rect(s_args, rect, s_mlx);
 			}
 			++x;
@@ -151,7 +154,6 @@ void        black_screen(t_args *s_args, t_mlx *s_mlx)
 	// rect = fill_rect(s_args->player.x * rect.w + rect.w / 2, s_args->player.y * rect.h + rect.h / 2, 5, 5);
 	// rect.color = 0x000000FF;
 	// draw_rect(s_args, rect, s_mlx);
-	
 	raycast(s_args, rect, s_mlx);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img->img, 0, 0);
 	return (1);
@@ -182,17 +184,19 @@ void			raycast(t_args *s_args, t_rect s_rect, t_mlx *s_mlx)
 		while (c)
 		{
 			x = (s_args->player.x + 0.5) * s_rect.w + c * cos(fov);
-			y = (s_args->player.y + 0.5)  * s_rect.h + c * sin(fov);
+			y = (s_args->player.y + 0.5) * s_rect.h + c * sin(fov);
 			// mapx = s_args->player.x + c * cos(fov);
 			// mapy = s_args->player.y + c * cos(fov);
 			if (y >= s_args->win_h || x >= s_args->win_w || s_args->win[y][x] == '1'
 			||	x < 0 || y < 0)
 				break ;
-			my_mlx_pixel_put(s_mlx->img, x, y, s_args->ceil);
+			my_mlx_pixel_put(s_mlx->img, x, y, 0);
 			c += 0.05;
 		}
-		column = fill_rect(s_args->win_w / 2 + i, s_args->win_h / 2 - s_args->win_h * 10 / (c * cos(fov - s_args->player.aov)) / 2, 1, s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)));
-		column.color = s_args->ceil;
+		column = fill_rect(s_args->win_w / 2 + i, 
+		s_args->win_h / 2 - s_args->win_h * 10 / (c * cos(fov - s_args->player.aov)) / 2, 
+		1, s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
+		column.color = 255;
 		draw_rect(s_args, column, s_mlx);
 		++i;
 		fov += diff;
@@ -388,6 +392,10 @@ int             cub_init(char *input)
 	print_2dmap(&s_args, &s_mlx);
 	s_loop.s_args = &s_args;
 	s_loop.s_mlx = &s_mlx;
+	s_args.tex_no.img.img = mlx_xpm_file_to_image(s_mlx.mlx, s_args.path_no, &s_args.tex_no.w, &s_args.tex_no.h);
+	s_args.tex_no.img.addr = mlx_get_data_addr(s_args.tex_no.img.img, &s_args.tex_no.img.bits_per_pixel,
+											&s_args.tex_no.img.size_line, &s_args.tex_no.img.endian);
+	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_args.tex_no.img.img, 0, 0);
 	mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
 	//mlx_loop_hook(s_mlx.mlx, ft_loop, &s_loop);
 		mlx_loop(s_mlx.mlx);

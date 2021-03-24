@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/23 17:34:05 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:52:18 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ typedef struct s_rect
 	unsigned int color;
 }				t_rect;
 
+typedef struct  s_img {
+    void        *img;
+    char        *addr;
+    int         bits_per_pixel;
+    int         size_line;
+    int         endian;
+}               t_img;
+
 typedef struct s_player
 {
 	int x;
@@ -58,6 +66,14 @@ typedef struct s_player
 	float aov;
 	float fov;
 }				t_player;
+
+typedef struct s_sprite
+{
+	t_img img;
+	int w;
+	int h;
+	char *path;
+}				t_sprite;
 
 typedef struct		s_args
 {
@@ -75,15 +91,9 @@ typedef struct		s_args
 	int				map_h;
 	char			**win;
 	t_player		player;
+	t_sprite		tex_no;
+	
 }					t_args;
-
-typedef struct  s_img {
-    void        *img;
-    char        *addr;
-    int         bits_per_pixel;
-    int         size_line;
-    int         endian;
-}               t_img;
 
 typedef struct	s_mlx
 {
