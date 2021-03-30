@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/24 18:58:33 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/31 01:48:04 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void            my_mlx_pixel_put(t_img *img, int x, int y, int color)
     }
 }
 
-void		draw_rect(t_args *s_args, t_rect rect, t_mlx *s_mlx)
+void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img)
 {
 	int i;
 	int j;
@@ -48,14 +48,14 @@ void		draw_rect(t_args *s_args, t_rect rect, t_mlx *s_mlx)
 	// block_w = s_args->win_w / s_args->map_w - 1;// - s_args->win_w % maxx(s_args);
 	// block_h = s_args->win_h / s_args->map_h - 1;// - s_args->win_h % maxy(s_args);
 	i = 0;
-	while (i < rect.w)
+	while (i < s_sqr.side)
 	{
 		j = 0;
-		while (j < rect.h)
+		while (j < s_sqr.side)
 		{
-			if (rect.x + i < s_args->win_w && rect.y + j < s_args->win_h)
+			if (s_sqr.x + i < s_args->win_w && s_sqr.y + j < s_args->win_h)
 			{
-				my_mlx_pixel_put(s_mlx->img, rect.x + i, rect.y + j, rect.color);
+				my_mlx_pixel_put(img, s_sqr.x + i, s_sqr.y + j, s_sqr.color);
 			}
 			++j;
 		}
@@ -63,48 +63,77 @@ void		draw_rect(t_args *s_args, t_rect rect, t_mlx *s_mlx)
 	}
 }
 
-void		fill_map(t_args *s_args, t_rect rect, int x, int y)
+void		map_element(t_args *s_args, int side, int x, int y)
 {
 	int i;
 	int j;
-	// int block_w;
-	// int block_h;
+	int win_x;
+	int win_y;
 
-	// block_w = s_args->win_w / s_args->map_w - 1;// - s_args->win_w % maxx(s_args);
-	// block_h = s_args->win_h / s_args->map_h - 1;// - s_args->win_h % maxy(s_args);
 	i = 0;
-	rect.x = x * rect.w;
-	rect.y = y * rect.h;
-	while (i < rect.w)
+	win_x = x * side;//(s_args->win_w / s_args->map_w - 1);
+	win_y = y * side;
+	while (i < side)
 	{
 		j = 0;
-		while (j < rect.h)
+		while (j < side)
 		{
-			if (rect.x + i < s_args->win_w && rect.y + j < s_args->win_h)
+			if (win_x + i < s_args->win_h && win_y + j < s_args->win_h)
 			{
-				s_args->win[rect.y + j][rect.x + i] = s_args->map[y][x];
+				s_args->win[win_y + j][win_x + i] = s_args->map[y][x];
 			}
 			++j;
 		}
 		++i;
 	}
-	i = 0;
-	// while (s_args->win[i])
-	// {
-	// 	printf("%s\n", s_args->win[i++]);
-	// }
 }
-t_rect 		fill_rect(int x, int y, int w, int h)
+void		fill_map(t_args *s_args)
 {
-	t_rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = w;
-	rect.h = h;
-	return (rect);
+	int x;
+	int y;
+
+	y = 0;
+	while (s_args->map[y])
+	{
+		x = 0;
+		while (s_args->map[y][x])
+		{
+			map_element(s_args, s_args->win_h / s_args->map_w - 1, x, y);
+			++x;
+		}
+		++y;
+	}
 }
 
-void        add_floor_ceil(t_args *s_args, t_mlx *s_mlx)
+t_sqr 		fill_sqr(int x, int y, int side, int color)
+{
+	t_sqr s_sqr;
+	s_sqr.x = x;
+	s_sqr.y = y;
+	s_sqr.side = side;
+	s_sqr.color = color;
+	return (s_sqr);
+}
+
+void        set_img_black(t_img *img, int w, int h)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while(i < h)
+	{
+		j = 0;
+		while (j < w)
+		{
+			my_mlx_pixel_put(img, j, i, 0);
+			++j;
+		}
+		++i;
+	}
+}
+
+void        add_floor_ceil(t_img *img, t_args *s_args)
 {
 	int x;
 	int y;
@@ -116,55 +145,58 @@ void        add_floor_ceil(t_args *s_args, t_mlx *s_mlx)
 		while (x < s_args->win_w)
 		{	
 			if (y < s_args->win_h / 2)
-				my_mlx_pixel_put(s_mlx->img, x++, y, s_args->floor);
+				my_mlx_pixel_put(img, x++, y, s_args->floor);
 			else
-				my_mlx_pixel_put(s_mlx->img, x++, y, s_args->ceil);
+				my_mlx_pixel_put(img, x++, y, s_args->ceil);
 		}
 		++y;
 	}
 }
- static int print_2dmap(t_args *s_args, t_mlx *s_mlx)
+int draw_minimap(t_args *s_args, t_mlx *s_mlx)
 {
 	int x;
 	int y;
-	t_rect rect;
-	
+	t_sqr s_sqr;
 
-	rect.h = s_args->win_h / s_args->map_h - 1;
-	rect.w = s_args->win_w / s_args->map_w / 2 - 1;
-	add_floor_ceil(s_args, s_mlx);
+	s_sqr.side = s_args->win_h / 100;
+	set_img_black(&s_mlx->minimap, s_args->win_h / 5, s_args->win_h / 5);
 	y = 0;
 	while (s_args->map[y])
     {
 		x = 0;
 		while (s_args->map[y][x])
 		{
-			fill_map(s_args, rect, x, y);
-			if (s_args->map[y][x] == '1')
-			{
-				rect.x = x * rect.w;
-				rect.y = y * rect.h;
-				rect.color = 0x00FFFF00;
-				draw_rect(s_args, rect, s_mlx);
-			}
+			if (s_args->map[y][x] == '1' && abs(s_args->player.x - x) < 10 && 
+			abs(s_args->player.y - y) < 10)
+				draw_sqr(s_args, fill_sqr(
+				(x - s_args->player.x + 10) * s_sqr.side, 
+				(y - s_args->player.y + 10) * s_sqr.side , s_sqr.side, 
+				0x00FF00FF), &s_mlx->minimap);
 			++x;
 		}
 		++y;
     }
-	// rect = fill_rect(s_args->player.x * rect.w + rect.w / 2, s_args->player.y * rect.h + rect.h / 2, 5, 5);
-	// rect.color = 0x000000FF;
-	// draw_rect(s_args, rect, s_mlx);
-	raycast(s_args, rect, s_mlx);
-	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img->img, 0, 0);
+	draw_sqr(s_args, fill_sqr(s_args->win_h / 10 - 5, 
+	s_args->win_h / 10 - 5, 5, 1000), &s_mlx->minimap);
+	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->minimap.img, 
+	s_args->win_w - s_args->win_h / 5, s_args->win_h / 5 * 4);
 	return (1);
 }
 
-//  void			draw_column(t_args *s_args, t_mlx *s_mlx)
-// {
+ void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx)
+{
+	int i;
 
-// }
+	i = 0;
+	while (i < sqr.side)
+	{
+		if (sqr.x < s_args->win_w && sqr.y + i < s_args->win_h)
+			my_mlx_pixel_put(&s_mlx->img, sqr.x, sqr.y + i, sqr.color);
+		++i;
+	}
+}
 
-void			raycast(t_args *s_args, t_rect s_rect, t_mlx *s_mlx)
+void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	float c;
 	float diff;
@@ -172,148 +204,38 @@ void			raycast(t_args *s_args, t_rect s_rect, t_mlx *s_mlx)
 	float fov;
 	int x;
 	int y;
-	t_rect column;
+	t_sqr line;
+	int side;
+
+	add_floor_ceil(&s_mlx->img, s_args);
+	side = s_args->win_h / s_args->map_h - 1;
 	// int mapx;
 	// int mapy;
-	diff = M_PI / 3 / s_args->win_w * 2;
+	diff = M_PI / 3 / s_args->win_w;
 	fov = s_args->player.aov - M_PI / 3 / 2;
 	i = 0;
-	while (i < s_args->win_w / 2)
+	while (i < s_args->win_w)
 	{
 		c = 0.1;
 		while (c)
 		{
-			x = (s_args->player.x + 0.5) * s_rect.w + c * cos(fov);
-			y = (s_args->player.y + 0.5) * s_rect.h + c * sin(fov);
+			x = (s_args->player.x + 0.5) * (s_args->win_h / s_args->map_w - 1) + c * cos(fov);
+			y = (s_args->player.y + 0.5) * (s_args->win_h / s_args->map_w - 1) + c * sin(fov);
 			// mapx = s_args->player.x + c * cos(fov);
 			// mapy = s_args->player.y + c * cos(fov);
-			if (y >= s_args->win_h || x >= s_args->win_w || s_args->win[y][x] == '1'
-			||	x < 0 || y < 0)
+			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[y][x] == '1')
 				break ;
-			my_mlx_pixel_put(s_mlx->img, x, y, 0);
+			my_mlx_pixel_put(&s_mlx->map, x, y, 0x00FFFF00);
 			c += 0.05;
 		}
-		column = fill_rect(s_args->win_w / 2 + i, 
-		s_args->win_h / 2 - s_args->win_h * 10 / (c * cos(fov - s_args->player.aov)) / 2, 
-		1, s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
-		column.color = 255;
-		draw_rect(s_args, column, s_mlx);
+		line = fill_sqr(i, 
+		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)) / 2,
+		s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
+		draw_line(s_args, line, s_mlx);
 		++i;
 		fov += diff;
 	}
-}
-
-void		key_a_pressed(t_args *s_args)
-{
-	// s_args->map[player.y][play]
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
-			--s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
-			++s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-	{
-		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
-		++s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
-			--s_args->player.y;
-}
-
-void		key_w_pressed(t_args *s_args)
-{
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-	{
-		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
-			--s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-	{
-		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
-			++s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
-		--s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
-			++s_args->player.x;
-}
-
-void		key_d_pressed(t_args *s_args)
-{
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
-			++s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
-			--s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-	{
-		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
-		--s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
-			++s_args->player.y;
-}
-
-void		key_s_pressed(t_args *s_args)
-{
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-	{
-		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
-			++s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-	{
-		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
-			--s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
-		++s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
-			--s_args->player.x;
-}
-
-void	key_arrow_left_pressed(t_args *s_args)
-{
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-		s_args->player.aov = AOV_W;
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-		s_args->player.aov = AOV_S;
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-		s_args->player.aov = AOV_E;
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		s_args->player.aov = AOV_N;
-}
-
-void	key_arrow_rigth_pressed(t_args *s_args)
-{
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-		s_args->player.aov = AOV_E;
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		s_args->player.aov = AOV_S;
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-		s_args->player.aov = AOV_W;
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-		s_args->player.aov = AOV_N;
+	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
 }
 
 void		ft_free(char **arr)
@@ -337,65 +259,95 @@ void		ft_exit(t_args *s_args, t_mlx *s_mlx)
 	free(s_args->path_s);
 	free(s_args->path_so);
 	free(s_args->path_we);
-	mlx_destroy_image(s_mlx->mlx, s_mlx->img->img);
+	mlx_destroy_image(s_mlx->mlx, s_mlx->img.img);
 	mlx_destroy_window(s_mlx->mlx, s_mlx->win);
 	exit(0);
-}
-
-int key_pressed(int keycode, t_loop *s_hook)
-{
-	if (keycode == KEY_A)
-		key_a_pressed(s_hook->s_args);
-	else if (keycode == KEY_D)
-		key_d_pressed(s_hook->s_args);
-	else if (keycode == KEY_W)
-		key_w_pressed(s_hook->s_args);
-	else if (keycode == KEY_S)
-		key_s_pressed(s_hook->s_args);
-	else if (keycode == KEY_ARROW_LEFT)
-		key_arrow_left_pressed(s_hook->s_args);
-	else if (keycode == KEY_ARROW_RIGTH)
-		key_arrow_rigth_pressed(s_hook->s_args);
-	else if (keycode == KEY_ESC)
-		ft_exit(s_hook->s_args, s_hook->s_mlx);
-	print_2dmap(s_hook->s_args, s_hook->s_mlx);
-	return (1);
 }
 
 int				ft_loop(t_loop *s_loop)
 {
 	// sleep(1);
 	s_loop->s_args->player.aov += M_PI / 12;
-	print_2dmap(s_loop->s_args, s_loop->s_mlx);
+	draw_minimap(s_loop->s_args, s_loop->s_mlx);
 	return (0);
 }
 
-int             cub_init(char *input)
+void map(t_args *s_args, t_mlx *s_mlx)
+{
+		int x;
+	int y;
+//	t_sqr s_sqr;
+
+	y = 0;
+//	s_sqr.side = s_args->win_h / s_args->map_h - 1;
+	set_img_black(&s_mlx->map, s_args->win_w, s_args->win_h);
+	while (s_args->win[y])
+    {
+		x = 0;
+		while (s_args->win[y][x])
+		{
+			if (s_args->win[y][x] == '1')
+				my_mlx_pixel_put(&s_mlx->map, x, y, 0x0000FF00);
+				// draw_sqr(s_args, fill_sqr(
+				// (x) * s_sqr.side,
+				// (y) * s_sqr.side , s_sqr.side,
+				// 0x00FF00FF), &s_mlx->map);
+			++x;
+		}
+		++y;
+    }
+	//draw_sqr(s_args, fill_sqr(x * (s_args->win_h / s_args->map_h - 1),
+	//y * (s_args->win_h / s_args->map_h - 1), 5, 1000), &s_mlx->minimap);
+	mlx_put_image_to_window(s_mlx->mlx, s_mlx->winmap, s_mlx->map.img, 0, 0);
+}
+
+
+int				cub_init(char *input)
 {
 	t_loop s_loop;
 	t_args s_args;
 	t_mlx s_mlx;
-	t_img img;
+	// t_img img;
 	int i = 0;
 	// int y = 0;
 
 	sleep(2);
 	ft_clearstruct(&s_args);
 	ft_getparam(input, &s_args);
-	s_mlx.img = &img;
+	// s_mlx.img = &img;
+
+
+
+
 	s_mlx.mlx = mlx_init();
 	s_mlx.win = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "cub3d");
-	s_mlx.img->img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
-	s_mlx.img->addr = mlx_get_data_addr(s_mlx.img->img, &s_mlx.img->bits_per_pixel,
-						&s_mlx.img->size_line, &s_mlx.img->endian);
+	s_mlx.img.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
+	s_mlx.img.addr = mlx_get_data_addr(s_mlx.img.img, &s_mlx.img.bits_per_pixel,
+						&s_mlx.img.size_line, &s_mlx.img.endian);
+	s_mlx.minimap.img = mlx_new_image(s_mlx.mlx, s_args.win_h / 5 , s_args.win_h / 5);
+	s_mlx.minimap.addr = mlx_get_data_addr(s_mlx.minimap.img, 
+	&s_mlx.minimap.bits_per_pixel, &s_mlx.minimap.size_line, &s_mlx.minimap.endian);
 	// mlx_key_hook(s_mlx.win, key, &s_mlx);
-	print_2dmap(&s_args, &s_mlx);
+	fill_map(&s_args);
+	draw_minimap(&s_args, &s_mlx);
 	s_loop.s_args = &s_args;
 	s_loop.s_mlx = &s_mlx;
+
 	s_args.tex_no.img.img = mlx_xpm_file_to_image(s_mlx.mlx, s_args.path_no, &s_args.tex_no.w, &s_args.tex_no.h);
 	s_args.tex_no.img.addr = mlx_get_data_addr(s_args.tex_no.img.img, &s_args.tex_no.img.bits_per_pixel,
 											&s_args.tex_no.img.size_line, &s_args.tex_no.img.endian);
+
 	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_args.tex_no.img.img, 0, 0);
+
+	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
+	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
+	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
+						&s_mlx.map.size_line, &s_mlx.map.endian);
+	map(&s_args, &s_mlx);
+	raycast(&s_args, &s_mlx);
+
+	//mlx_put_image_to_window(s_mlx.mlx, s_mlx.winmap, s_mlx.map.img, 0, 0);
+	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
 	mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
 	//mlx_loop_hook(s_mlx.mlx, ft_loop, &s_loop);
 		mlx_loop(s_mlx.mlx);

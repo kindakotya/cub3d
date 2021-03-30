@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/24 16:52:18 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/03/31 00:10:19 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,19 @@
 #define KEY_ARROW_LEFT 123
 #define KEY_ARROW_RIGTH 124
 #define KEY_ESC 53
+#define AOV {1, 2, 3}
 #define AOV_N M_PI / 2. * 3.
 #define AOV_S M_PI / 2.
 #define AOV_W M_PI
 #define AOV_E M_PI * 2.
 
-typedef struct s_rect
+typedef struct s_sqr
 {
 	int x;
 	int y;
-	int w;
-	int h;
+	int side;
 	unsigned int color;
-}				t_rect;
+}				t_sqr;
 
 typedef struct  s_img {
     void        *img;
@@ -99,7 +99,10 @@ typedef struct	s_mlx
 {
 	void *mlx;
 	void *win;
-	t_img *img;
+	void *winmap;
+	t_img img;
+	t_img map;
+	t_img minimap;
 }				t_mlx;
 
 typedef struct s_loop
@@ -111,6 +114,15 @@ typedef struct s_loop
 int     ft_parcecub(t_args *s_args, char *arglist);
 int		cub_init(char *input);
 int		ft_getparam(char *input, t_args *s_args);
-void			raycast(t_args *s_args,t_rect s_rect, t_mlx *s_mlx);
+void			raycast(t_args *s_args, t_mlx *s_mlx);
 t_player			ft_find_player(t_args *s_args);
+int key_pressed(int keycode, t_loop *s_hook);
+void	key_arrow_left_pressed(t_args *s_args);
+void	key_arrow_rigth_pressed(t_args *s_args);
+void		ft_exit(t_args *s_args, t_mlx *s_mlx);
+int draw_minimap(t_args *s_args, t_mlx *s_mlx);
+
+
+
+void map(t_args *s_args, t_mlx *s_mlx);
 #endif
