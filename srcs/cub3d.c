@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/31 01:48:04 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/01 16:41:09 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,41 +28,6 @@ static void     ft_clearstruct(t_args *s_args)
 	s_args->map_w = 0;
 }
 
-void            my_mlx_pixel_put(t_img *img, int x, int y, int color)
-{
-    char    *dst;
-    if (x > 0 && y > 0)
-    {
-	    dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
-	    *(unsigned int *) dst = color;
-    }
-}
-
-void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img)
-{
-	int i;
-	int j;
-	// int block_w;
-	// int block_h;
-
-	// block_w = s_args->win_w / s_args->map_w - 1;// - s_args->win_w % maxx(s_args);
-	// block_h = s_args->win_h / s_args->map_h - 1;// - s_args->win_h % maxy(s_args);
-	i = 0;
-	while (i < s_sqr.side)
-	{
-		j = 0;
-		while (j < s_sqr.side)
-		{
-			if (s_sqr.x + i < s_args->win_w && s_sqr.y + j < s_args->win_h)
-			{
-				my_mlx_pixel_put(img, s_sqr.x + i, s_sqr.y + j, s_sqr.color);
-			}
-			++j;
-		}
-		++i;
-	}
-}
-
 void		map_element(t_args *s_args, int side, int x, int y)
 {
 	int i;
@@ -78,7 +43,8 @@ void		map_element(t_args *s_args, int side, int x, int y)
 		j = 0;
 		while (j < side)
 		{
-			if (win_x + i < s_args->win_h && win_y + j < s_args->win_h)
+			if (win_x + i < ft_min(s_args->win_h, s_args->win_w) && 
+			win_y + j < ft_min(s_args->win_h, s_args->win_w))
 			{
 				s_args->win[win_y + j][win_x + i] = s_args->map[y][x];
 			}
@@ -98,11 +64,26 @@ void		fill_map(t_args *s_args)
 		x = 0;
 		while (s_args->map[y][x])
 		{
-			map_element(s_args, s_args->win_h / s_args->map_w - 1, x, y);
+			map_element(s_args, ft_min(s_args->win_h, s_args->win_w) / 
+				ft_max(s_args->map_w, s_args->map_h) - 1, x, y);
 			++x;
 		}
 		++y;
 	}
+}
+
+unsigned int	take_color(t_img *img, int x, int y)
+{
+	char *dst;
+
+	if (x >= 0 && y >= 0)
+	{
+		dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
+		if (x == 30)
+			x = 30;
+		return(*(unsigned int *) dst);
+	}
+	return (0);
 }
 
 t_sqr 		fill_sqr(int x, int y, int side, int color)
@@ -113,24 +94,6 @@ t_sqr 		fill_sqr(int x, int y, int side, int color)
 	s_sqr.side = side;
 	s_sqr.color = color;
 	return (s_sqr);
-}
-
-void        set_img_black(t_img *img, int w, int h)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while(i < h)
-	{
-		j = 0;
-		while (j < w)
-		{
-			my_mlx_pixel_put(img, j, i, 0);
-			++j;
-		}
-		++i;
-	}
 }
 
 void        add_floor_ceil(t_img *img, t_args *s_args)
@@ -152,49 +115,8 @@ void        add_floor_ceil(t_img *img, t_args *s_args)
 		++y;
 	}
 }
-int draw_minimap(t_args *s_args, t_mlx *s_mlx)
-{
-	int x;
-	int y;
-	t_sqr s_sqr;
 
-	s_sqr.side = s_args->win_h / 100;
-	set_img_black(&s_mlx->minimap, s_args->win_h / 5, s_args->win_h / 5);
-	y = 0;
-	while (s_args->map[y])
-    {
-		x = 0;
-		while (s_args->map[y][x])
-		{
-			if (s_args->map[y][x] == '1' && abs(s_args->player.x - x) < 10 && 
-			abs(s_args->player.y - y) < 10)
-				draw_sqr(s_args, fill_sqr(
-				(x - s_args->player.x + 10) * s_sqr.side, 
-				(y - s_args->player.y + 10) * s_sqr.side , s_sqr.side, 
-				0x00FF00FF), &s_mlx->minimap);
-			++x;
-		}
-		++y;
-    }
-	draw_sqr(s_args, fill_sqr(s_args->win_h / 10 - 5, 
-	s_args->win_h / 10 - 5, 5, 1000), &s_mlx->minimap);
-	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->minimap.img, 
-	s_args->win_w - s_args->win_h / 5, s_args->win_h / 5 * 4);
-	return (1);
-}
 
- void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx)
-{
-	int i;
-
-	i = 0;
-	while (i < sqr.side)
-	{
-		if (sqr.x < s_args->win_w && sqr.y + i < s_args->win_h)
-			my_mlx_pixel_put(&s_mlx->img, sqr.x, sqr.y + i, sqr.color);
-		++i;
-	}
-}
 
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
@@ -202,13 +124,13 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	float diff;
 	int i;
 	float fov;
-	int x;
+	float x;
 	int y;
 	t_sqr line;
 	int side;
 
 	add_floor_ceil(&s_mlx->img, s_args);
-	side = s_args->win_h / s_args->map_h - 1;
+	side = ft_min(s_args->win_h, s_args->win_w) / ft_max(s_args->map_h, s_args->map_w) - 1;
 	// int mapx;
 	// int mapy;
 	diff = M_PI / 3 / s_args->win_w;
@@ -216,14 +138,14 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	i = 0;
 	while (i < s_args->win_w)
 	{
-		c = 0.1;
+		c = 0.01;
 		while (c)
 		{
-			x = (s_args->player.x + 0.5) * (s_args->win_h / s_args->map_w - 1) + c * cos(fov);
-			y = (s_args->player.y + 0.5) * (s_args->win_h / s_args->map_w - 1) + c * sin(fov);
+			x = (s_args->player.x + 0.5) * /*(s_args->win_h / s_args->map_w - 1)*/ side + c * cos(fov);
+			y = (s_args->player.y + 0.5) * /*(s_args->win_h / s_args->map_w - 1)*/ side + c * sin(fov);
 			// mapx = s_args->player.x + c * cos(fov);
 			// mapy = s_args->player.y + c * cos(fov);
-			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[y][x] == '1')
+			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[y][(int)x] == '1')
 				break ;
 			my_mlx_pixel_put(&s_mlx->map, x, y, 0x00FFFF00);
 			c += 0.05;
@@ -231,7 +153,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 		line = fill_sqr(i, 
 		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)) / 2,
 		s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
-		draw_line(s_args, line, s_mlx);
+		draw_line(s_args, line, s_mlx, x);
 		++i;
 		fov += diff;
 	}
@@ -272,34 +194,7 @@ int				ft_loop(t_loop *s_loop)
 	return (0);
 }
 
-void map(t_args *s_args, t_mlx *s_mlx)
-{
-		int x;
-	int y;
-//	t_sqr s_sqr;
 
-	y = 0;
-//	s_sqr.side = s_args->win_h / s_args->map_h - 1;
-	set_img_black(&s_mlx->map, s_args->win_w, s_args->win_h);
-	while (s_args->win[y])
-    {
-		x = 0;
-		while (s_args->win[y][x])
-		{
-			if (s_args->win[y][x] == '1')
-				my_mlx_pixel_put(&s_mlx->map, x, y, 0x0000FF00);
-				// draw_sqr(s_args, fill_sqr(
-				// (x) * s_sqr.side,
-				// (y) * s_sqr.side , s_sqr.side,
-				// 0x00FF00FF), &s_mlx->map);
-			++x;
-		}
-		++y;
-    }
-	//draw_sqr(s_args, fill_sqr(x * (s_args->win_h / s_args->map_h - 1),
-	//y * (s_args->win_h / s_args->map_h - 1), 5, 1000), &s_mlx->minimap);
-	mlx_put_image_to_window(s_mlx->mlx, s_mlx->winmap, s_mlx->map.img, 0, 0);
-}
 
 
 int				cub_init(char *input)

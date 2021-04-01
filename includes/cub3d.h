@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/31 00:10:19 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/01 15:06:47 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,15 @@ typedef struct s_loop
 	t_args *s_args;
 }				t_loop;
 
+typedef struct s_line
+{
+	int x;
+	int y;
+	int length;
+	int *color;
+	t_sprite tex;
+}				t_line;
+
 int     ft_parcecub(t_args *s_args, char *arglist);
 int		cub_init(char *input);
 int		ft_getparam(char *input, t_args *s_args);
@@ -121,7 +130,11 @@ void	key_arrow_left_pressed(t_args *s_args);
 void	key_arrow_rigth_pressed(t_args *s_args);
 void		ft_exit(t_args *s_args, t_mlx *s_mlx);
 int draw_minimap(t_args *s_args, t_mlx *s_mlx);
-
+ void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, float x);
+void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
+void            my_mlx_pixel_put(t_img *img, int x, int y, int color);
+t_sqr 		fill_sqr(int x, int y, int side, int color);
+unsigned int	take_color(t_img *img, int x, int y);
 
 
 void map(t_args *s_args, t_mlx *s_mlx);

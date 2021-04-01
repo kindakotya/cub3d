@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/03/30 16:58:43 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/03/31 19:22:45 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,8 @@ SRCS =					cub3d.c\
 						cub_keyhooks2.c\
 						cub_parser1.c\
 						cub_parser2.c\
+						drawings.c\
+						minimap.c\
 						main.c
 
 HEAD = cub3d.h
@@ -45,11 +47,11 @@ libmlx.dylib:
 	cp mlx/libmlx.dylib .
 
 $(NAME): $(LIBFT) libmlx.dylib $(OBJDIR) $(OBJS)
-	clang -g -Iincludes -framework OpenGL -framework AppKit -Wall -Wextra -Werror\
+	clang -g -Iincludes -Ilibft -framework OpenGL -framework AppKit -Wall -Wextra -Werror\
 		-o $(NAME) $(OBJSPATH) libft/libft.a libmlx.dylib
 
 %.o : %.c $(HEAD)
-	clang -g -Wall -Wextra -Werror -Iincludes -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
+	clang -g -Wall -Wextra -Werror -Ilibft -Iincludes -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
