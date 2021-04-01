@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/01 15:06:47 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/02 02:02:06 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ typedef struct s_player
 	int y;
 	int win_x;
 	int win_y;
-	float aov;
-	float fov;
+	double aov;
+	double fov;
 }				t_player;
 
 typedef struct s_sprite
@@ -130,7 +130,7 @@ void	key_arrow_left_pressed(t_args *s_args);
 void	key_arrow_rigth_pressed(t_args *s_args);
 void		ft_exit(t_args *s_args, t_mlx *s_mlx);
 int draw_minimap(t_args *s_args, t_mlx *s_mlx);
- void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, float x);
+ void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, double x);
 void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
 void            my_mlx_pixel_put(t_img *img, int x, int y, int color);
 t_sqr 		fill_sqr(int x, int y, int side, int color);

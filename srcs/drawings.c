@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/01 16:52:33 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/01 17:50:00 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	}
 }
 
- void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, float x)
+ void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, double x)
 {
 	int i;
 	int color[sqr.side];
 	i = 0;
 
-	x = s_args->tex_no.w * (x - floor(x + 0.5));
 	if (x < 0)
 		x += s_args->tex_no.w;
 	i = 0;

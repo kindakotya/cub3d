@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 16:57:55 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/03/30 16:58:11 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/02 02:02:42 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	key_arrow_left_pressed(t_args *s_args)
 	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
 		s_args->player.aov = AOV_E;
 	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
+		s_args->player.aov = AOV_E - M_PI / 4;
+	else if (fabs(s_args->player.aov - AOV_E + M_PI / 4) < 0.001)
 		s_args->player.aov = AOV_N;
 }
 

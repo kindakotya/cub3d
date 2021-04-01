@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/01 16:41:09 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/02 02:22:17 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ unsigned int	take_color(t_img *img, int x, int y)
 	if (x >= 0 && y >= 0)
 	{
 		dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
-		if (x == 30)
-			x = 30;
 		return(*(unsigned int *) dst);
 	}
 	return (0);
@@ -120,16 +118,17 @@ void        add_floor_ceil(t_img *img, t_args *s_args)
 
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
-	float c;
-	float diff;
+	double c;
+	double diff;
 	int i;
-	float fov;
-	float x;
-	int y;
+	double fov;
+	double x;
+	double y;
 	t_sqr line;
 	int side;
 
 	add_floor_ceil(&s_mlx->img, s_args);
+	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win,s_mlx->img.img, 0, 0);
 	side = ft_min(s_args->win_h, s_args->win_w) / ft_max(s_args->map_h, s_args->map_w) - 1;
 	// int mapx;
 	// int mapy;
@@ -145,7 +144,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 			y = (s_args->player.y + 0.5) * /*(s_args->win_h / s_args->map_w - 1)*/ side + c * sin(fov);
 			// mapx = s_args->player.x + c * cos(fov);
 			// mapy = s_args->player.y + c * cos(fov);
-			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[y][(int)x] == '1')
+			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[(int)y][(int)x] == '1')
 				break ;
 			my_mlx_pixel_put(&s_mlx->map, x, y, 0x00FFFF00);
 			c += 0.05;
@@ -153,7 +152,14 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 		line = fill_sqr(i, 
 		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)) / 2,
 		s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
-		draw_line(s_args, line, s_mlx, x);
+		x = s_args->tex_no.w * (x / side - floor(x / side + 0.5));
+		y = s_args->tex_no.w * (y / side - floor(y / side + 0.5));
+		if (i == 320)
+			i = 320;
+		if (fabs(x) < fabs(y))
+			draw_line(s_args, line, s_mlx, y);
+		else
+			draw_line(s_args, line, s_mlx, x);
 		++i;
 		fov += diff;
 	}
