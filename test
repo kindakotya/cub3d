@@ -1,6 +1,6 @@
-R 1000 1000
+R 640 640
 
-NO /Users/gmayweat/Desktop/cub3d/textures/WALL10.xpm
+NO /Users/gmayweat/Desktop/cub3d/textures/van.xpm
 
 SO ./path_to_the_south_texture
 

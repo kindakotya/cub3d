@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/03/31 19:22:45 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/02 17:27:25 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS =					cub3d.c\
 						cub_parser2.c\
 						drawings.c\
 						minimap.c\
+						moving.c\
 						main.c
 
 HEAD = cub3d.h

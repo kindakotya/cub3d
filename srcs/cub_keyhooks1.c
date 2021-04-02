@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 16:51:03 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 02:02:35 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/02 19:36:08 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,22 @@
 
 void		key_a_pressed(t_args *s_args)
 {
-	// s_args->map[player.y][play]
-	if (fabs(s_args->player.aov - AOV_N) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
-			--s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_S) < 0.001)
-	{
-		if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
-			++s_args->player.x;
-	}
-	else if (fabs(s_args->player.aov - AOV_W) < 0.001)
-	{
-		if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
-		++s_args->player.y;
-	}
-	else if (fabs(s_args->player.aov - AOV_E) < 0.001)
-		if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
-			--s_args->player.y;
+	if (s_args->player.aov == 0)
+		move_west(s_args);
+	else if (s_args->player.aov == 1)
+		move_west(s_args) && move_north(s_args);
+	else if (s_args->player.aov == 2)
+		move_north(s_args);
+	else if (s_args->player.aov == 3)
+		move_north(s_args) && move_east(s_args);
+	else if (s_args->player.aov == 4)
+		move_east(s_args);
+	else if (s_args->player.aov == 5)
+		move_west(s_args) && move_south(s_args);
+	else if (s_args->player.aov == 6)
+		move_south(s_args);
+	else if (s_args->player.aov == 7)
+		move_south(s_args) && move_west(s_args);
 }
 
 void		key_w_pressed(t_args *s_args)

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 02:22:17 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/02 19:05:40 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	// int mapx;
 	// int mapy;
 	diff = M_PI / 3 / s_args->win_w;
-	fov = s_args->player.aov - M_PI / 3 / 2;
+	fov = s_args->player.angles[s_args->player.aov] - M_PI / 3 / 2;
 	i = 0;
 	while (i < s_args->win_w)
 	{
@@ -141,7 +141,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 		while (c)
 		{
 			x = (s_args->player.x + 0.5) * /*(s_args->win_h / s_args->map_w - 1)*/ side + c * cos(fov);
-			y = (s_args->player.y + 0.5) * /*(s_args->win_h / s_args->map_w - 1)*/ side + c * sin(fov);
+			y = (s_args->player.y + 0.5) * /*(s_argss->win_h / s_args->map_w - 1)*/ side + c * sin(fov);
 			// mapx = s_args->player.x + c * cos(fov);
 			// mapy = s_args->player.y + c * cos(fov);
 			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[(int)y][(int)x] == '1')
@@ -150,8 +150,8 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 			c += 0.05;
 		}
 		line = fill_sqr(i, 
-		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)) / 2,
-		s_args->win_h * 15 / (c * cos(fov - s_args->player.aov)), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
+		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.angles[s_args->player.aov])) / 2,
+		s_args->win_h * 15 / (c * cos(fov - s_args->player.angles[s_args->player.aov])), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
 		x = s_args->tex_no.w * (x / side - floor(x / side + 0.5));
 		y = s_args->tex_no.w * (y / side - floor(y / side + 0.5));
 		if (i == 320)
@@ -216,9 +216,6 @@ int				cub_init(char *input)
 	ft_clearstruct(&s_args);
 	ft_getparam(input, &s_args);
 	// s_mlx.img = &img;
-
-
-
 
 	s_mlx.mlx = mlx_init();
 	s_mlx.win = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "cub3d");

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 02:02:06 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/02 19:22:53 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 #define KEY_ARROW_LEFT 123
 #define KEY_ARROW_RIGTH 124
 #define KEY_ESC 53
-#define AOV {1, 2, 3}
 #define AOV_N M_PI / 2. * 3.
 #define AOV_S M_PI / 2.
 #define AOV_W M_PI
@@ -61,10 +60,8 @@ typedef struct s_player
 {
 	int x;
 	int y;
-	int win_x;
-	int win_y;
-	double aov;
-	double fov;
+	int aov;
+	double angles[8];
 }				t_player;
 
 typedef struct s_sprite
@@ -135,7 +132,10 @@ void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
 void            my_mlx_pixel_put(t_img *img, int x, int y, int color);
 t_sqr 		fill_sqr(int x, int y, int side, int color);
 unsigned int	take_color(t_img *img, int x, int y);
-
+int		move_north(t_args *s_args);
+int		move_south(t_args *s_args);
+int		move_east(t_args *s_args);
+int		move_west(t_args *s_args);
 
 void map(t_args *s_args, t_mlx *s_mlx);
 #endif
