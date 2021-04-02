@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/02 17:27:25 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/03 00:25:52 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ SRCS =					cub3d.c\
 						drawings.c\
 						minimap.c\
 						moving.c\
+						gnl/get_next_line.c\
+						gnl/get_next_line_utils.c\
 						main.c
 
 HEAD = cub3d.h
@@ -30,7 +32,7 @@ OBJS = $(SRCS:.c=.o)
 
 OBJDIR = objs
 
-OBJSPATH = $(addprefix objs/, $(OBJS))
+OBJSPATH = $(patsubst objs/gnl%, gnl%, $(addprefix objs/, $(OBJS)))
 
 vpath %.o objs
 vpath %.c srcs
@@ -65,6 +67,6 @@ clean:
 fclean:
 	$(MAKE) -C libft fclean
 	$(MAKE) -C mlx clean
-	rm -rf $(OBJDIR) $(NAME) libmlx.dylib
+	rm -rf $(OBJSPATH) $(NAME) libmlx.dylib
 
 re: fclean all

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:44:34 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 19:18:35 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/03 00:30:28 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,24 @@ static char    *ft_readfile(int fd)
 	return (s);
 }
 
-int ft_getparam(char *str, t_args *s_args)
+int getparam(char *str, t_args *s_args)
 {
 	int     fd;
-	char    *arglist;
+	char    *line;
 
 	fd = open(str, O_RDONLY);
 	if (fd == -1)
-		return(-1);
-	arglist = ft_readfile(fd);
+	{
+		perror("Can't open file, friend.");
+		exit(-1);
+	}
+	while (get_next_line(fd, *line) == 1)
+	{
+		if (*line == '\n')
+			free(line);
+		else
+			parcecub()
+	}
 	close(fd);
 	ft_parcecub(s_args, arglist);
 	free(arglist);

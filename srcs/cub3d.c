@@ -6,21 +6,32 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 19:05:40 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/03 00:42:28 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+static void		clear_sprite(t_sprite *sprite)
+{
+	sprite->h = 0;
+	sprite->w = 0;
+	sprite->path = NULL;
+	sprite->img.img = NULL;
+}
 
-static void     ft_clearstruct(t_args *s_args)
+static void		clearstruct(t_args *s_args)
 {
 	s_args->win_w = 0;
 	s_args->win_h = 0;
-	s_args->path_no = NULL;
-	s_args->path_so = NULL;
-	s_args->path_ea = NULL;
-	s_args->path_we = NULL;
-	s_args->path_s = NULL;
+	s_args->win = NULL;
+	s_args->player.x = 0;
+	s_args->player.y = 0;
+	s_args->player.aov = 1;
+	clear_sprite(&s_args->tex_ea);
+	clear_sprite(&s_args->tex_no);
+	clear_sprite(&s_args->tex_so);
+	clear_sprite(&s_args->tex_we);
+	clear_sprite(&s_args->sprite);
 	s_args->floor = 0;
 	s_args->ceil = 0;
 	s_args->map = NULL;
@@ -182,11 +193,11 @@ void		ft_exit(t_args *s_args, t_mlx *s_mlx)
 {
 	ft_free(s_args->map);
 	ft_free(s_args->win);
-	free(s_args->path_ea);
-	free(s_args->path_no);
-	free(s_args->path_s);
-	free(s_args->path_so);
-	free(s_args->path_we);
+	// free(s_args->path_ea);
+	// free(s_args->path_no);
+	// free(s_args->path_s);
+	// free(s_args->path_so);
+	// free(s_args->path_we);
 	mlx_destroy_image(s_mlx->mlx, s_mlx->img.img);
 	mlx_destroy_window(s_mlx->mlx, s_mlx->win);
 	exit(0);
@@ -212,9 +223,8 @@ int				cub_init(char *input)
 	int i = 0;
 	// int y = 0;
 
-	sleep(2);
-	ft_clearstruct(&s_args);
-	ft_getparam(input, &s_args);
+	clearstruct(&s_args);
+	getparam(input, &s_args);
 	// s_mlx.img = &img;
 
 	s_mlx.mlx = mlx_init();

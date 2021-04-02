@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 19:22:53 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/03 00:33:21 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 // #include <OpenGL/glext.h>
 // #include <GLUT/glut.h>
 #include "mlx.h"
+#include "get_next_line.h"
 
 #define KEY_W 13
 #define KEY_A 0
@@ -74,13 +75,8 @@ typedef struct s_sprite
 
 typedef struct		s_args
 {
-	int			win_w;
-	int			win_h;
-	char			*path_no;
-	char			*path_so;
-	char			*path_ea;
-	char			*path_we;
-	char			*path_s;
+	int				win_w;
+	int				win_h;
 	unsigned int	floor;
 	unsigned int	ceil;
 	char			**map;
@@ -89,7 +85,10 @@ typedef struct		s_args
 	char			**win;
 	t_player		player;
 	t_sprite		tex_no;
-	
+	t_sprite		tex_so;
+	t_sprite		tex_ea;
+	t_sprite		tex_we;
+	t_sprite		sprite;
 }					t_args;
 
 typedef struct	s_mlx
@@ -117,9 +116,9 @@ typedef struct s_line
 	t_sprite tex;
 }				t_line;
 
-int     ft_parcecub(t_args *s_args, char *arglist);
+int     parcecub(t_args *s_args, char *line);
 int		cub_init(char *input);
-int		ft_getparam(char *input, t_args *s_args);
+int		getparam(char *input, t_args *s_args);
 void			raycast(t_args *s_args, t_mlx *s_mlx);
 t_player			ft_find_player(t_args *s_args);
 int key_pressed(int keycode, t_loop *s_hook);
