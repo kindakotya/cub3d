@@ -220,11 +220,12 @@ int				cub_init(char *input)
 	t_args s_args;
 	//t_mlx s_mlx;
 	// t_img img;
-	//int i = 0;
+	int i = 0;
 	// int y = 0;
 
 	clearstruct(&s_args);
 	getparam(input, &s_args);
+	i = 5;
 	// s_mlx.img = &img;
 
 	// s_mlx.mlx = mlx_init();

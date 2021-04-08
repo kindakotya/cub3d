@@ -6,13 +6,13 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:06 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 02:31:49 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/09 00:30:42 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void        set_img_black(t_img *img, int w, int h)
+static void		set_img_black(t_img *img, int w, int h)
 {
 	int i;
 	int j;
@@ -32,7 +32,7 @@ void        set_img_black(t_img *img, int w, int h)
 
 void map(t_args *s_args, t_mlx *s_mlx)
 {
-		int x;
+	int x;
 	int y;
 //	t_sqr s_sqr;
 
@@ -59,11 +59,11 @@ void map(t_args *s_args, t_mlx *s_mlx)
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->winmap, s_mlx->map.img, 0, 0);
 }
 
-int draw_minimap(t_args *s_args, t_mlx *s_mlx)
+int				draw_minimap(t_args *s_args, t_mlx *s_mlx)
 {
-	int x;
-	int y;
-	t_sqr s_sqr;
+	int		x;
+	int		y;
+	t_sqr	s_sqr;
 
 	s_sqr.side = s_args->win_h / 100;
 	set_img_black(&s_mlx->minimap, s_args->win_h / 5, s_args->win_h / 5);
