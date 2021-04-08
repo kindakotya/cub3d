@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/03 00:42:28 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/05 18:03:06 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,49 +216,48 @@ int				ft_loop(t_loop *s_loop)
 
 int				cub_init(char *input)
 {
-	t_loop s_loop;
+	//t_loop s_loop;
 	t_args s_args;
-	t_mlx s_mlx;
+	//t_mlx s_mlx;
 	// t_img img;
-	int i = 0;
+	//int i = 0;
 	// int y = 0;
 
 	clearstruct(&s_args);
 	getparam(input, &s_args);
 	// s_mlx.img = &img;
 
-	s_mlx.mlx = mlx_init();
-	s_mlx.win = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "cub3d");
-	s_mlx.img.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
-	s_mlx.img.addr = mlx_get_data_addr(s_mlx.img.img, &s_mlx.img.bits_per_pixel,
-						&s_mlx.img.size_line, &s_mlx.img.endian);
-	s_mlx.minimap.img = mlx_new_image(s_mlx.mlx, s_args.win_h / 5 , s_args.win_h / 5);
-	s_mlx.minimap.addr = mlx_get_data_addr(s_mlx.minimap.img, 
-	&s_mlx.minimap.bits_per_pixel, &s_mlx.minimap.size_line, &s_mlx.minimap.endian);
-	// mlx_key_hook(s_mlx.win, key, &s_mlx);
-	fill_map(&s_args);
-	draw_minimap(&s_args, &s_mlx);
-	s_loop.s_args = &s_args;
-	s_loop.s_mlx = &s_mlx;
+	// s_mlx.mlx = mlx_init();
+	// s_mlx.win = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "cub3d");
+	// s_mlx.img.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
+	// s_mlx.img.addr = mlx_get_data_addr(s_mlx.img.img, &s_mlx.img.bits_per_pixel,
+	// 					&s_mlx.img.size_line, &s_mlx.img.endian);
+	// s_mlx.minimap.img = mlx_new_image(s_mlx.mlx, s_args.win_h / 5 , s_args.win_h / 5);
+	// s_mlx.minimap.addr = mlx_get_data_addr(s_mlx.minimap.img, 
+	// &s_mlx.minimap.bits_per_pixel, &s_mlx.minimap.size_line, &s_mlx.minimap.endian);
+	// // mlx_key_hook(s_mlx.win, key, &s_mlx);
+	// fill_map(&s_args);
+	// draw_minimap(&s_args, &s_mlx);
+	// s_loop.s_args = &s_args;
+	// s_loop.s_mlx = &s_mlx;
 
-	s_args.tex_no.img.img = mlx_xpm_file_to_image(s_mlx.mlx, s_args.path_no, &s_args.tex_no.w, &s_args.tex_no.h);
-	s_args.tex_no.img.addr = mlx_get_data_addr(s_args.tex_no.img.img, &s_args.tex_no.img.bits_per_pixel,
-											&s_args.tex_no.img.size_line, &s_args.tex_no.img.endian);
+	// s_args.tex_no.img.img = mlx_xpm_file_to_image(s_mlx.mlx, s_args.path_no, &s_args.tex_no.w, &s_args.tex_no.h);
+	// s_args.tex_no.img.addr = mlx_get_data_addr(s_args.tex_no.img.img, &s_args.tex_no.img.bits_per_pixel,
+	// 										&s_args.tex_no.img.size_line, &s_args.tex_no.img.endian);
 
-	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_args.tex_no.img.img, 0, 0);
+	// mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_args.tex_no.img.img, 0, 0);
 
-	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
-	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
-	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
-						&s_mlx.map.size_line, &s_mlx.map.endian);
-	map(&s_args, &s_mlx);
-	raycast(&s_args, &s_mlx);
+	// s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
+	// s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
+	// s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
+	// 					&s_mlx.map.size_line, &s_mlx.map.endian);
+	// map(&s_args, &s_mlx);
+	// raycast(&s_args, &s_mlx);
 
-	//mlx_put_image_to_window(s_mlx.mlx, s_mlx.winmap, s_mlx.map.img, 0, 0);
-	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
-	mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
-	//mlx_loop_hook(s_mlx.mlx, ft_loop, &s_loop);
-		mlx_loop(s_mlx.mlx);
-	++i;
+
+	// mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
+	// mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
+	// mlx_loop(s_mlx.mlx);
+	// ++i;
 	return (0);
 }

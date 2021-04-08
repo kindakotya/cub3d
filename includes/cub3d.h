@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/03 00:33:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/05 19:13:56 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ typedef struct s_line
 	t_sprite tex;
 }				t_line;
 
-int     parcecub(t_args *s_args, char *line);
+//int     parcecub(t_args *s_args, char *line);
 int		cub_init(char *input);
 int		getparam(char *input, t_args *s_args);
 void			raycast(t_args *s_args, t_mlx *s_mlx);

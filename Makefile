@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/03 00:25:52 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/05 19:01:19 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,7 @@ LIBFT = libft/libft.a
 SRCS =					cub3d.c\
 						cub_keyhooks1.c\
 						cub_keyhooks2.c\
-						cub_parser1.c\
-						cub_parser2.c\
+						cub_parser.c\
 						drawings.c\
 						minimap.c\
 						moving.c\
