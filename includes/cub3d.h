@@ -41,37 +41,38 @@
 #define AOV_W M_PI
 #define AOV_E M_PI * 2.
 
-typedef struct s_sqr
+typedef struct		s_sqr
 {
-	int x;
-	int y;
-	int side;
-	unsigned int color;
-}				t_sqr;
+	int				x;
+	int				y;
+	int				side;
+	unsigned int	color;
+}					t_sqr;
 
-typedef struct  s_img {
-    void        *img;
-    char        *addr;
-    int         bits_per_pixel;
-    int         size_line;
-    int         endian;
-}               t_img;
-
-typedef struct s_player
+typedef struct		s_img
 {
-	int x;
-	int y;
-	int aov;
-	double angles[8];
-}				t_player;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+}					t_img;
 
-typedef struct s_sprite
+typedef struct		s_player
 {
-	t_img img;
-	int w;
-	int h;
-	char *path;
-}				t_sprite;
+	int			x;
+	int			y;
+	int			aov;
+	double		angles[8];
+}					t_player;
+
+typedef struct		s_sprite
+{
+	t_img	img;
+	int		w;
+	int		h;
+	char	*path;
+}					t_sprite;
 
 typedef struct		s_args
 {
@@ -91,50 +92,69 @@ typedef struct		s_args
 	t_sprite		sprite;
 }					t_args;
 
-typedef struct	s_mlx
+typedef struct		s_mlx
 {
-	void *mlx;
-	void *win;
-	void *winmap;
-	t_img img;
-	t_img map;
-	t_img minimap;
-}				t_mlx;
+	void		*mlx;
+	void		*win;
+	void		*winmap;
+	t_img		img;
+	t_img		map;
+	t_img		minimap;
+}					t_mlx;
 
-typedef struct s_loop
+typedef struct		s_loop
 {
-	t_mlx *s_mlx;
-	t_args *s_args;
-}				t_loop;
+	t_mlx		*s_mlx;
+	t_args		*s_args;
+}					t_loop;
 
-typedef struct s_line
+typedef struct		s_line
 {
 	int x;
 	int y;
 	int length;
 	int *color;
 	t_sprite tex;
-}				t_line;
+}					t_line;
 
 //int     parcecub(t_args *s_args, char *line);
 int		cub_init(char *input);
-int		getparam(char *input, t_args *s_args);
+
 void			raycast(t_args *s_args, t_mlx *s_mlx);
-t_player			ft_find_player(t_args *s_args);
-int key_pressed(int keycode, t_loop *s_hook);
-void	key_arrow_left_pressed(t_args *s_args);
-void	key_arrow_rigth_pressed(t_args *s_args);
+
+
+
 void		ft_exit(t_args *s_args, t_mlx *s_mlx);
-int draw_minimap(t_args *s_args, t_mlx *s_mlx);
- void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, double x);
-void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
-void            my_mlx_pixel_put(t_img *img, int x, int y, int color);
+
+
+
 t_sqr 		fill_sqr(int x, int y, int side, int color);
 unsigned int	take_color(t_img *img, int x, int y);
+// drawing
+void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
+void            my_mlx_pixel_put(t_img *img, int x, int y, int color);
+int draw_minimap(t_args *s_args, t_mlx *s_mlx);
+ void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, double x);
+// keyhooks
+int key_pressed(int keycode, t_loop *s_hook);
 int		move_north(t_args *s_args);
 int		move_south(t_args *s_args);
 int		move_east(t_args *s_args);
 int		move_west(t_args *s_args);
+void	key_arrow_left_pressed(t_args *s_args);
+void	key_arrow_rigth_pressed(t_args *s_args);
+// parcer
+void	skip_spaces(char **s);
+void	skip_numbers(char **s);
+char	**add_string(char **arr1, char *str);
+
+int		get_res(char *line, t_args *s_args);
+int		get_path(char **path, char *line);
+int		get_color(char *line, unsigned int *color);
+t_player			ft_find_player(t_args *s_args);
+int		getparam(char *input, t_args *s_args);
+
+void		ft_exit(int fd, t_args *s_args, t_mlx *s_mlx, int return_val);
 
 void map(t_args *s_args, t_mlx *s_mlx);
 #endif

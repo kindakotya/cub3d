@@ -35,7 +35,6 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	{
 		color[i] = take_color(&s_args->tex_no.img, x, 
 		i * s_args->tex_no.h / sqr.side);
-		//printf("%f/n", modf(x, &j));
 		++i;
 	}
 	i = 0;

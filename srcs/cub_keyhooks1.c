@@ -94,6 +94,10 @@ void		key_s_pressed(t_args *s_args)
 
 int key_pressed(int keycode, t_loop *s_hook)
 {
+	static char c = '0';
+
+	s_hook->s_args->
+	map[s_hook->s_args->player.y][s_hook->s_args->player.x] = c;
 	if (keycode == KEY_A)
 		key_a_pressed(s_hook->s_args);
 	else if (keycode == KEY_D)
@@ -108,10 +112,10 @@ int key_pressed(int keycode, t_loop *s_hook)
 		key_arrow_rigth_pressed(s_hook->s_args);
 	else if (keycode == KEY_ESC)
 		ft_exit(s_hook->s_args, s_hook->s_mlx);
-
-		map(s_hook->s_args, s_hook->s_mlx);
+	c = s_hook->s_args->
+	map[s_hook->s_args->player.y][s_hook->s_args->player.x];
+	map(s_hook->s_args, s_hook->s_mlx);
 	raycast(s_hook->s_args, s_hook->s_mlx);
-		draw_minimap(s_hook->s_args, s_hook->s_mlx);
-
+	draw_minimap(s_hook->s_args, s_hook->s_mlx);
 	return (1);
 }

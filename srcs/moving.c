@@ -14,28 +14,28 @@
 
 int		move_north(t_args *s_args)
 {
-	if (s_args->map[s_args->player.y - 1][s_args->player.x] == '0')
+	if (s_args->map[s_args->player.y - 1][s_args->player.x] != '1')
 		--s_args->player.y;
 	return (1);
 }
 
 int		move_south(t_args *s_args)
 {
-	if (s_args->map[s_args->player.y + 1][s_args->player.x] == '0')
+	if (s_args->map[s_args->player.y + 1][s_args->player.x] != '1')
 		++s_args->player.y;
 	return (1);
 }
 
 int		move_west(t_args *s_args)
 {
-	if (s_args->map[s_args->player.y][s_args->player.x - 1] == '0')
+	if (s_args->map[s_args->player.y][s_args->player.x - 1] != '1')
 		--s_args->player.x;
 	return (1);
 }
 
 int		move_east(t_args *s_args)
 {
-	if (s_args->map[s_args->player.y][s_args->player.x + 1] == '0')
+	if (s_args->map[s_args->player.y][s_args->player.x + 1] != '1')
 		++s_args->player.x;
 	return (1);
 }

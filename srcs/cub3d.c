@@ -177,31 +177,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
 }
 
-void		ft_free(char **arr)
-{
-	int i;
 
-	i = 0;
-	while (arr[i])
-		++i;
-	while (i)
-		free(arr[--i]);
-	free(arr);
-}
-
-void		ft_exit(t_args *s_args, t_mlx *s_mlx)
-{
-	ft_free(s_args->map);
-	ft_free(s_args->win);
-	// free(s_args->path_ea);
-	// free(s_args->path_no);
-	// free(s_args->path_s);
-	// free(s_args->path_so);
-	// free(s_args->path_we);
-	mlx_destroy_image(s_mlx->mlx, s_mlx->img.img);
-	mlx_destroy_window(s_mlx->mlx, s_mlx->win);
-	exit(0);
-}
 
 int				ft_loop(t_loop *s_loop)
 {

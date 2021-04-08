@@ -12,123 +12,7 @@
 
 #include "cub3d.h"
 
-// void	set_aov(t_player *player, char cp)
-// {
-// 	player->angles[0] = 1.5 * M_PI;
-// 	player->angles[1] = 1.75 * M_PI;
-// 	player->angles[2] = 2. * M_PI;
-// 	player->angles[3] = M_PI_4;
-// 	player->angles[4] = M_PI_2;
-// 	player->angles[5] = 0.75 * M_PI;
-// 	player->angles[6] = M_PI;
-// 	player->angles[7] = 1.25 * M_PI;
-// 	if (cp == 'N')
-// 		player->aov = 0;
-// 	else if (cp == 'S')
-// 		player->aov = 4;
-// 	else if (cp == 'E')
-// 		player->aov = 2;
-// 	else if (cp == 'W')
-// 		player->aov = 6;
-// }
-
-// t_player			ft_find_player(t_args *s_args)
-// {
-// 	int i;
-// 	int j;
-// 	t_player player;
-
-// 	i = 0;
-// 	while (s_args->map[i])
-// 	{
-// 		j = 0;
-// 		while (s_args->map[i][j])
-// 			if (s_args->map[i][j] == 'N' || s_args->map[i][j] == 'W' ||
-// 				s_args->map[i][j] == 'S' || s_args->map[i][j] == 'E')
-// 				break ;
-// 			else
-// 				++j;
-// 		if (s_args->map[i][j] == 'N' || s_args->map[i][j] == 'W' ||
-// 				s_args->map[i][j] == 'S' || s_args->map[i][j] == 'E')
-// 				break ;
-// 			else
-// 				++i;
-// 	}
-// 	player.x = j;
-// 	player.y = i;
-// 	set_aov(&player, s_args->map[i][j]);
-// 	s_args->map[i][j] = '0';
-// 	return (player);
-// }
-
-
-
-int		get_res(char *line, t_args *s_args)
-{
-	int i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (!ft_isalnum(line[i]) && line[i] != ' ')
-			return (-1);
-		++i;
-	}
-	skip_spaces(&line);
-	if (!ft_isalnum(*line))
-		return (-1);
-	s_args->win_w = ft_atoi(line);
-	skip_numbers(&line);
-	skip_spaces(&line);
-	if (!ft_isalnum(*line))
-		return (-1);
-	s_args->win_h = ft_atoi(line);
-	return (1);
-}
-
-int		get_path(char **path, char *line)
-{
-	int i;
-
-	skip_spaces(&line);
-	i = 0;
-	while (line[i])
-		if (ft_isspace(line[i++]))
-			return (-1);
-	if ((*path = ft_strdup(line)) == NULL)
-	{
-		perror("Malloc error.\n");
-		return (-1);
-	}
-	return (1);
-}
-
-int		get_color(char *line, unsigned int *color)
-{
-	skip_spaces(&line);
-	if (!ft_isalnum(*line))
-		return (-1);
-	*color += ft_atoi(line) << 16;
-	skip_numbers(&line);
-	if ((line = ft_strnstr(line, ",", 1)) == NULL)
-		return (-1);
-	++line;
-	skip_spaces(&line);
-	if (!ft_isalnum(*line))
-		return (-1);
-	*color += ft_atoi(line) << 8;
-	skip_numbers(&line);
-	if ((line = ft_strnstr(line, ",", 1)) == NULL)
-		return (-1);
-	++line;
-	skip_spaces(&line);
-	if (!ft_isalnum(*line))
-		return (-1);
-	*color += ft_atoi(line);
-	return (1);
-}
-
-int		parce_cub(t_args *s_args, char *line, char check[8])
+static int		parce_cub(t_args *s_args, char *line, char check[8])
 {
 	if (ft_strnstr(line, "R ", 2))
 		check[0] = get_res(line + 1, s_args);
@@ -149,7 +33,7 @@ int		parce_cub(t_args *s_args, char *line, char check[8])
 	return (1);
 }
 
-int				check_all(char check[8])
+static int		check_all(char check[8])
 {
 	int i;
 
@@ -195,17 +79,18 @@ static int		read_file(int fd, t_args *s_args, char check[8])
 	}
 	if (i == -1)
 	{
-		perror("Can't read file.\n");
-		exit(-1); //ft_exit
+		perror("Can't read from file.\n");
+		close(fd);
+		ft_exit(s_args);
 	}
 	if (check_all(check) == 1)
-			parce_map(s_args, fd);
-		else if (check_all(check) == -1)
-			exit(-1);
+		parce_map(s_args, fd);
+	else if (check_all(check) == -1)
+		exit(-1);
 	return (1);
 }
 
-int getparam(char *str, t_args *s_args)
+int				getparam(char *str, t_args *s_args)
 {
 	int fd;
 	int i;
