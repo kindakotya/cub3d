@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:44:34 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/09 00:32:44 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/09 03:32:46 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int		parce_cub(t_args *s_args, char *line, char check[8])
 	return (1);
 }
 
-static int		check_all(char check[8])
+static int		check_all(int fd, t_args *s_args, char check[8])
 {
 	int i;
 
@@ -56,7 +56,7 @@ static int		check_all(char check[8])
 		perror("Ceil color is wrong.\n");
 	while (i <= 7)
 		if (check[i] == -1)
-			exit(-1);
+			ft_exit(fd, s_args, 0, -1);
 		else if (!check[i++])
 			return (0);
 	return (1);
@@ -74,19 +74,15 @@ static int		read_file(int fd, t_args *s_args, char check[8])
 		if (*line)
 			parce_cub(s_args, line, check);
 		free(line);
-		if (check_all(check))
+		if (check_all(fd, s_args, check))
 			break ;
 	}
 	if (i == -1)
 	{
 		perror("Can't read from file.\n");
-		close(fd);
-		ft_exit(s_args);
+		ft_exit(fd, s_args, 0, -1);
 	}
-	if (check_all(check) == 1)
-		parce_map(s_args, fd);
-	else if (check_all(check) == -1)
-		exit(-1);
+	parce_map(s_args, fd);
 	return (1);
 }
 
@@ -102,7 +98,7 @@ int				getparam(char *str, t_args *s_args)
 	if ((fd = open(str, O_RDONLY)) == -1)
 	{
 		perror("Can't open file, friend.\n");
-		exit(-1);
+		ft_exit(fd, s_args, 0, -1);
 	}
 	read_file(fd, s_args, check);
 	close(fd);

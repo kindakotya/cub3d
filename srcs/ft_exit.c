@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/09 03:34:40 by gmayweat          #+#    #+#             */
+/*   Updated: 2021/04/09 03:41:40 by gmayweat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "cub3d.h"
 
@@ -13,7 +24,7 @@ void		ft_free(char **arr)
 	free(arr);
 }
 
-void		destroy_texture(void *mlx, s_sprite *tex)
+void		destroy_texture(void *mlx, t_sprite *tex)
 {
 	free(tex->path);
 	mlx_destroy_image(mlx, tex->img.img);

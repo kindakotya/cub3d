@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 16:51:03 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/02 23:47:36 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/09 03:33:31 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int key_pressed(int keycode, t_loop *s_hook)
 	else if (keycode == KEY_ARROW_RIGTH)
 		key_arrow_rigth_pressed(s_hook->s_args);
 	else if (keycode == KEY_ESC)
-		ft_exit(s_hook->s_args, s_hook->s_mlx);
+		ft_exit(0, s_hook->s_args, s_hook->s_mlx, 0);
 	c = s_hook->s_args->
 	map[s_hook->s_args->player.y][s_hook->s_args->player.x];
 	map(s_hook->s_args, s_hook->s_mlx);

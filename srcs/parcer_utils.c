@@ -6,11 +6,18 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:25:36 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/09 00:28:55 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/09 03:52:16 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int		is_side_of_world(int c)
+{
+	if (c == 'N' || c == 'W' || c == 'S' || c == 'E')
+		return (1);
+	return (0);
+}
 
 void	skip_spaces(char **s)
 {

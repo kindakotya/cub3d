@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/05 19:01:19 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/09 03:40:01 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,11 @@ SRCS =					cub3d.c\
 						cub_keyhooks1.c\
 						cub_keyhooks2.c\
 						cub_parser.c\
+						params_parcer.c\
+						parcer_utils.c\
+						player_parcer.c\
+						map_parcer.c\
+						ft_exit.c\
 						drawings.c\
 						minimap.c\
 						moving.c\
