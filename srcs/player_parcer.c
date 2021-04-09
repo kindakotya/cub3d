@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:24 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/09 03:52:02 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/10 02:53:21 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_player		ft_find_player(t_args *s_args)
 	if (!player.x)
 	{
 		perror("There is no player on map.\n");
-		ft_exit(0, s_args, 0, -1);
+		ft_exit(0, s_args, 0, 5);
 	}
 	set_aov(&player, s_args->map[i][j]);
 	s_args->map[i][j] = '0';
