@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:24 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:53:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 17:49:10 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void		set_aov(t_player *player, char cp)
 		player->aov = 6;
 }
 
-t_player		ft_find_player(t_args *s_args)
+t_player		find_player(t_args *s_args)
 {
 	int			i;
 	int			j;
@@ -62,11 +62,8 @@ t_player		ft_find_player(t_args *s_args)
 		++i;
 	}
 	if (!player.x)
-	{
-		perror("There is no player on map.\n");
-		ft_exit(0, s_args, 0, 5);
-	}
-	set_aov(&player, s_args->map[i][j]);
-	s_args->map[i][j] = '0';
+		ft_exit(0, s_args, 0, 7);
+	set_aov(&player, s_args->map[player.y][player.x]);
+	s_args->map[player.y][player.x] = '0';
 	return (player);
 }

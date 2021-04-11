@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:53:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 18:27:42 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void			clear_mlx(t_mlx *s_mlx)
 	s_mlx->win = NULL;
 	s_mlx->img.img = NULL;
 	s_mlx->minimap.img = NULL;
+	s_mlx->m_size = 0;
 }
 
 static void		clear_sprite(t_sprite *sprite)
@@ -114,7 +115,7 @@ t_sqr 		fill_sqr(int x, int y, int side, int color)
 	return (s_sqr);
 }
 
-void        add_floor_ceil(t_img *img, t_args *s_args)
+void	add_floor_ceil(t_img *img, t_args *s_args)
 {
 	int x;
 	int y;
@@ -164,7 +165,8 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 			y = (s_args->player.y + 0.5) * /*(s_argss->win_h / s_args->map_w - 1)*/ side + c * sin(fov);
 			// mapx = s_args->player.x + c * cos(fov);
 			// mapy = s_args->player.y + c * cos(fov);
-			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w || s_args->win[(int)y][(int)x] == '1')
+			if (x < 0 || y < 0 || y >= s_args->win_h || x >= s_args->win_w ||
+			s_args->map[(int)y / side][(int)x / side] == '1')
 				break ;
 			my_mlx_pixel_put(&s_mlx->map, x, y, 0x00FFFF00);
 			c += 0.05;
@@ -186,8 +188,6 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
 }
 
-
-
 int				ft_loop(t_loop *s_loop)
 {
 	// sleep(1);
@@ -196,15 +196,28 @@ int				ft_loop(t_loop *s_loop)
 	return (0);
 }
 
-void		screen_params(void *mlx, t_args *s_args)
+int		screen_params(t_mlx *s_mlx, t_args *s_args)
 {
 	int screen_size[2];
+	int i;
 
-	mlx_get_screen_size(mlx, &screen_size[0], &screen_size[1]);
+	i = 0;
+	mlx_get_screen_size(s_mlx->mlx, &screen_size[0], &screen_size[1]);
 	if (s_args->win_w < s_args->map_w || s_args->win_w > screen_size[0])
 		s_args->win_w = screen_size[0];
 	if (s_args->win_h < s_args->map_h || s_args->win_h > screen_size[1])
 		s_args->win_h = screen_size[1] - screen_size[1] / 10;
+	if ((s_args->win = malloc((s_args->win_h + 1) *sizeof(char*))) == NULL)
+		ft_exit(0, s_args, s_mlx, 2);
+	s_args->win[s_args->win_h] = NULL;
+	while (i < s_args->win_h)
+		if ((s_args->win[i++] = 
+		ft_calloc((s_args->win_w + 1), sizeof(char))) == NULL)
+			ft_exit(0, s_args, s_mlx, 2);
+	if (s_args->win_h < s_args->win_w)
+		return (s_args->win_h / 5);
+	else
+		return(s_args->win_w / 5);
 }
 
 int		load_texture(void *mlx, t_sprite *tex)
@@ -224,28 +237,46 @@ void		load_textures(t_mlx *s_mlx, t_args *s_args)
 	if ((load_texture(s_mlx->mlx, &s_args->tex_no)) == 0)
 	{
 		perror("Can't load north texture.\n");
-		ft_exit(0, s_args, s_mlx, 5);
+		ft_exit(0, s_args, s_mlx, 16);
 	}
 	if ((load_texture(s_mlx->mlx, &s_args->tex_so)) == 0)
 	{
 		perror("Can't load south texture.\n");
-		ft_exit(0, s_args, s_mlx, 5);
+		ft_exit(0, s_args, s_mlx, 16);
 	}
 	if ((load_texture(s_mlx->mlx, &s_args->tex_ea)) == 0)
 	{
 		perror("Can't load east texture.\n");
-		ft_exit(0, s_args, s_mlx, 5);
+		ft_exit(0, s_args, s_mlx, 16);
 	}
 	if ((load_texture(s_mlx->mlx, &s_args->tex_we)) == 0)
 	{
 		perror("Can't load west texture.\n");
-		ft_exit(0, s_args, s_mlx, 5);
+		ft_exit(0, s_args, s_mlx, 16);
 	}
 	if ((load_texture(s_mlx->mlx, &s_args->sprite)) == 0)
 	{
 		perror("Can't load sprite.\n");
-		ft_exit(0, s_args, s_mlx, 5);
+		ft_exit(0, s_args, s_mlx, 16);
 	}
+}
+
+void		create_images(t_args *s_args, t_mlx *s_mlx)
+{
+	if ((s_mlx->img.img = 
+	mlx_new_image(s_mlx->mlx, s_args->win_w, s_args->win_h)) == NULL)
+		ft_exit(0, s_args, s_mlx, 12);
+	if ((s_mlx->img.addr = mlx_get_data_addr(s_mlx->img.img,
+	&s_mlx->img.bits_per_pixel,
+	&s_mlx->img.size_line, &s_mlx->img.endian)) == NULL)
+		ft_exit(0, s_args, s_mlx, 13);
+	if ((s_mlx->minimap.img = 
+		mlx_new_image(s_mlx->mlx, s_mlx->m_size, s_mlx->m_size)) == NULL)
+		ft_exit(0, s_args, s_mlx, 12);
+	if ((s_mlx->minimap.addr = mlx_get_data_addr(s_mlx->minimap.img,
+	&s_mlx->minimap.bits_per_pixel,
+	&s_mlx->minimap.size_line, &s_mlx->minimap.endian)) == NULL)
+		ft_exit(0, s_args, s_mlx, 13);
 }
 
 t_mlx	start_mlx(t_args *s_args)
@@ -253,17 +284,12 @@ t_mlx	start_mlx(t_args *s_args)
 	t_mlx s_mlx;
 
 	if ((s_mlx.mlx = mlx_init()) == NULL)
-	{
-		perror("Cant init mlx.\n");
-		ft_exit(0, s_args, 0, 5);
-	}
-	screen_params(s_mlx.mlx, s_args);
-	if ((s_mlx.win = mlx_new_window(s_mlx.mlx, 
-		s_args->win_w, s_args->win_h, "cub3d")) == NULL)
-	{
-		perror("Cant create window.\n");
-		ft_exit(0, s_args, &s_mlx, 5);
-	}
+		ft_exit(0, s_args, 0, 11);
+	s_mlx.m_size = screen_params(s_mlx.mlx, s_args);
+	if ((s_mlx.win =
+	mlx_new_window(s_mlx.mlx, s_args->win_w, s_args->win_h, "cub3d")) == NULL)
+		ft_exit(0, s_args, &s_mlx, 12);
+	create_images(s_args, &s_mlx);
 	load_textures(&s_mlx, s_args);
 	return (s_mlx);
 }
@@ -271,7 +297,7 @@ t_mlx	start_mlx(t_args *s_args)
 
 int				cub_init(char *input)
 {
-	//t_loop s_loop;
+	t_loop s_loop;
 	t_args s_args;
 	t_mlx s_mlx;
 	// t_img img;
@@ -280,9 +306,9 @@ int				cub_init(char *input)
 	clear_args(&s_args);
 	getparam(input, &s_args);
 	s_mlx = start_mlx(&s_args);
-	clear_mlx(&s_mlx);
+	//clear_mlx(&s_mlx);
 	//mlx_destroy_image(s_mlx.mlx, s_args.tex_no.img.img);
-	ft_exit(0, &s_args, &s_mlx, 0);
+
 	// s_mlx.img = &img;
 
 	// 
@@ -293,11 +319,11 @@ int				cub_init(char *input)
 	// s_mlx.minimap.img = mlx_new_image(s_mlx.mlx, s_args.win_h / 5 , s_args.win_h / 5);
 	// s_mlx.minimap.addr = mlx_get_data_addr(s_mlx.minimap.img, 
 	// &s_mlx.minimap.bits_per_pixel, &s_mlx.minimap.size_line, &s_mlx.minimap.endian);
-	// // mlx_key_hook(s_mlx.win, key, &s_mlx);
-	// fill_map(&s_args);
+	//mlx_key_hook(s_mlx.win, key, &s_mlx);
+	fill_map(&s_args);
 	// draw_minimap(&s_args, &s_mlx);
-	// s_loop.s_args = &s_args;
-	// s_loop.s_mlx = &s_mlx;
+	 s_loop.s_args = &s_args;
+	 s_loop.s_mlx = &s_mlx;
 
 	// s_args.tex_no.img.img = mlx_xpm_file_to_image(s_mlx.mlx, s_args.path_no, &s_args.tex_no.w, &s_args.tex_no.h);
 	// s_args.tex_no.img.addr = mlx_get_data_addr(s_args.tex_no.img.img, &s_args.tex_no.img.bits_per_pixel,
@@ -310,12 +336,13 @@ int				cub_init(char *input)
 	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
 						&s_mlx.map.size_line, &s_mlx.map.endian);
 	map(&s_args, &s_mlx);
-	// raycast(&s_args, &s_mlx);
+	raycast(&s_args, &s_mlx);
 
 
-	// mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
-	// mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
-	// mlx_loop(s_mlx.mlx);
-	// ++i;
+
+	 mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
+	 mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
+	 mlx_loop(s_mlx.mlx);
+
 	return (0);
 }

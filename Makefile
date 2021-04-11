@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/09 03:40:01 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/11 17:12:40 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS =					cub3d.c\
 						drawings.c\
 						minimap.c\
 						moving.c\
+						cub_errors.c\
 						gnl/get_next_line.c\
 						gnl/get_next_line_utils.c\
 						main.c

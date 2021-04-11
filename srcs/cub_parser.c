@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:44:34 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:53:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 17:50:46 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int		check_all(int fd, t_args *s_args, char check[8])
 		perror("Ceil color is wrong.\n");
 	while (i <= 7)
 		if (check[i] == -1)
-			ft_exit(fd, s_args, 0, 5);
+			ft_exit(fd, s_args, 0, 2);
 		else if (!check[i++])
 			return (0);
 	return (1);
@@ -78,10 +78,7 @@ static int		read_file(int fd, t_args *s_args, char check[8])
 			break ;
 	}
 	if (i == -1)
-	{
-		perror("Can't read from file.\n");
-		ft_exit(fd, s_args, 0, 5);
-	}
+		ft_exit(fd, s_args, 0, 4);
 	parce_map(s_args, fd);
 	return (1);
 }
@@ -96,11 +93,9 @@ int				getparam(char *str, t_args *s_args)
 	while (i < 8)
 		check[i++] = 0;
 	if ((fd = open(str, O_RDONLY)) == -1)
-	{
-		perror("Can't open file, friend.\n");
-		ft_exit(fd, s_args, 0, 5);
-	}
+		ft_exit(fd, s_args, 0, 3);
 	read_file(fd, s_args, check);
 	close(fd);
+	s_args->player = find_player(s_args);
 	return (1);
 }

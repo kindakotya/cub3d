@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 16:33:12 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:50:29 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 16:26:21 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		main(int argc, char **argv)
 	if (!ft_strnstr(argv[1], ".cub", ft_strlen(argv[1])))
 	{
 		perror("Card must be .cub file.");
-		return (2);
+		return (1);
 	}
 	cub_init(argv[1]);
 }

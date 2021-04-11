@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/09 03:52:32 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 17:49:10 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct		s_mlx
 	t_img		img;
 	t_img		map;
 	t_img		minimap;
+	int			m_size;
 }					t_mlx;
 
 typedef struct		s_loop
@@ -123,7 +124,7 @@ int			cub_init(char *input);
 void		raycast(t_args *s_args, t_mlx *s_mlx);
 
 
-
+int		display_error(int err_no);
 t_sqr 		fill_sqr(int x, int y, int side, int color);
 unsigned int	take_color(t_img *img, int x, int y);
 // drawing
@@ -149,7 +150,7 @@ int			get_res(char *line, t_args *s_args);
 int			get_path(char **path, char *line);
 int			get_color(char *line, unsigned int *color);
 void		parce_map(t_args *s_args, int fd);
-t_player	ft_find_player(t_args *s_args);
+t_player	find_player(t_args *s_args);
 int			getparam(char *input, t_args *s_args);
 void		get_map_res(t_args *s_args, int fd);
 

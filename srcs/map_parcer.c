@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:22:44 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:53:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 16:31:03 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,7 @@ static int		check_map(t_args *s_args)
 			if ((s_args->map[i][j] == '0' || 
 			is_side_of_world(s_args->map[i][j])) && 
 			!check_x(s_args->map, j, i, 0) && !check_y(s_args->map, j, i, 0))
-			{
-				perror("Map is not valid.\n");
-				return (-1);
-			}
+				return (0);
 			++j;
 		}
 		++i;
@@ -110,10 +107,7 @@ void			parce_map(t_args *s_args, int fd)
 		else
 			break ;
 	if ((s_args->map = malloc(2 * sizeof(char*))) == NULL)
-	{
-		perror("Malloc error.\n");
-		ft_exit(fd, s_args, 0, 5);
-	}
+		ft_exit(fd, s_args, 0, 2);
 	s_args->map[0] = line;
 	s_args->map[1] = NULL;
 	while ((i = get_next_line(fd, &line)) == 1)
@@ -124,5 +118,5 @@ void			parce_map(t_args *s_args, int fd)
 		free(line);
 	get_map_res(s_args, fd);
 	if (!check_map(s_args))
-		ft_exit(fd, s_args, 0, 5);
+		ft_exit(fd, s_args, 0, 8);
 }

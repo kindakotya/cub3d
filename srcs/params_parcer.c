@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:15 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:53:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 18:27:42 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void		get_map_res(t_args *s_args, int fd)
 		j = 0;
 		while (s_args->map[i][j])
 		{
-			if (j > s_args->map_w || s_args->map[i][j] != ' ')
+			if (j >= s_args->map_w && s_args->map[i][j] != ' ')
 				s_args->map_w = j + 1;
-			++j;
+				++j;
 		}
 		++i;
 	}
@@ -34,7 +34,7 @@ void		get_map_res(t_args *s_args, int fd)
 	if (s_args->map_h < 3 && s_args->map_w < 3)
 	{
 		perror("Map too small.");
-		ft_exit(fd, s_args, 0, 5);
+		ft_exit(fd, s_args, 0, 6);
 	}
 }
 

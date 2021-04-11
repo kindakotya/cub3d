@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:40 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/10 02:41:06 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/11 16:23:50 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,5 @@ void		ft_exit(int fd, t_args *s_args, t_mlx *s_mlx, int return_val)
 		end_mlx(s_mlx);
 	}
 	//getchar();
-	exit(return_val);
+	exit(display_error(return_val));
 }
