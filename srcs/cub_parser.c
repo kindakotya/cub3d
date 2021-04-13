@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:44:34 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 17:50:46 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 21:45:24 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ static int		read_file(int fd, t_args *s_args, char check[8])
 		i = get_next_line(fd, &line);
 		if (i == -1 || i == 0)
 			ft_exit(fd, s_args, 0, 4);
-		if (*line)
-			parce_cub(s_args, line, check);
 		if (check_all(fd, s_args, check) && *line)
 			break ;
+		if (*line)
+			parce_cub(s_args, line, check);
 		free(line);
 	}
-	parce_map(s_args, fd);
+	parce_map(s_args, fd, &line);
 	return (1);
 }
 
@@ -92,7 +92,7 @@ int				getparam(char *str, t_args *s_args)
 	i = 0;
 	while (i < 8)
 		check[i++] = 0;
-	fd = open(str, O_RDONLY))
+	fd = open(str, O_RDONLY);
 	if (fd == -1)
 		ft_exit(fd, s_args, 0, 3);
 	read_file(fd, s_args, check);

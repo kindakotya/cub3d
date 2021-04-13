@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:24 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 17:49:10 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 23:15:05 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_player		find_player(t_args *s_args)
 	}
 	if (!player.x)
 		ft_exit(0, s_args, 0, 7);
-	set_aov(&player, s_args->map[player.y][player.x]);
-	s_args->map[player.y][player.x] = '0';
+	set_aov(&player, s_args->map[(int)player.y][(int)player.x]);
+	s_args->map[(int)player.y][(int)player.x] = '0';
 	return (player);
 }

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/12 19:37:25 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 23:13:49 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ typedef struct		s_img
 
 typedef struct		s_player
 {
-	int			x;
-	int			y;
+	double			x;
+	double			y;
 	int			aov;
+	double		a;
 	double		angles[8];
 }					t_player;
 
@@ -121,7 +122,7 @@ typedef struct		s_line
 //int     parcecub(t_args *s_args, char *line);
 int			cub_init(char *input);
 
-void		raycast(t_args *s_args, t_mlx *s_mlx, double aov);
+void		raycast(t_args *s_args, t_mlx *s_mlx);
 
 
 int		display_error(int err_no);
@@ -150,7 +151,7 @@ int		is_side_of_world(int c);
 int			get_res(char *line, t_args *s_args);
 int			get_path(char **path, char *line);
 int			get_color(char *line, unsigned int *color);
-void		parce_map(t_args *s_args, int fd);
+void		parce_map(t_args *s_args, int fd, char **line);
 t_player	find_player(t_args *s_args);
 int			getparam(char *input, t_args *s_args);
 void		get_map_res(t_args *s_args, int fd);

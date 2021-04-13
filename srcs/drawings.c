@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/01 17:50:00 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 21:43:40 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,18 @@ unsigned int	take_color(t_img *img, int x, int y)
 	return (0);
 }
 
-unsigned int	*line_colors(t_img *img, int x, int y, int size)
+unsigned int	*line_colors(t_img *img, int x, int tex_size, int line_size)
 {
 	unsigned int	*color;
 	int				i;
 
-	color = malloc(size * sizeof(int));
+	color = malloc(line_size * sizeof(int));
 	if (color == NULL)
 		return (NULL);
 	i = 0;
-	while (i < sqr.side)
+	while (i < line_size)
 	{
-		color[i] = take_color(img, x, y);
+		color[i] = take_color(img, x, i * tex_size / line_size);
 		++i;
 	}
 	return (color);
@@ -59,8 +59,7 @@ unsigned int	*line_colors(t_img *img, int x, int y, int size)
 
 	if (x < 0)
 		x += s_args->tex_no.w;
-	color = line_colors(&s_args->tex_no.img, x, 
-			i * s_args->tex_no.h / sqr.side, sqr.side + 1);
+	color = line_colors(&s_args->tex_no.img, x, s_args->tex_no.h, sqr.side);
 	if (color == NULL)
 		ft_exit(0, s_args, s_mlx, 2);
 	i = 0;

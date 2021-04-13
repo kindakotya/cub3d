@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:06 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 17:14:30 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 23:15:44 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int				draw_minimap(t_args *s_args, t_mlx *s_mlx)
 		x = 0;
 		while (s_args->map[y][x])
 		{
-			if (s_args->map[y][x] == '1' && abs(s_args->player.x - x) < 10 && 
-			abs(s_args->player.y - y) < 10)
+			if (s_args->map[y][x] == '1' && fabs(s_args->player.x - x) < 10 && 
+			fabs(s_args->player.y - y) < 10)
 				draw_sqr(s_args, fill_sqr(
 				(x - s_args->player.x + 10) * s_sqr.side, 
 				(y - s_args->player.y + 10) * s_sqr.side , s_sqr.side, 

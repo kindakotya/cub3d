@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 16:33:12 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 16:26:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 22:44:36 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		main(int argc, char **argv)
 {
-	if (argc != 2)
+	if (argc < 2)
 	{
 		perror("Gimme card.");
 		return (1);

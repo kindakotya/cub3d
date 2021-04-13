@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 18:27:42 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 23:52:40 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,6 @@ void	add_floor_ceil(t_img *img, t_args *s_args)
 	}
 }
 
-
-
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	double c;
@@ -144,7 +142,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	// int mapx;
 	// int mapy;
 	diff = M_PI / 3 / s_args->win_w;
-	fov = s_args->player.angles[s_args->player.aov] - M_PI / 3 / 2;
+	fov = s_args->player.a - /*s_args->player.angles[s_args->player.aov]*/ M_PI / 3 / 2;
 	i = 0;
 	while (i < s_args->win_w)
 	{
@@ -162,8 +160,8 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 			c += 0.05;
 		}
 		line = fill_sqr(i, 
-		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.angles[s_args->player.aov])) / 2,
-		s_args->win_h * 15 / (c * cos(fov - s_args->player.angles[s_args->player.aov])), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
+		s_args->win_h / 2 - s_args->win_h * 15 / (c * cos(fov - s_args->player.a/*s_args->player.angles[s_args->player.aov]*/)) / 2,
+		s_args->win_h * 15 / (c * cos(fov - s_args->player.a/*s_args->player.angles[s_args->player.aov]*/)), 255);// s_args->win_h * 1 / (c * cos(fov - s_args->player.aov)));
 		x = s_args->tex_no.w * (x / side - floor(x / side + 0.5));
 		y = s_args->tex_no.w * (y / side - floor(y / side + 0.5));
 		if (i == 320)
@@ -220,7 +218,7 @@ int		load_texture(void *mlx, t_sprite *tex)
 	tex->img.addr = mlx_get_data_addr(tex->img.img,
 									&tex->img.bits_per_pixel,
 									&tex->img.size_line,
-									&tex->img.endian)
+									&tex->img.endian);
 	if (tex->img.addr == NULL)
 		return (0);
 	return (1);

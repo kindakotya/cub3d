@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:22:44 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 16:31:03 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/13 21:42:59 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,6 @@ static void		load_map(t_args *s_args, int fd)
 
 void			parce_map(t_args *s_args, int fd, char **line)
 {
-	int i;
-
 	s_args->map = malloc(2 * sizeof(char*));
 	if (s_args->map == NULL)
 	{
