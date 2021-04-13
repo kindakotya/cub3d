@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 17:49:10 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/12 19:37:25 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ typedef struct		s_line
 //int     parcecub(t_args *s_args, char *line);
 int			cub_init(char *input);
 
-void		raycast(t_args *s_args, t_mlx *s_mlx);
+void		raycast(t_args *s_args, t_mlx *s_mlx, double aov);
 
 
 int		display_error(int err_no);
@@ -138,7 +138,7 @@ int			move_north(t_args *s_args);
 int			move_south(t_args *s_args);
 int			move_east(t_args *s_args);
 int			move_west(t_args *s_args);
-void		key_arrow_left_pressed(t_args *s_args);
+int		key_arrow_left_pressed(t_loop *s_loop);
 void		key_arrow_rigth_pressed(t_args *s_args);
 // parcer
 void		skip_spaces(char **s);
