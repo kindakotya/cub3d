@@ -66,19 +66,19 @@ static int		read_file(int fd, t_args *s_args, char check[8])
 {
 	char *line;
 	int i;
-	int meow;
 
-	meow = 0;
-	while ((i = get_next_line(fd, &line)) == 1)
+	i = 1;
+	while (i == 1)
 	{
+		i = get_next_line(fd, &line);
+		if (i == -1 || i == 0)
+			ft_exit(fd, s_args, 0, 4);
 		if (*line)
 			parce_cub(s_args, line, check);
-		free(line);
-		if (check_all(fd, s_args, check))
+		if (check_all(fd, s_args, check) && *line)
 			break ;
+		free(line);
 	}
-	if (i == -1)
-		ft_exit(fd, s_args, 0, 4);
 	parce_map(s_args, fd);
 	return (1);
 }
@@ -92,7 +92,8 @@ int				getparam(char *str, t_args *s_args)
 	i = 0;
 	while (i < 8)
 		check[i++] = 0;
-	if ((fd = open(str, O_RDONLY)) == -1)
+	fd = open(str, O_RDONLY))
+	if (fd == -1)
 		ft_exit(fd, s_args, 0, 3);
 	read_file(fd, s_args, check);
 	close(fd);

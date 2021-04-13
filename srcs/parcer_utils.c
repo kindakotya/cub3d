@@ -12,6 +12,13 @@
 
 #include "cub3d.h"
 
+int		is_valid_char(int c)
+{
+	if (c == '0' || c == '1' || c == '2' || is_side_of_world(c))
+		return (1);
+	return (0);
+}
+
 int		is_side_of_world(int c)
 {
 	if (c == 'N' || c == 'W' || c == 'S' || c == 'E')
@@ -39,7 +46,8 @@ char	**add_string(char **arr1, char *str)
 	i = 0;
 	while (arr1[i])
 		++i;
-	if ((arr2 = malloc((i + 2) * sizeof(char*))) == NULL)
+	arr2 = malloc((i + 2) * sizeof(char*));
+	if (arr2 == NULL)
 	{
 		perror("Malloc error.\n");
 		return(NULL);

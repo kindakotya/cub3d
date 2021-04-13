@@ -12,13 +12,6 @@
 
 #include "cub3d.h"
 
-static int		is_valid_char(int c)
-{
-	if (c == '0' || c == '1' || c == '2' || is_side_of_world(c))
-		return (1);
-	return (0);
-}
-
 static int		check_y(char **map, int space_x, int space_y, int walls)
 {
 	while (space_y > 0)
@@ -96,26 +89,44 @@ static int		check_map(t_args *s_args)
 	return (1);
 }
 
-void			parce_map(t_args *s_args, int fd)
+static void		load_map(t_args *s_args, int fd)
 {
 	int i;
 	char *line;
 
-	while ((i = get_next_line(fd, &line)) == 1)
-		if (*line == '\0')
-			free(line);
+	i = 1;
+	while (i == 1)
+	{
+		i = get_next_line(fd, &line);
+		if (i == -1)
+			ft_exit(fd, s_args, 0, 4);
+		if (*line)
+			s_args->map = add_string(s_args->map, line);
 		else
-			break ;
-	if ((s_args->map = malloc(2 * sizeof(char*))) == NULL)
+		{
+			free(line);
+			ft_exit(fd, s_args, 0, 8);
+		}
+		if (s_args->map == NULL)
+			ft_exit(fd, s_args, 0, 2);
+		if (i == 0)
+			return ;
+	}
+}
+
+void			parce_map(t_args *s_args, int fd, char **line)
+{
+	int i;
+
+	s_args->map = malloc(2 * sizeof(char*));
+	if (s_args->map == NULL)
+	{
+		free(*line);
 		ft_exit(fd, s_args, 0, 2);
-	s_args->map[0] = line;
+	}
+	s_args->map[0] = *line;
 	s_args->map[1] = NULL;
-	while ((i = get_next_line(fd, &line)) == 1)
-		s_args->map = add_string(s_args->map, line);
-	if (*line)
-		s_args->map = add_string(s_args->map, line);
-	else
-		free(line);
+	load_map(s_args, fd);
 	get_map_res(s_args, fd);
 	if (!check_map(s_args))
 		ft_exit(fd, s_args, 0, 8);

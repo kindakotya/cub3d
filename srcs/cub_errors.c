@@ -31,19 +31,23 @@ void	parcer_errors(int err_no)
 void	mlx_list(int err_no)
 {
 	if (err_no == 11)
-	perror("Cant init mlx.\n");
+		perror("Cant init mlx.\n");
 	if (err_no == 12)
-	perror("Can't create window\n");
+		perror("Can't create window\n");
 	if (err_no == 13)
-	perror("Can't create image.\n");
+		perror("Can't create image.\n");
 	if (err_no == 14)
-	perror("Can't take image addr.\n");
-	// if (err_no == 15)
-	// if (err_no == 16)
-	// if (err_no == 17)
-	// if (err_no == 18)
-	// if (err_no == 19)
-	
+		perror("Can't take image addr.\n");
+	if (err_no == 15)
+		perror("Can't load north texture.\n");
+	if (err_no == 16)
+		perror("Can't load south texture.\n");
+	if (err_no == 17)
+		perror("Can't load east texture.\n");
+	if (err_no == 18)
+		perror("Can't load west texture.\n");
+	if (err_no == 19)
+		perror("Can't load sprite.\n");
 }
 int		display_error(int err_no)
 {
@@ -53,5 +57,6 @@ int		display_error(int err_no)
 		parcer_errors(err_no);
 	else if (err_no <= 20)
 		mlx_list(err_no);
+	// else if (err_no <= 30)
 	return (err_no);
 }

@@ -65,12 +65,11 @@ int				draw_minimap(t_args *s_args, t_mlx *s_mlx)
 	int		y;
 	t_sqr	s_sqr;
 
-
 	s_sqr.side = s_args->win_h / 100;
 	set_img_black(&s_mlx->minimap, s_mlx->m_size, s_mlx->m_size);
 	y = 0;
 	while (s_args->map[y])
-    {
+	{
 		x = 0;
 		while (s_args->map[y][x])
 		{
@@ -83,7 +82,7 @@ int				draw_minimap(t_args *s_args, t_mlx *s_mlx)
 			++x;
 		}
 		++y;
-    }
+	}
 	draw_sqr(s_args, fill_sqr(s_args->win_h / 10 - 5, 
 	s_args->win_h / 10 - 5, 5, 1000), &s_mlx->minimap);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->minimap.img, 

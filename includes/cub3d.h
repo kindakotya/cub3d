@@ -141,6 +141,7 @@ int			move_west(t_args *s_args);
 int		key_arrow_left_pressed(t_loop *s_loop);
 void		key_arrow_rigth_pressed(t_args *s_args);
 // parcer
+int		is_valid_char(int c);
 void		skip_spaces(char **s);
 void		skip_numbers(char **s);
 char		**add_string(char **arr1, char *str);

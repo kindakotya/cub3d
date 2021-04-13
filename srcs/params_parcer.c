@@ -70,7 +70,8 @@ int		get_path(char **path, char *line)
 	while (line[i])
 		if (ft_isspace(line[i++]))
 			return (-1);
-	if ((*path = ft_strdup(line)) == NULL)
+	*path = ft_strdup(line);
+	if (path == NULL)
 	{
 		perror("Malloc error.\n");
 		return (-1);
@@ -85,7 +86,8 @@ int		get_color(char *line, unsigned int *color)
 		return (-1);
 	*color += ft_atoi(line) << 16;
 	skip_numbers(&line);
-	if ((line = ft_strnstr(line, ",", 1)) == NULL)
+	line = ft_strnstr(line, ",", 1);
+	if (line == NULL)
 		return (-1);
 	++line;
 	skip_spaces(&line);
@@ -93,7 +95,8 @@ int		get_color(char *line, unsigned int *color)
 		return (-1);
 	*color += ft_atoi(line) << 8;
 	skip_numbers(&line);
-	if ((line = ft_strnstr(line, ",", 1)) == NULL)
+	line = ft_strnstr(line, ",", 1);
+	if (line == NULL)
 		return (-1);
 	++line;
 	skip_spaces(&line);
