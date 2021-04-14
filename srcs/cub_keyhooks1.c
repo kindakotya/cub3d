@@ -20,7 +20,7 @@ void		key_a_pressed(t_args *s_args)
 
 	x = s_args->player.x + MEOW * cos(s_args->player.a - M_PI_2);
 	y = s_args->player.y + MEOW * sin(s_args->player.a - M_PI_2);
-	if (s_args->map[(int)floor(y + 0.5)][(int)floor(x + 0.5)] != '1')
+	if (s_args->map[(int)floor(y + 1.5)][(int)floor(x + 1.5)] != '1')
 	{
 		s_args->player.x = x;
 		s_args->player.y = y;
@@ -34,7 +34,7 @@ void		key_w_pressed(t_args *s_args)
 
 	x = s_args->player.x + MEOW * cos(s_args->player.a);
 	y = s_args->player.y + MEOW * sin(s_args->player.a);
-	if (s_args->map[(int)floor(y + 0.5)][(int)floor(x + 0.5)] != '1')
+	if (s_args->map[(int)floor(y + 1.5)][(int)floor(x + 1.5)] != '1')
 	{
 		s_args->player.x = x;
 		s_args->player.y = y;
@@ -65,7 +65,7 @@ void		key_d_pressed(t_args *s_args)
 
 	x = s_args->player.x + MEOW * cos(s_args->player.a + M_PI_2);
 	y = s_args->player.y + MEOW * sin(s_args->player.a + M_PI_2);
-	if (s_args->map[(int)floor(y + 0.5)][(int)floor(x + 0.5)] != '1')
+	if (s_args->map[(int)floor(y + 1.5)][(int)floor(x + 1.5)] != '1')
 	{
 		s_args->player.x = x;
 		s_args->player.y = y;
@@ -79,7 +79,7 @@ void		key_s_pressed(t_args *s_args)
 
 	x = s_args->player.x + MEOW * cos(s_args->player.a + M_PI);
 	y = s_args->player.y + MEOW * sin(s_args->player.a + M_PI);
-	if (s_args->map[(int)floor(y + 0.5)][(int)floor(x + 0.5)] != '1')
+	if (s_args->map[(int)floor(y + 1.5)][(int)floor(x + 1.5)] != '1')
 	{
 		s_args->player.x = x;
 		s_args->player.y = y;
@@ -100,10 +100,12 @@ int key_pressed(int keycode, t_loop *s_hook)
 		key_w_pressed(s_hook->s_args);
 	else if (keycode == KEY_S)
 		key_s_pressed(s_hook->s_args);
-	else if (keycode == KEY_ARROW_LEFT)
+	else if (keycode == KEY_ARROW_LEFT && keycode == KEY_Q)
 		key_arrow_left_pressed(s_hook);
-	else if (keycode == KEY_ARROW_RIGTH)
+	else if (keycode == KEY_ARROW_RIGTH && keycode == KEY_E)
 		key_arrow_rigth_pressed(s_hook->s_args);
+	else if (keycode == KEY_F12 && s_hook->s_args->screenshot)
+		make_screenshot(s_hook->s_args, s_hook->s_mlx);
 	else if (keycode == KEY_ESC)
 		ft_exit(0, s_hook->s_args, s_hook->s_mlx, 0);
 	c = s_hook->s_args->

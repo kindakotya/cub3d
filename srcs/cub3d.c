@@ -37,6 +37,7 @@ static void		clear_args(t_args *s_args)
 	s_args->player.x = 0;
 	s_args->player.y = 0;
 	s_args->player.aov = 1;
+	s_args->screenshot = NULL;
 	clear_sprite(&s_args->tex_ea);
 	clear_sprite(&s_args->tex_no);
 	clear_sprite(&s_args->tex_so);
@@ -287,7 +288,7 @@ t_mlx	start_mlx(t_args *s_args)
 }
 
 
-int				cub_init(char *input)
+int				cub_init(char **input, int save)
 {
 	t_loop s_loop;
 	t_args s_args;
@@ -296,7 +297,9 @@ int				cub_init(char *input)
 	// int y = 0;
 
 	clear_args(&s_args);
-	getparam(input, &s_args);
+	getparam(input[1], &s_args);
+	if (save)
+		s_args.screenshot = input[3];
 	s_mlx = start_mlx(&s_args);
 	//clear_mlx(&s_mlx);
 	//mlx_destroy_image(s_mlx.mlx, s_args.tex_no.img.img);

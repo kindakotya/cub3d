@@ -22,10 +22,6 @@
 # include "libft.h"
 
 int		get_next_line(int fd, char **line);
-// size_t	ft_strlen(const char *s);
-// char	*ft_strjoin(const char *s1, const char *s2);
-// char	*ft_strdup(const char *s);
-// void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_strnl(char *s);
 
 #endif

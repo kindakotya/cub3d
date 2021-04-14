@@ -33,6 +33,9 @@
 #define KEY_A 0
 #define KEY_S 1
 #define KEY_D 2
+#define KEY_Q 12
+#define KEY_E 14
+#define KEY_F12 111
 #define KEY_ARROW_LEFT 123
 #define KEY_ARROW_RIGTH 124
 #define KEY_ESC 53
@@ -85,6 +88,7 @@ typedef struct		s_args
 	int				map_w;
 	int				map_h;
 	char			**win;
+	char			*screenshot;
 	t_player		player;
 	t_sprite		tex_no;
 	t_sprite		tex_so;
