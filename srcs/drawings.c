@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/13 21:43:40 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/16 17:41:50 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,21 @@ unsigned int	*line_colors(t_img *img, int x, int tex_size, int line_size)
 	return (color);
 }
 
- void			draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, double x)
+void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)
 {
 	int i;
 	unsigned int *color;
-	i = 0;
 
 	if (x < 0)
-		x += s_args->tex_no.w;
-	color = line_colors(&s_args->tex_no.img, x, s_args->tex_no.h, sqr.side);
+		x += line->tex->w;
+	color = line_colors(&line->tex->img, x, line->tex->h, line->length);
 	if (color == NULL)
 		ft_exit(0, s_args, s_mlx, 2);
 	i = 0;
-	while (i < sqr.side)
+	while (i < line->length)
 	{
-		if (sqr.x < s_args->win_w && sqr.y + i < s_args->win_h)
-			my_mlx_pixel_put(&s_mlx->img, sqr.x, sqr.y + i, color[i]);
+		if (line->x < s_args->win_w && line->y + i < s_args->win_h)
+			my_mlx_pixel_put(&s_mlx->img, line->x, line->y + i, color[i]);
 		++i;
 	}
 	free(color);

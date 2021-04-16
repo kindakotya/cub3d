@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 16:57:55 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/13 22:46:26 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/16 04:31:39 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	key_arrow_left_pressed(t_loop *s_loop)
 {
-	s_loop->s_args->player.a -= 0.2;
+	s_loop->s_args->player.aov -= 0.26179938779;
 	// double prev;
 	// double new;
 
@@ -40,7 +40,7 @@ int	key_arrow_left_pressed(t_loop *s_loop)
 
 void	key_arrow_rigth_pressed(t_args *s_args)
 {
-	s_args->player.a += 0.2;
+	s_args->player.aov += 0.26179938779;
 	// if (s_args->player.aov == 7)
 	// 	s_args->player.aov = 0;
 	// else

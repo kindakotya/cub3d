@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:24 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/13 23:15:05 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/16 04:30:14 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,14 @@ static int		set_pos(int c, t_player *player, int y, int x)
 
 static void		set_aov(t_player *player, char cp)
 {
-	player->angles[0] = 1.5 * M_PI;
-	player->angles[1] = 1.75 * M_PI;
-	player->angles[2] = 2. * M_PI;
-	player->angles[3] = M_PI_4;
-	player->angles[4] = M_PI_2;
-	player->angles[5] = 0.75 * M_PI;
-	player->angles[6] = M_PI;
-	player->angles[7] = 1.25 * M_PI;
 	if (cp == 'N')
-		player->aov = 0;
+		player->aov = 1.5 * M_PI;
 	else if (cp == 'S')
-		player->aov = 4;
+		player->aov = M_PI_2;
 	else if (cp == 'E')
-		player->aov = 2;
+		player->aov = 2. * M_PI;
 	else if (cp == 'W')
-		player->aov = 6;
+		player->aov = M_PI;
 }
 
 t_player		find_player(t_args *s_args)

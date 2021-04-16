@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/13 23:13:49 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/16 17:23:19 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ typedef struct		s_player
 {
 	double			x;
 	double			y;
-	int			aov;
-	double		a;
-	double		angles[8];
+	double			aov;
 }					t_player;
 
 typedef struct		s_sprite
@@ -89,6 +87,8 @@ typedef struct		s_args
 	int				map_h;
 	char			**win;
 	char			*screenshot;
+	int				side;
+	double			rays_density;
 	t_player		player;
 	t_sprite		tex_no;
 	t_sprite		tex_so;
@@ -108,6 +108,14 @@ typedef struct		s_mlx
 	int			m_size;
 }					t_mlx;
 
+typedef struct		s_ray
+{
+	double x;
+	double y;
+	double c;
+	double fov;
+}					t_ray;
+
 typedef struct		s_loop
 {
 	t_mlx		*s_mlx;
@@ -119,12 +127,11 @@ typedef struct		s_line
 	int x;
 	int y;
 	int length;
-	int *color;
-	t_sprite tex;
+	t_sprite *tex;
 }					t_line;
 
 //int     parcecub(t_args *s_args, char *line);
-int			cub_init(char *input);
+int			cub_init(char **input, int save);
 
 void		raycast(t_args *s_args, t_mlx *s_mlx);
 
@@ -136,7 +143,7 @@ unsigned int	take_color(t_img *img, int x, int y);
 void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
 void		my_mlx_pixel_put(t_img *img, int x, int y, int color);
 int			draw_minimap(t_args *s_args, t_mlx *s_mlx);
- void		draw_line(t_args *s_args, t_sqr sqr, t_mlx *s_mlx, double x);
+void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x);
 // keyhooks
 int			key_pressed(int keycode, t_loop *s_hook);
 int			move_north(t_args *s_args);
@@ -161,6 +168,8 @@ int			getparam(char *input, t_args *s_args);
 void		get_map_res(t_args *s_args, int fd);
 
 void		ft_exit(int fd, t_args *s_args, t_mlx *s_mlx, int return_val);
+void		screenshot(t_args *s_args, t_mlx *s_mlx);
+t_mlx	start_mlx(t_args *s_args);
 
 void map(t_args *s_args, t_mlx *s_mlx);
 #endif

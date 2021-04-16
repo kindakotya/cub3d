@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 16:17:47 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 17:37:07 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/16 03:48:07 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	parcer_errors(int err_no)
 		perror("There is no player on map.\n");
 	else if (err_no == 8)
 		perror("Map is not valid.\n");
-	// else if (err_no == 9)
+	else if (err_no == 9)
+		perror("File is not valid.\n");
 	// else if (err_no == 10)
 }
 
@@ -48,6 +49,8 @@ void	mlx_list(int err_no)
 		perror("Can't load west texture.\n");
 	if (err_no == 19)
 		perror("Can't load sprite.\n");
+	if (err_no == 20)
+		perror("Can't create file.\n");
 }
 int		display_error(int err_no)
 {
