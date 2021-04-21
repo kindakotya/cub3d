@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:24 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/16 04:30:14 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/21 03:27:22 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static int		set_pos(int c, t_player *player, int y, int x)
 {
 	if (is_side_of_world(c))
 	{
-		player->x = x;
-		player->y = y;
+		player->x = x + 0.5;
+		player->y = y + 0.5;
 		return (1);
 	}
 	return (0);

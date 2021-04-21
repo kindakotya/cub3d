@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/16 04:25:40 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/21 03:50:45 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,7 @@ NAME = cub3d
 LIBFT = libft/libft.a
 
 SRCS =					cub3d.c\
-						cub_keyhooks1.c\
-						cub_keyhooks2.c\
+						cub_keyhooks.c\
 						cub_parser.c\
 						params_parcer.c\
 						parcer_utils.c\

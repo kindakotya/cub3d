@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/16 17:45:43 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/21 03:58:35 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			clear_mlx(t_mlx *s_mlx)
 	s_mlx->m_size = 0;
 }
 
-static void		clear_sprite(t_sprite *sprite)
+static void		clear_sprite(t_tex *sprite)
 {
 	sprite->h = 0;
 	sprite->w = 0;
@@ -120,53 +120,99 @@ void	add_floor_ceil(t_img *img, t_args *s_args)
 		while (x < s_args->win_w)
 		{	
 			if (y < s_args->win_h / 2)
-				my_mlx_pixel_put(img, x++, y, s_args->floor);
+				put_pixel(img, x++, y, s_args->floor);
 			else
-				my_mlx_pixel_put(img, x++, y, s_args->ceil);
+				put_pixel(img, x++, y, s_args->ceil);
 		}
 		++y;
 	}
 }
 
-void		fill_line(t_line *line, t_args *s_args, t_ray *ray, t_sprite *tex)
+void		fill_line(t_line *line, t_args *s_args, t_ray *ray, t_tex *tex)
 {
-	line->y = s_args->win_h / 2 - s_args->win_h * 15 / (ray->c * cos(ray->fov - s_args->player.aov)) / 2;
-	line->length = s_args->win_h * 15 / (ray->c * cos(ray->fov - s_args->player.aov));
+	line->y = s_args->win_h / 2 - s_args->win_h * 15 /
+			(ray->c * cos(ray->fov - s_args->player.aov)) / 2;
+	line->length = s_args->win_h * 15 /
+				(ray->c * cos(ray->fov - s_args->player.aov));
 	line->tex = tex;
+	line->tex_x = ray->map_x - floor(ray->map_x + 0.5);
+	line->tex_y = ray->map_y - floor(ray->map_y + 0.5);
 }
 
+t_ray		set_ray(t_args *s_args)
+{
+	t_ray ray;
 
+	ray.player.x = (s_args->player.x) * s_args->side;
+	ray.player.y = (s_args->player.y) * s_args->side;
+	ray.fov = s_args->player.aov - 0.52359877559;
+	return (ray);
+}
+
+void	set_sprite(t_sprite *sprite, t_args *s_args, t_ray *ray)
+{
+	// sprite->y = s_args->win_h - s_args->win_h * 15 /
+	// 		(ray->c * cos(ray->fov - s_args->player.aov) + 0.5) / 2;
+	sprite->length = s_args->win_h * 15 / ray->c;
+	sprite->tex_x = s_args->sprite.w * (ray->map_x - floor(ray->map_x + 0.5));
+	sprite->tex_y = s_args->sprite.w * (ray->map_y - floor(ray->map_y + 0.5));
+}
+
+int		ray_pos(t_ray *ray, t_args *s_args)
+{
+	ray->x = ray->player.x + ray->c * cos(ray->fov);
+	ray->y = ray->player.y + ray->c * sin(ray->fov);
+	ray->map_x = ray->x / s_args->side;
+	ray->map_y = ray->y / s_args->side;
+	// if ((ray->x < 0 || ray->y < 0 ||
+	// 	ray->y >= s_args->win_h || ray->x >= s_args->win_w ||
+	// 	s_args->map[(int)ray->map_y][(int)ray->map_x] == '2'))
+	// {
+	// 	sprite->x[sprite->num] = ray->map_x;
+	// 	++sprite->num;
+// 
+	// }
+	if (ray->x < 0 || ray->y < 0 || 
+		ray->y >= s_args->win_h || ray->x >= s_args->win_w ||
+		s_args->map[(int)ray->map_y][(int)ray->map_x] == '1')
+			return (1);
+	return (0);
+}
 
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	t_ray ray;
-	double tex_x;
-	double tex_y;
 	t_line line;
+	t_sprite sprite;
 
+	sprite.num = 0;
 	add_floor_ceil(&s_mlx->img, s_args);
-	ray.fov = s_args->player.aov - 0.52359877559;
+	ray = set_ray(s_args);
 	line.x = 0;
 	while (line.x < s_args->win_w)
 	{
 		ray.c = 0.01;
-		while (ray.c)
+		while (!ray_pos(&ray, s_args))
 		{
-			ray.x = (s_args->player.x + 0.5) * s_args->side + ray.c * cos(ray.fov);
-			ray.y = (s_args->player.y + 0.5) * s_args->side + ray.c * sin(ray.fov);
-			if (ray.x < 0 || ray.y < 0 || ray.y >= s_args->win_h || ray.x >= s_args->win_w ||
-			s_args->map[(int)ray.y / s_args->side][(int)ray.x / s_args->side] == '1')
-				break ;
-			my_mlx_pixel_put(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
-			ray.c += 0.05;
+			put_pixel(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
+			ray.c += 0.1;
 		}
-		fill_line(&line, s_args, &ray, &s_args->tex_so);
-		tex_x = line.tex->w * (ray.x / s_args->side - floor(ray.x / s_args->side + 0.5));
-		tex_y = line.tex->w * (ray.y / s_args->side - floor(ray.y / s_args->side + 0.5));
-		if (fabs(tex_x) < fabs(tex_y))
-			draw_line(s_args, &line, s_mlx, tex_y);
+		if (1)
+		{
+			if (ray.player.y < ray.y)
+				fill_line(&line, s_args, &ray, &s_args->tex_no);
+			else
+				fill_line(&line, s_args, &ray, &s_args->tex_so);
+		}
 		else
-			draw_line(s_args, &line, s_mlx, tex_x);
+			if (ray.player.x < ray.x)
+				fill_line(&line, s_args, &ray, &s_args->tex_we);
+			else 
+				fill_line(&line, s_args, &ray, &s_args->tex_ea);
+		if (fabs(line.tex_x) < fabs(line.tex_y))
+			draw_line(s_args, &line, s_mlx, line.tex_y * line.tex->w);
+		else
+			draw_line(s_args, &line, s_mlx, line.tex_x * line.tex->w);
 		++line.x;
 		ray.fov += s_args->rays_density;
 	}
@@ -189,46 +235,23 @@ int				cub_init(char **input, int save)
 	t_loop s_loop;
 	t_args s_args;
 	t_mlx s_mlx;
-	// t_img img;
-	// int y = 0;
 
 	clear_args(&s_args);
 	getparam(input[1], &s_args);
 	if (save)
 		s_args.screenshot = input[3];
 	s_mlx = start_mlx(&s_args);
-	//clear_mlx(&s_mlx);
-	//mlx_destroy_image(s_mlx.mlx, s_args.tex_no.img.img);
 
-	// s_mlx.img = &img;
-
-	// 
-	// 
-	// s_mlx.img.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
-	// s_mlx.img.addr = mlx_get_data_addr(s_mlx.img.img, &s_mlx.img.bits_per_pixel,
-	// 					&s_mlx.img.size_line, &s_mlx.img.endian);
-	// s_mlx.minimap.img = mlx_new_image(s_mlx.mlx, s_args.win_h / 5 , s_args.win_h / 5);
-	// s_mlx.minimap.addr = mlx_get_data_addr(s_mlx.minimap.img, 
-	// &s_mlx.minimap.bits_per_pixel, &s_mlx.minimap.size_line, &s_mlx.minimap.endian);
-	//mlx_key_hook(s_mlx.win, key, &s_mlx);
 	fill_map(&s_args);
-	// draw_minimap(&s_args, &s_mlx);
-	 s_loop.s_args = &s_args;
-	 s_loop.s_mlx = &s_mlx;
-
-	// s_args.tex_no.img.img = mlx_xpm_file_to_image(s_mlx.mlx, s_args.path_no, &s_args.tex_no.w, &s_args.tex_no.h);
-	// s_args.tex_no.img.addr = mlx_get_data_addr(s_args.tex_no.img.img, &s_args.tex_no.img.bits_per_pixel,
-	// 										&s_args.tex_no.img.size_line, &s_args.tex_no.img.endian);
-
-	// mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_args.tex_no.img.img, 0, 0);
-
+	s_loop.s_args = &s_args;
+	s_loop.s_mlx = &s_mlx;
 	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
 	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
 	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
 						&s_mlx.map.size_line, &s_mlx.map.endian);
 	map(&s_args, &s_mlx);
 	raycast(&s_args, &s_mlx);
-
+	draw_minimap(&s_args, &s_mlx);
 
 
 	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);

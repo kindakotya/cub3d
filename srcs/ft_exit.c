@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:40 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/11 16:23:50 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/20 01:43:01 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void		destroy_textures(void *mlx, t_args *s_args)
 		mlx_destroy_image(mlx, s_args->sprite.img.img);
 }
 
-static void		end_mlx(t_mlx *s_mlx)
+static void		close_mlx(t_mlx *s_mlx)
 {
 	if (s_mlx->win)
 		mlx_destroy_window(s_mlx->mlx, s_mlx->win);
@@ -70,7 +70,7 @@ void		ft_exit(int fd, t_args *s_args, t_mlx *s_mlx, int return_val)
 	{
 		if (s_mlx->mlx)
 			destroy_textures(s_mlx->mlx, s_args);
-		end_mlx(s_mlx);
+		close_mlx(s_mlx);
 	}
 	//getchar();
 	exit(display_error(return_val));

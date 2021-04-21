@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/16 17:23:19 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/21 03:44:48 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ typedef struct		s_player
 	double			aov;
 }					t_player;
 
-typedef struct		s_sprite
+typedef struct		s_tex
 {
 	t_img	img;
 	int		w;
 	int		h;
 	char	*path;
-}					t_sprite;
+}					t_tex;
 
 typedef struct		s_args
 {
@@ -90,11 +90,11 @@ typedef struct		s_args
 	int				side;
 	double			rays_density;
 	t_player		player;
-	t_sprite		tex_no;
-	t_sprite		tex_so;
-	t_sprite		tex_ea;
-	t_sprite		tex_we;
-	t_sprite		sprite;
+	t_tex		tex_no;
+	t_tex		tex_so;
+	t_tex		tex_ea;
+	t_tex		tex_we;
+	t_tex		sprite;
 }					t_args;
 
 typedef struct		s_mlx
@@ -108,12 +108,18 @@ typedef struct		s_mlx
 	int			m_size;
 }					t_mlx;
 
+
+
+
 typedef struct		s_ray
 {
 	double x;
 	double y;
 	double c;
 	double fov;
+	double map_x;
+	double map_y;
+	t_player player;
 }					t_ray;
 
 typedef struct		s_loop
@@ -122,13 +128,30 @@ typedef struct		s_loop
 	t_args		*s_args;
 }					t_loop;
 
+
+typedef struct		s_sprite
+{
+	double length;
+	int		x[100];
+	int		y[100];
+	int		num;
+	double tex_x;
+	double tex_y;
+}					t_sprite;
+
 typedef struct		s_line
 {
 	int x;
 	int y;
 	int length;
-	t_sprite *tex;
+	t_tex *tex;
+	double tex_x;
+	double tex_y;
+	int is_sprite;
+	t_sprite sprite;
 }					t_line;
+
+
 
 //int     parcecub(t_args *s_args, char *line);
 int			cub_init(char **input, int save);
@@ -141,16 +164,13 @@ t_sqr 		fill_sqr(int x, int y, int side, int color);
 unsigned int	take_color(t_img *img, int x, int y);
 // drawing
 void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
-void		my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void		put_pixel(t_img *img, int x, int y, int color);
 int			draw_minimap(t_args *s_args, t_mlx *s_mlx);
 void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x);
 // keyhooks
 int			key_pressed(int keycode, t_loop *s_hook);
-int			move_north(t_args *s_args);
-int			move_south(t_args *s_args);
-int			move_east(t_args *s_args);
-int			move_west(t_args *s_args);
-int		key_arrow_left_pressed(t_loop *s_loop);
+void		step(t_args *s_args, double angle);
+void		key_arrow_left_pressed(t_args *s_args);
 void		key_arrow_rigth_pressed(t_args *s_args);
 // parcer
 int		is_valid_char(int c);

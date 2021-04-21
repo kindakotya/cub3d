@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 03:51:29 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/16 15:23:03 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/20 02:09:16 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		screen_params(t_mlx *s_mlx, t_args *s_args)
 		return(s_args->win_w / 5);
 }
 
-int		load_texture(void *mlx, t_sprite *tex)
+int		load_texture(void *mlx, t_tex *tex)
 {
 	tex->img.img = mlx_xpm_file_to_image(mlx, tex->path, &tex->w, &tex->h);
 	if (tex->img.img == NULL)
