@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/21 03:44:48 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/22 03:22:13 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,11 @@ typedef struct		s_ray
 	t_player player;
 }					t_ray;
 
-typedef struct		s_loop
+typedef struct		s_all
 {
 	t_mlx		*s_mlx;
 	t_args		*s_args;
-}					t_loop;
+}					t_all;
 
 
 typedef struct		s_sprite
@@ -168,10 +168,7 @@ void		put_pixel(t_img *img, int x, int y, int color);
 int			draw_minimap(t_args *s_args, t_mlx *s_mlx);
 void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x);
 // keyhooks
-int			key_pressed(int keycode, t_loop *s_hook);
-void		step(t_args *s_args, double angle);
-void		key_arrow_left_pressed(t_args *s_args);
-void		key_arrow_rigth_pressed(t_args *s_args);
+int			key_pressed(int keycode, t_all *s_hook);
 // parcer
 int		is_valid_char(int c);
 void		skip_spaces(char **s);

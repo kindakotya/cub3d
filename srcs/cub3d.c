@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/21 03:58:35 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/22 03:22:13 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,20 +219,15 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
 }
 
-int				ft_loop(t_loop *s_loop)
+int			red_cross(t_all *s_all)
 {
-	// sleep(1);
-	s_loop->s_args->player.aov += M_PI / 12;
-	draw_minimap(s_loop->s_args, s_loop->s_mlx);
+	ft_exit(0, s_all->s_args, s_all->s_mlx, 0);
 	return (0);
 }
 
-
-
-
 int				cub_init(char **input, int save)
 {
-	t_loop s_loop;
+	t_all s_all;
 	t_args s_args;
 	t_mlx s_mlx;
 
@@ -243,8 +238,8 @@ int				cub_init(char **input, int save)
 	s_mlx = start_mlx(&s_args);
 
 	fill_map(&s_args);
-	s_loop.s_args = &s_args;
-	s_loop.s_mlx = &s_mlx;
+	s_all.s_args = &s_args;
+	s_all.s_mlx = &s_mlx;
 	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
 	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
 	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
@@ -255,7 +250,8 @@ int				cub_init(char **input, int save)
 
 
 	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
-	mlx_hook(s_mlx.win, 2, 1, key_pressed, &s_loop);
+	mlx_hook(s_mlx.win, 2, 1, &key_pressed, &s_all);
+	mlx_hook(s_mlx.win, 17, 0, &red_cross, &s_all);
 	mlx_loop(s_mlx.mlx);
 
 	return (0);

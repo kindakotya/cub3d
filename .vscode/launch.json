@@ -12,6 +12,7 @@
 			"args": ["test"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
+			"targetArchitecture": "x86_64", 
 			"environment": [],
 			"console": "externalTerminal",
 			"MIMode": "lldb"

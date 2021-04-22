@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:06 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/20 01:43:45 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/21 19:04:23 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int				draw_minimap(t_args *s_args, t_mlx *s_mlx)
 		}
 		++y;
 	}
-	draw_sqr(s_args, fill_sqr(s_args->win_h / 10 - s_sqr.side, 
-	s_args->win_h / 10 - s_sqr.side, s_sqr.side, 0x00FFFFFF), &s_mlx->minimap);
+	draw_sqr(s_args, fill_sqr(s_args->win_h / 10 - s_sqr.side * 1.5, 
+	s_args->win_h / 10 - s_sqr.side * 1.5, s_sqr.side / 2, 0x00FFFFFF), &s_mlx->minimap);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->minimap.img, 
 	s_args->win_w - s_mlx->m_size, s_mlx->m_size * 4);
 	return (1);

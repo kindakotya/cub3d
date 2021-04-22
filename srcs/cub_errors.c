@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 16:17:47 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/16 03:48:07 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/22 01:19:17 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	mlx_list(int err_no)
 		perror("Can't load sprite.\n");
 	if (err_no == 20)
 		perror("Can't create file.\n");
+	if (err_no == 21)
+		perror("Can't write to file.\n");
 }
 int		display_error(int err_no)
 {
@@ -58,7 +60,7 @@ int		display_error(int err_no)
 		perror("Malloc error.\n");
 	else if (err_no > 2 && err_no <= 10)
 		parcer_errors(err_no);
-	else if (err_no <= 20)
+	else if (err_no <= 23)
 		mlx_list(err_no);
 	// else if (err_no <= 30)
 	return (err_no);
