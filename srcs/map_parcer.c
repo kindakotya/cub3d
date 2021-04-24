@@ -6,18 +6,18 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:22:44 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/13 21:42:59 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/24 03:44:27 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int		check_y(char **map, int space_x, int space_y, int walls)
+static int	check_y(char **map, int space_x, int space_y, int walls)
 {
 	while (space_y > 0)
 	{
 		if (!is_valid_char(map[--space_y][space_x]))
-			break;
+			break ;
 		if (map[space_y--][space_x] == '1')
 		{
 			++walls;
@@ -27,7 +27,7 @@ static int		check_y(char **map, int space_x, int space_y, int walls)
 	while (map[space_y])
 	{
 		if (!is_valid_char(map[space_y][space_x]))
-			break;
+			break ;
 		if (map[++space_y][space_x] == '1')
 		{
 			++walls;
@@ -39,12 +39,12 @@ static int		check_y(char **map, int space_x, int space_y, int walls)
 	return (0);
 }
 
-static int		check_x(char **map, int space_x, int space_y, int walls)
+static int	check_x(char **map, int space_x, int space_y, int walls)
 {
 	while (space_x > 0)
 	{
 		if (!is_valid_char(map[space_y][space_x]))
-			break;
+			break ;
 		if (map[space_y][--space_x] == '1')
 		{
 			++walls;
@@ -54,7 +54,7 @@ static int		check_x(char **map, int space_x, int space_y, int walls)
 	while (map[space_y][space_x])
 	{
 		if (!is_valid_char(map[space_y][space_x]))
-			break;
+			break ;
 		if (map[space_y][++space_x] == '1')
 		{
 			++walls;
@@ -66,33 +66,34 @@ static int		check_x(char **map, int space_x, int space_y, int walls)
 	return (0);
 }
 
-static int		check_map(t_args *s_args)
+static int	check_map(t_args *s_args)
 {
-	int i;
-	int j;
+	int	y;
+	int	x;
 
-	i = 0;
-	j = 0;
-	while (s_args->map[i])
+	y = 0;
+	x = 0;
+	while (s_args->map[y])
 	{
-		j = 0;
-		while (s_args->map[i][j])
+		x = 0;
+		while (s_args->map[y][x])
 		{
-			if ((s_args->map[i][j] == '0' || 
-			is_side_of_world(s_args->map[i][j])) && 
-			!check_x(s_args->map, j, i, 0) && !check_y(s_args->map, j, i, 0))
+			if ((s_args->map[y][x] == '0'
+				|| is_side_of_world(s_args->map[y][x]))
+				&& !check_x(s_args->map, x, y, 0)
+				&& !check_y(s_args->map, x, y, 0))
 				return (0);
-			++j;
+			++x;
 		}
-		++i;
+		++y;
 	}
 	return (1);
 }
 
-static void		load_map(t_args *s_args, int fd)
+static void	load_map(t_args *s_args, int fd)
 {
-	int i;
-	char *line;
+	int		i;
+	char	*line;
 
 	i = 1;
 	while (i == 1)
@@ -114,9 +115,9 @@ static void		load_map(t_args *s_args, int fd)
 	}
 }
 
-void			parce_map(t_args *s_args, int fd, char **line)
+void	parce_map(t_args *s_args, int fd, char **line)
 {
-	s_args->map = malloc(2 * sizeof(char*));
+	s_args->map = malloc(2 * sizeof(char *));
 	if (s_args->map == NULL)
 	{
 		free(*line);

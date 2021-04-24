@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/22 03:22:13 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/23 17:48:53 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ typedef struct		s_ray
 {
 	double x;
 	double y;
+	double prev_x;
+	double prev_y;
 	double c;
 	double fov;
 	double map_x;

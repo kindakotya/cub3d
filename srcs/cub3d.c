@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/22 03:22:13 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/24 03:46:53 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,12 @@ t_ray		set_ray(t_args *s_args)
 {
 	t_ray ray;
 
+	ray.x = 0;
+	ray.y = 0;
+	ray.map_x = 0;
+	ray.map_y = 0;
+	ray.prev_x = 0;
+	ray.prev_y = 0;
 	ray.player.x = (s_args->player.x) * s_args->side;
 	ray.player.y = (s_args->player.y) * s_args->side;
 	ray.fov = s_args->player.aov - 0.52359877559;
@@ -179,6 +185,30 @@ int		ray_pos(t_ray *ray, t_args *s_args)
 	return (0);
 }
 
+void	drawing_params(t_args *s_args, t_mlx *s_mlx, t_ray *ray, t_line *line)
+{
+	if (fabs(ray->prev_x - ray->x) > fabs(ray->prev_y - ray->y))// - ray->y < ray->prev_x - ray->x)
+		{
+			if (ray->player.y < ray->y)
+				fill_line(line, s_args, ray, &s_args->tex_no);
+			else
+				fill_line(line, s_args, ray, &s_args->tex_so);
+		}
+	else
+		{
+			if (ray->player.x < ray->x)
+				fill_line(line, s_args, ray, &s_args->tex_we);
+			else 
+				fill_line(line, s_args, ray, &s_args->tex_ea);
+		}
+	if (fabs(line->tex_x) < fabs(line->tex_y))
+		draw_line(s_args, line, s_mlx, line->tex_y * line->tex->w);
+	else
+		draw_line(s_args, line, s_mlx, line->tex_x * line->tex->w);
+	ray->prev_x = ray->x;
+	ray->prev_y = ray->y;
+}
+
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	t_ray ray;
@@ -191,28 +221,15 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	line.x = 0;
 	while (line.x < s_args->win_w)
 	{
-		ray.c = 0.01;
+		ray.c = 5;
+		ray.prev_x = ray.x;
+		ray.prev_y = ray.y;
 		while (!ray_pos(&ray, s_args))
 		{
-			put_pixel(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
-			ray.c += 0.1;
+			//put_pixel(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
+			ray.c *= 1.001;
 		}
-		if (1)
-		{
-			if (ray.player.y < ray.y)
-				fill_line(&line, s_args, &ray, &s_args->tex_no);
-			else
-				fill_line(&line, s_args, &ray, &s_args->tex_so);
-		}
-		else
-			if (ray.player.x < ray.x)
-				fill_line(&line, s_args, &ray, &s_args->tex_we);
-			else 
-				fill_line(&line, s_args, &ray, &s_args->tex_ea);
-		if (fabs(line.tex_x) < fabs(line.tex_y))
-			draw_line(s_args, &line, s_mlx, line.tex_y * line.tex->w);
-		else
-			draw_line(s_args, &line, s_mlx, line.tex_x * line.tex->w);
+		drawing_params(s_args, s_mlx, &ray, &line);
 		++line.x;
 		ray.fov += s_args->rays_density;
 	}
@@ -240,11 +257,11 @@ int				cub_init(char **input, int save)
 	fill_map(&s_args);
 	s_all.s_args = &s_args;
 	s_all.s_mlx = &s_mlx;
-	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
-	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
-	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
-						&s_mlx.map.size_line, &s_mlx.map.endian);
-	map(&s_args, &s_mlx);
+//	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
+//	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
+//	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
+//						&s_mlx.map.size_line, &s_mlx.map.endian);
+	//map(&s_args, &s_mlx);
 	raycast(&s_args, &s_mlx);
 	draw_minimap(&s_args, &s_mlx);
 

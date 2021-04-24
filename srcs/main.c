@@ -6,15 +6,15 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 16:33:12 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/19 20:28:46 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/23 17:47:38 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	int save;
+	int	save;
 
 	save = 0;
 	if (argc < 2 || argc == 3 || argc > 4)
