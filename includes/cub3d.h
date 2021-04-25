@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 17:48:53 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/24 22:32:48 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,13 @@ typedef struct		s_all
 
 typedef struct		s_sprite
 {
-	double length;
-	int		x[100];
-	int		y[100];
-	int		num;
+	double dist;
+	double		x;
+	double		y;
 	double tex_x;
 	double tex_y;
+	struct s_sprite *next;
+	struct s_sprite *prev;
 }					t_sprite;
 
 typedef struct		s_line

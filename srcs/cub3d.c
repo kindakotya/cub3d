@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/24 03:46:53 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/25 03:57:57 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,14 +155,14 @@ t_ray		set_ray(t_args *s_args)
 	return (ray);
 }
 
-void	set_sprite(t_sprite *sprite, t_args *s_args, t_ray *ray)
-{
-	// sprite->y = s_args->win_h - s_args->win_h * 15 /
-	// 		(ray->c * cos(ray->fov - s_args->player.aov) + 0.5) / 2;
-	sprite->length = s_args->win_h * 15 / ray->c;
-	sprite->tex_x = s_args->sprite.w * (ray->map_x - floor(ray->map_x + 0.5));
-	sprite->tex_y = s_args->sprite.w * (ray->map_y - floor(ray->map_y + 0.5));
-}
+// void	set_sprite(t_sprite *sprite, t_args *s_args, t_ray *ray)
+// {
+// 	// sprite->y = s_args->win_h - s_args->win_h * 15 /
+// 	// 		(ray->c * cos(ray->fov - s_args->player.aov) + 0.5) / 2;
+// 	sprite->length = s_args->win_h * 15 / ray->c;
+// 	sprite->tex_x = s_args->sprite.w * (ray->map_x - floor(ray->map_x + 0.5));
+// 	sprite->tex_y = s_args->sprite.w * (ray->map_y - floor(ray->map_y + 0.5));
+// }
 
 int		ray_pos(t_ray *ray, t_args *s_args)
 {
@@ -209,30 +209,123 @@ void	drawing_params(t_args *s_args, t_mlx *s_mlx, t_ray *ray, t_line *line)
 	ray->prev_y = ray->y;
 }
 
+void		sort_sprites(t_sprite **sprites)
+{
+	int is_sorted;
+	t_sprite *sprite;
+
+	is_sorted = 0;
+	sprite = *sprites;
+	while (sprite->next)
+	{
+		if ((*sprites)->next->dist > (*sprites)->dist)
+		{
+			(*sprites)->next = *sprites;
+			*sprites = sprite;
+			sort_sprites(&(*sprites)->next);
+		}
+		sprite = sprite->next;
+	}
+}
+
+t_sprite	*add_sprite(t_sprite *sprites)
+{
+	t_sprite *meow;
+
+	while (sprites->next)
+	{
+		meow = sprites;
+		sprites = sprites->next;
+		sprites->prev = meow;
+	}
+	sprites->next = malloc(sizeof(t_sprite));
+	if (sprites->next == NULL)
+		return (NULL);
+	sprites->next->next = NULL;
+	return (sprites->next);
+}
+
+t_sprite	*create_sprites()
+{
+	t_sprite *sprites;
+
+	sprites = malloc(sizeof(t_sprite));
+	if (sprites == NULL)
+		return (NULL);
+	sprites->prev = NULL;
+	sprites->next = NULL;
+	sprites->tex_x = 0;
+	return (sprites);
+}
+
+void	free_sprites(t_sprite *sprites)
+{
+	if (sprites)
+	{
+		while (sprites->next) {
+			sprites = sprites->next;
+			free(sprites->prev);
+		}
+		free(sprites);
+	}
+}
+
+int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
+{
+	t_sprite *sprite;
+
+	if (s_args->map[(int)ray->map_y][(int)ray->map_x] == '2'
+		&& ((!(*sprites)) || ((int)(*sprites)->y != (int)ray->map_y
+		&& (int)(*sprites)->x != (int)ray->map_x)))
+	{
+			if (*sprites == NULL)
+			{
+				sprite = create_sprites();
+				*sprites = sprite;
+			}
+			else
+			{
+				(*sprites)->tex_x++;
+				sprite = add_sprite(*sprites);
+			}
+			if (sprite == NULL)
+			{
+				free_sprites(*sprites);
+				return (0);
+			}
+			sprite->x = floor(ray->map_x) + 0.5;
+			sprite->y = floor(ray->map_y) + 0.5;
+			sprite->dist = sqrt(pow(s_args->player.x - sprite->x, 2) +
+			pow(s_args->player.y - sprite->y, 2));
+			sort_sprites(sprites);
+	}
+	return (1);
+}
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	t_ray ray;
 	t_line line;
-	t_sprite sprite;
+	t_sprite *sprites;
 
-	sprite.num = 0;
+	sprites = NULL;
 	add_floor_ceil(&s_mlx->img, s_args);
 	ray = set_ray(s_args);
 	line.x = 0;
 	while (line.x < s_args->win_w)
 	{
 		ray.c = 5;
-		ray.prev_x = ray.x;
-		ray.prev_y = ray.y;
 		while (!ray_pos(&ray, s_args))
 		{
 			//put_pixel(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
 			ray.c *= 1.001;
+			if (!find_sprite(&ray, s_args, &sprites))
+				ft_exit(0, s_args, s_mlx, 2);
 		}
 		drawing_params(s_args, s_mlx, &ray, &line);
 		++line.x;
 		ray.fov += s_args->rays_density;
 	}
+	free_sprites(sprites);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
 }
 

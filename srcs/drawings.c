@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 01:41:35 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/25 01:49:39 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,29 @@ unsigned int	*line_colors(t_img *img, int x, int tex_size, int line_size)
 	return (color);
 }
 
-void			draw_sprite(t_args *s_args, t_line *line, t_mlx *s_mlx)
-{
-	int i;
-	unsigned int *color;
+// void			draw_sprite(t_args *s_args, t_line *line, t_mlx *s_mlx)
+// {
+// 	int i;
+// 	unsigned int *color;
 
-	if (line->sprite.tex_x < line->sprite.tex_y)
-		color = line_colors(&s_args->sprite.img, line->sprite.tex_y,
-							s_args->sprite.h, line->sprite.length);
-	else
-		color = line_colors(&s_args->sprite.img, line->sprite.tex_x,
-							s_args->sprite.h, line->sprite.length);
-	if (color == NULL)
-		ft_exit(0, s_args, s_mlx, 2);
-	i = 0;
-	while (i < line->sprite.length)
-	{
-		// if (line->x < s_args->win_w && line->sprite.y + i < s_args->win_h)
-			// put_pixel(&s_mlx->img, line->x + s_args->side, line->sprite.y + i, color[i]);
-		++i;
-	}
-	free(color);
-	line->is_sprite = 0;
-}
+// 	if (line->sprite.tex_x < line->sprite.tex_y)
+// 		color = line_colors(&s_args->sprite.img, line->sprite.tex_y,
+// 							s_args->sprite.h, line->sprite.length);
+// 	else
+// 		color = line_colors(&s_args->sprite.img, line->sprite.tex_x,
+// 							s_args->sprite.h, line->sprite.length);
+// 	if (color == NULL)
+// 		ft_exit(0, s_args, s_mlx, 2);
+// 	i = 0;
+// 	while (i < line->sprite.length)
+// 	{
+// 		// if (line->x < s_args->win_w && line->sprite.y + i < s_args->win_h)
+// 			// put_pixel(&s_mlx->img, line->x + s_args->side, line->sprite.y + i, color[i]);
+// 		++i;
+// 	}
+// 	free(color);
+// 	line->is_sprite = 0;
+// }
 
 void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)
 {
@@ -93,8 +93,8 @@ void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)
 		++i;
 	}
 	free(color);
-	if (line->is_sprite)
-		draw_sprite(s_args, line, s_mlx);
+	// if (line->is_sprite)
+	// 	draw_sprite(s_args, line, s_mlx);
 }
 
 void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img)
