@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/25 03:57:57 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/26 03:55:42 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,50 +209,42 @@ void	drawing_params(t_args *s_args, t_mlx *s_mlx, t_ray *ray, t_line *line)
 	ray->prev_y = ray->y;
 }
 
-void		sort_sprites(t_sprite **sprites)
-{
-	int is_sorted;
-	t_sprite *sprite;
-
-	is_sorted = 0;
-	sprite = *sprites;
-	while (sprite->next)
-	{
-		if ((*sprites)->next->dist > (*sprites)->dist)
-		{
-			(*sprites)->next = *sprites;
-			*sprites = sprite;
-			sort_sprites(&(*sprites)->next);
-		}
-		sprite = sprite->next;
-	}
-}
-
-t_sprite	*add_sprite(t_sprite *sprites)
+void	push_mid(t_sprite *sprites, t_sprite *sprite)
 {
 	t_sprite *meow;
 
-	while (sprites->next)
-	{
-		meow = sprites;
+	meow = sprites;
+	while (meow && sprite->dist < meow->dist)
+		meow = meow->next;
+	while (sprites->next != meow)
 		sprites = sprites->next;
-		sprites->prev = meow;
-	}
-	sprites->next = malloc(sizeof(t_sprite));
-	if (sprites->next == NULL)
-		return (NULL);
-	sprites->next->next = NULL;
-	return (sprites->next);
+	sprites->next = sprite;
+	sprite->next = meow;
 }
 
-t_sprite	*create_sprites()
+void	add_sprite(t_sprite **sprites, t_sprite *sprite)
+{
+	if (*sprites == NULL)
+	{
+		*sprites = sprite;
+		return ;
+	}
+	if (sprite->dist > (*sprites)->dist)
+	{
+		sprite->next = *sprites;
+		*sprites = sprite;
+		return ;
+	}
+	push_mid(*sprites, sprite);
+}
+
+t_sprite	*create_sprite()
 {
 	t_sprite *sprites;
 
 	sprites = malloc(sizeof(t_sprite));
 	if (sprites == NULL)
 		return (NULL);
-	sprites->prev = NULL;
 	sprites->next = NULL;
 	sprites->tex_x = 0;
 	return (sprites);
@@ -260,47 +252,64 @@ t_sprite	*create_sprites()
 
 void	free_sprites(t_sprite *sprites)
 {
+	t_sprite *prev_sprite;
+
 	if (sprites)
 	{
-		while (sprites->next) {
+		while (sprites->next)
+		{
+			prev_sprite = sprites;
 			sprites = sprites->next;
-			free(sprites->prev);
+			free(prev_sprite);
 		}
 		free(sprites);
 	}
 }
 
-int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
+int	check_sprite(t_ray *ray, t_sprite *sprites, double *x, double *y)
 {
-	t_sprite *sprite;
-
-	if (s_args->map[(int)ray->map_y][(int)ray->map_x] == '2'
-		&& ((!(*sprites)) || ((int)(*sprites)->y != (int)ray->map_y
-		&& (int)(*sprites)->x != (int)ray->map_x)))
+	*y = floor(ray->map_y) + 0.5;
+	*x = floor(ray->map_x) + 0.5;
+	if (!sprites)
+		return (1);
+	while (sprites)
 	{
-			if (*sprites == NULL)
-			{
-				sprite = create_sprites();
-				*sprites = sprite;
-			}
-			else
-			{
-				(*sprites)->tex_x++;
-				sprite = add_sprite(*sprites);
-			}
-			if (sprite == NULL)
-			{
-				free_sprites(*sprites);
-				return (0);
-			}
-			sprite->x = floor(ray->map_x) + 0.5;
-			sprite->y = floor(ray->map_y) + 0.5;
-			sprite->dist = sqrt(pow(s_args->player.x - sprite->x, 2) +
-			pow(s_args->player.y - sprite->y, 2));
-			sort_sprites(sprites);
+		if (fabs((sprites)->y - *y) < 0.1
+			&& fabs((sprites)->x - *x) < 0.1)
+			return (0);
+		sprites = sprites->next;
 	}
 	return (1);
 }
+
+int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
+{
+	t_sprite *sprite;
+	double x;
+	double y;
+
+	if (s_args->map[(int)ray->map_y][(int)ray->map_x] == '2'
+	&& check_sprite(ray, *sprites, &x, &y))
+	{
+		sprite = create_sprite();
+		if (sprite == NULL)
+		{
+			free_sprites(*sprites);
+			return (0);
+		}
+		sprite->x = x;
+		sprite->y = y;
+		sprite->dist = sqrt(pow(s_args->player.x - sprite->x, 2) +
+		pow(s_args->player.y - sprite->y, 2));
+		add_sprite(sprites, sprite);
+		(*sprites)->tex_x++;
+	}
+	return (1);
+}
+
+void	draw_sprites()
+{}
+
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	t_ray ray;
@@ -317,7 +326,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 		while (!ray_pos(&ray, s_args))
 		{
 			//put_pixel(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
-			ray.c *= 1.001;
+			ray.c *= 1.00102;
 			if (!find_sprite(&ray, s_args, &sprites))
 				ft_exit(0, s_args, s_mlx, 2);
 		}
@@ -325,6 +334,7 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 		++line.x;
 		ray.fov += s_args->rays_density;
 	}
+	draw_sprites();
 	free_sprites(sprites);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
 }
