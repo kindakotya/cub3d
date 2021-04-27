@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 16:33:12 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 17:47:38 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/26 19:27:19 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 int	main(int argc, char **argv)
 {
-	int	save;
-
-	save = 0;
 	if (argc < 2 || argc == 3 || argc > 4)
 	{
 		perror("Wrong input params.\n");
@@ -33,6 +30,8 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (argc == 4)
-		save = 1;
-	cub_init(argv, save);
+		cub_init(argv, 1);
+	else
+		cub_init(argv, 0);
+	return (0);
 }

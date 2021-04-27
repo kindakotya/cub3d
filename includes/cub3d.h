@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/26 03:07:21 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/27 03:46:19 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,12 @@ typedef struct		s_sprite
 	double dist;
 	double		x;
 	double		y;
+	int			size;
 	double tex_x;
 	double tex_y;
+	int			win_x;
+	int			h;
+	int			w;
 	struct s_sprite *next;
 }					t_sprite;
 
@@ -169,6 +173,8 @@ void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img);
 void		put_pixel(t_img *img, int x, int y, int color);
 int			draw_minimap(t_args *s_args, t_mlx *s_mlx);
 void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x);
+unsigned int	*line_colors(t_img *img, int x, int tex_size, int line_size);
+unsigned int	take_color(t_img *img, int x, int y);
 // keyhooks
 int			key_pressed(int keycode, t_all *s_hook);
 // parcer
