@@ -6,13 +6,13 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/15 17:08:52 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/22 03:14:22 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/28 19:59:51 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void write_four_bites(unsigned char *point, int value)
+static void	write_four_bites(unsigned char *point, int value)
 {
 	point[0] = (unsigned char)(value);
 	point[1] = (unsigned char)(value >> 8);
@@ -20,11 +20,11 @@ static void write_four_bites(unsigned char *point, int value)
 	point[3] = (unsigned char)(value >> 24);
 }
 
-int		write_header(int fd, t_args *s_args)//, t_mlx *s_mlx)
+int	write_header(int fd, t_args *s_args)
 {
-	int i;
-	int size;
-	unsigned char header[54];
+	int				i;
+	int				size;
+	unsigned char	header[54];
 
 	i = 0;
 	while (i < 54)
@@ -37,16 +37,16 @@ int		write_header(int fd, t_args *s_args)//, t_mlx *s_mlx)
 	header[14] = 40;
 	write_four_bites(header + 18, s_args->win_w);
 	write_four_bites(header + 22, s_args->win_h);
-	header[27] = 1;
+	header[26] = 1;
 	header[28] = 24;
 	return (write(fd, header, 54));
 }
 
-static void write_array(int fd, t_args *s_args, t_mlx *s_mlx)
+static void	write_array(int fd, t_args *s_args, t_mlx *s_mlx)
 {
-	int y;
-	int x;
-	unsigned int color;
+	int				y;
+	int				x;
+	unsigned int	color;
 
 	y = s_args->win_h - 1;
 	while (y >= 0)
@@ -65,7 +65,7 @@ static void write_array(int fd, t_args *s_args, t_mlx *s_mlx)
 
 void	screenshot(t_args *s_args, t_mlx *s_mlx)
 {
-	int fd;
+	int	fd;
 
 	if (!*s_args->screenshot)
 	{
@@ -73,11 +73,10 @@ void	screenshot(t_args *s_args, t_mlx *s_mlx)
 		return ;
 	}
 	fd = 0;
-	fd = open(s_args->screenshot,
-				O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 755);
+	fd = open(s_args->screenshot, O_CREAT | O_WRONLY | O_TRUNC | O_APPEND);
 	if (fd == -1)
 		ft_exit(0, s_args, s_mlx, 20);
-	if (write_header(fd , s_args) < 0)
+	if (write_header(fd, s_args) < 0)
 		ft_exit(fd, s_args, s_mlx, 21);
 	write_array(fd, s_args, s_mlx);
 	close(fd);

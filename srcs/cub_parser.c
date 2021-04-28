@@ -6,13 +6,13 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 16:44:34 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 01:46:16 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/28 20:03:52 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int		parce_cub(t_args *s_args, char *line, char check[8])
+static int	parce_cub(t_args *s_args, char *line, char check[8])
 {
 	if (ft_strnstr(line, "R ", 2))
 		check[0] = get_res(line + 1, s_args);
@@ -35,9 +35,9 @@ static int		parce_cub(t_args *s_args, char *line, char check[8])
 	return (1);
 }
 
-static int		check_all(int fd, t_args *s_args, char check[8])
+static int	check_all(int fd, t_args *s_args, char check[8])
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (check[0] == -1)
@@ -57,17 +57,19 @@ static int		check_all(int fd, t_args *s_args, char check[8])
 	if (check[7] == -1)
 		perror("Error: Ceil color is wrong.\n");
 	while (i <= 7)
+	{
 		if (check[i] == -1)
 			ft_exit(fd, s_args, 0, 2);
 		else if (!check[i++])
 			return (0);
+	}
 	return (1);
 }
 
-static int		read_file(int fd, t_args *s_args, char check[8])
+static int	read_file(int fd, t_args *s_args, char check[8])
 {
-	char *line;
-	int i;
+	char	*line;
+	int		i;
 
 	i = 1;
 	while (i == 1)
@@ -89,11 +91,11 @@ static int		read_file(int fd, t_args *s_args, char check[8])
 	return (1);
 }
 
-int				getparam(char *str, t_args *s_args)
+int	getparam(char *str, t_args *s_args)
 {
-	int fd;
-	int i;
-	char check[8];
+	int		fd;
+	int		i;
+	char	check[8];
 
 	i = 0;
 	while (i < 8)

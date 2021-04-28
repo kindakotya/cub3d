@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/16 03:51:29 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 01:48:30 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/28 21:11:10 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,9 @@ int	screen_params(t_mlx *s_mlx, t_args *s_args)
 		s_args->win_w = screen_size[0];
 	if (s_args->win_h < s_args->map_h || s_args->win_h > screen_size[1])
 		s_args->win_h = screen_size[1] - screen_size[1] / 10;
-
-	if ((s_args->win = malloc((s_args->win_h + 1) *sizeof(char*))) == NULL)
-		ft_exit(0, s_args, s_mlx, 2);
-	s_args->win[s_args->win_h] = NULL;
-	while (i < s_args->win_h)
-		if ((s_args->win[i++] = 
-		ft_calloc((s_args->win_w + 1), sizeof(char))) == NULL)
-			ft_exit(0, s_args, s_mlx, 2);
-
 	s_args->rays_density = M_PI / 3 / s_args->win_w;
-	s_args->side = ft_min(s_args->win_h, s_args->win_w) /
-					ft_max(s_args->map_h, s_args->map_w) - 1;
+	s_args->side = s_args->win_w / s_args->win_h;//ft_min(s_args->win_h, s_args->win_w) /
+					//ft_max(s_args->map_h, s_args->map_w);
 	if (s_args->win_h < s_args->win_w)
 		return (s_args->win_h / 5);
 	else

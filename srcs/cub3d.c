@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/28 02:54:00 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:14:16 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,52 +50,6 @@ static void		clear_args(t_args *s_args)
 	s_args->map_w = 0;
 }
 
-void		map_element(t_args *s_args, int side, int x, int y)
-{
-	int i;
-	int j;
-	int win_x;
-	int win_y;
-
-	i = 0;
-	win_x = x * side;//(s_args->win_w / s_args->map_w - 1);
-	win_y = y * side;
-	while (i < side)
-	{
-		j = 0;
-		while (j < side)
-		{
-			if (win_x + i < ft_min(s_args->win_h, s_args->win_w) && 
-			win_y + j < ft_min(s_args->win_h, s_args->win_w))
-			{
-				s_args->win[win_y + j][win_x + i] = s_args->map[y][x];
-			}
-			++j;
-		}
-		++i;
-	}
-}
-void		fill_map(t_args *s_args)
-{
-	int x;
-	int y;
-
-	y = 0;
-	while (s_args->map[y])
-	{
-		x = 0;
-		while (s_args->map[y][x])
-		{
-			map_element(s_args, ft_min(s_args->win_h, s_args->win_w) / 
-				ft_max(s_args->map_w, s_args->map_h) - 1, x, y);
-			++x;
-		}
-		++y;
-	}
-}
-
-
-
 t_sqr 		fill_sqr(int x, int y, int side, int color)
 {
 	t_sqr s_sqr;
@@ -105,8 +59,6 @@ t_sqr 		fill_sqr(int x, int y, int side, int color)
 	s_sqr.color = color;
 	return (s_sqr);
 }
-
-
 
 void	add_floor_ceil(t_img *img, t_args *s_args)
 {
@@ -130,13 +82,13 @@ void	add_floor_ceil(t_img *img, t_args *s_args)
 
 void		fill_line(t_line *line, t_args *s_args, t_ray *ray, t_tex *tex)
 {
-	line->y = s_args->win_h / 2 - s_args->win_h * 15 /
-			(ray->c * cos(ray->fov - s_args->player.aov)) / 2;
-	line->length = s_args->win_h * 15 /
+	line->y = s_args->win_h / 2 - s_args->win_h /
+			(ray->c * cos(ray->fov - s_args->player.aov)) / 2;// * (float)s_args->win_w/(float)s_args->win_h;
+	line->length = s_args->win_h /
 				(ray->c * cos(ray->fov - s_args->player.aov));
 	line->tex = tex;
-	line->tex_x = ray->map_x - floor(ray->map_x + 0.5);
-	line->tex_y = ray->map_y - floor(ray->map_y + 0.5);
+	line->tex_x = ray->x - floor(ray->x + 0.5);
+	line->tex_y = ray->y - floor(ray->y + 0.5);
 }
 
 t_ray		set_ray(t_args *s_args)
@@ -145,35 +97,22 @@ t_ray		set_ray(t_args *s_args)
 
 	ray.x = 0;
 	ray.y = 0;
-	ray.map_x = 0;
-	ray.map_y = 0;
 	ray.prev_x = 0;
 	ray.prev_y = 0;
-	ray.player.x = (s_args->player.x) * s_args->side;
-	ray.player.y = (s_args->player.y) * s_args->side;
+	ray.player.x = (s_args->player.x);
+	ray.player.y = (s_args->player.y);
 	ray.fov = s_args->player.aov - 0.52359877559;
 	ray.walls = malloc(s_args->win_w * sizeof(double));
 	return (ray);
 }
 
-// void	set_sprite(t_sprite *sprite, t_args *s_args, t_ray *ray)
-// {
-// 	// sprite->y = s_args->win_h - s_args->win_h * 15 /
-// 	// 		(ray->c * cos(ray->fov - s_args->player.aov) + 0.5) / 2;
-// 	sprite->length = s_args->win_h * 15 / ray->c;
-// 	sprite->tex_x = s_args->sprite.w * (ray->map_x - floor(ray->map_x + 0.5));
-// 	sprite->tex_y = s_args->sprite.w * (ray->map_y - floor(ray->map_y + 0.5));
-// }
-
 int		ray_pos(t_ray *ray, t_args *s_args, int x)
 {
 	ray->x = ray->player.x + ray->c * cos(ray->fov);
 	ray->y = ray->player.y + ray->c * sin(ray->fov);
-	ray->map_x = ray->x / s_args->side;
-	ray->map_y = ray->y / s_args->side;
 	if (ray->x < 0 || ray->y < 0 || 
-		ray->y >= s_args->win_h || ray->x >= s_args->win_w ||
-		s_args->map[(int)ray->map_y][(int)ray->map_x] == '1')
+		ray->y >= s_args->map_h || ray->x >= s_args->map_w ||
+		s_args->map[(int)ray->y][(int)ray->x] == '1')
 		{
 			ray->walls[x] = ray->c;
 			return (1);
@@ -264,8 +203,8 @@ void	free_sprites(t_sprite *sprites)
 
 int	check_sprite(t_ray *ray, t_sprite *sprites, double *x, double *y)
 {
-	*y = floor(ray->map_y) + 0.5;
-	*x = floor(ray->map_x) + 0.5;
+	*y = floor(ray->y) + 0.5;
+	*x = floor(ray->x) + 0.5;
 	if (!sprites)
 		return (1);
 	while (sprites)
@@ -284,7 +223,7 @@ int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
 	double x;
 	double y;
 
-	if (s_args->map[(int)ray->map_y][(int)ray->map_x] == '2'
+	if (s_args->map[(int)ray->y][(int)ray->x] == '2'
 	&& check_sprite(ray, *sprites, &x, &y))
 	{
 		sprite = create_sprite();
@@ -297,11 +236,11 @@ int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
 		sprite->y = y;
 		sprite->dist = sqrt(pow(s_args->player.x - sprite->x, 2) +
 		pow(s_args->player.y - sprite->y, 2));
-		sprite->size = s_args->win_h / sprite->dist / 2;
+		sprite->size = s_args->win_h / sprite->dist;
 		sprite->dir = atan2(sprite->y - s_args->player.y, sprite->x - s_args->player.x);
 		while (sprite->dir - s_args->player.aov > M_PI) sprite->dir -= 6.28318530718;
 		while (sprite->dir - s_args->player.aov < -M_PI) sprite->dir += 6.28318530718;
-		sprite->w = (sprite->dir - s_args->player.aov)/M_PI*3*s_args->win_w + s_args->win_w/2 - sprite->size / 2;
+		sprite->w = (sprite->dir - s_args->player.aov)/1.0471975512*s_args->win_w + s_args->win_w/2 - sprite->size / 2;
 		sprite->h = s_args->win_h / 2 - sprite->size / 2;
 		add_sprite(sprites, sprite);
 		(*sprites)->tex_x++;
@@ -315,7 +254,6 @@ void	draw_sprites(t_args *s_args, t_mlx *s_mlx, t_sprite *sprites, t_ray *ray)
 	unsigned int color;
 	int j;
 
-	s_args->screenshot = 0;
 	if (sprites == NULL)
 		return ;
 	while (sprites)
@@ -323,13 +261,12 @@ void	draw_sprites(t_args *s_args, t_mlx *s_mlx, t_sprite *sprites, t_ray *ray)
 		i = 0;
 		while (i < sprites->size)
 		{
-			//colors = line_colors(&s_args->sprite.img, s_args->sprite.w / 2 ,s_args->sprite.h, sprites->h);
 			j = 0;
 			if (sprites->h + i < s_args->win_h)
 			{
 			while (j < sprites->size)
 			{
-				if (sprites->w + j < s_args->win_w && sprites->dist < ray->walls[sprites->w + j] / s_args->side)
+				if (sprites->w + j < s_args->win_w && sprites->dist < ray->walls[sprites->w + j])// / s_args->side)
 				{
 					color = take_color(&s_args->sprite.img, j * s_args->sprite.w / sprites->size, i * s_args->sprite.h / sprites->size);
 					if (color >> 24 == 0)
@@ -339,7 +276,6 @@ void	draw_sprites(t_args *s_args, t_mlx *s_mlx, t_sprite *sprites, t_ray *ray)
 			}
 			}
 			++i;
-			//free(colors);
 		}
 		sprites = sprites->next;
 	}
@@ -357,11 +293,13 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	line.x = 0;
 	while (line.x < s_args->win_w)
 	{
-		ray.c = 5;
+		ray.c = 0.1;
 		while (!ray_pos(&ray, s_args, line.x))
 		{
-			//put_pixel(&s_mlx->map, ray.x, ray.y, 0x00FFFF00);
-			ray.c *= 1.00102;
+			if (ray.c < 1)
+				ray.c += 0.011;
+			else
+				ray.c = pow(ray.c, 1.5);
 			if (!find_sprite(&ray, s_args, &sprites))
 				ft_exit(0, s_args, s_mlx, 2);
 		}
@@ -370,8 +308,9 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 		ray.fov += s_args->rays_density;
 	}
 	draw_sprites(s_args, s_mlx, sprites, &ray);
-	free_sprites(sprites);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
+	free(ray.walls);
+	free_sprites(sprites);
 }
 
 int			red_cross(t_all *s_all)
@@ -391,19 +330,10 @@ int				cub_init(char **input, int save)
 	if (save)
 		s_args.screenshot = input[3];
 	s_mlx = start_mlx(&s_args);
-
-	fill_map(&s_args);
 	s_all.s_args = &s_args;
 	s_all.s_mlx = &s_mlx;
-//	s_mlx.winmap = mlx_new_window(s_mlx.mlx, s_args.win_w, s_args.win_h, "map");
-//	s_mlx.map.img = mlx_new_image(s_mlx.mlx, s_args.win_w, s_args.win_h);
-//	s_mlx.map.addr = mlx_get_data_addr(s_mlx.map.img, &s_mlx.map.bits_per_pixel,
-//						&s_mlx.map.size_line, &s_mlx.map.endian);
-	//map(&s_args, &s_mlx);
 	raycast(&s_args, &s_mlx);
 	draw_minimap(&s_args, &s_mlx);
-
-
 	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_mlx.img.img, 0, 0);
 	mlx_hook(s_mlx.win, 2, 1, &key_pressed, &s_all);
 	mlx_hook(s_mlx.win, 17, 0, &red_cross, &s_all);

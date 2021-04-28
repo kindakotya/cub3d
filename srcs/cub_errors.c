@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 16:17:47 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 01:28:54 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/28 19:55:30 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	parcer_errors(int err_no)
 		perror("Map is not valid.\n");
 	else if (err_no == 9)
 		perror("File is not valid.\n");
-	// else if (err_no == 10)
 }
 
 void	mlx_list(int err_no)
@@ -63,6 +62,5 @@ int	display_error(int err_no)
 		parcer_errors(err_no);
 	else if (err_no <= 23)
 		mlx_list(err_no);
-	// else if (err_no <= 30)
 	return (err_no);
 }
