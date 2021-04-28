@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:10:33 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/27 03:46:19 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/28 02:24:29 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct		s_ray
 	double prev_y;
 	double c;
 	double fov;
+	double *walls;
 	double map_x;
 	double map_y;
 	t_player player;
@@ -142,6 +143,7 @@ typedef struct		s_sprite
 	int			win_x;
 	int			h;
 	int			w;
+	double		dir;
 	struct s_sprite *next;
 }					t_sprite;
 
