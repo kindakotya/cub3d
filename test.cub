@@ -1,7 +1,7 @@
 
 
 NO /Users/gmayweat/Desktop/cub3d/textures/van.xpm
-R 2540 1440
+R 9999 9999
 
 
 WE /Users/gmayweat/Desktop/cub3d/textures/WALL10.xpm
@@ -12,7 +12,7 @@ S /Users/gmayweat/Desktop/cub3d/textures/sprite.xpm
 
 F 255,255,255
 
-C 225,30,0
+C 225,30,0   
 SO /Users/gmayweat/Desktop/cub3d/textures/WALL2.xpm
 
         1111111111111111111111111

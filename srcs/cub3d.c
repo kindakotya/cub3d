@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:45:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/28 23:14:16 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/29 02:44:18 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,8 @@ int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
 		sprite->y = y;
 		sprite->dist = sqrt(pow(s_args->player.x - sprite->x, 2) +
 		pow(s_args->player.y - sprite->y, 2));
+		if (sprite->dist > 0)
+		{
 		sprite->size = s_args->win_h / sprite->dist;
 		sprite->dir = atan2(sprite->y - s_args->player.y, sprite->x - s_args->player.x);
 		while (sprite->dir - s_args->player.aov > M_PI) sprite->dir -= 6.28318530718;
@@ -244,6 +246,9 @@ int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
 		sprite->h = s_args->win_h / 2 - sprite->size / 2;
 		add_sprite(sprites, sprite);
 		(*sprites)->tex_x++;
+		}
+		else
+			free(sprite);
 	}
 	return (1);
 }
@@ -281,6 +286,37 @@ void	draw_sprites(t_args *s_args, t_mlx *s_mlx, t_sprite *sprites, t_ray *ray)
 	}
 }
 
+double min(double *arr, int size)
+{
+	double n;
+	int i;
+
+	i = 0;
+	n = arr[0];
+	while (i < size)
+	{
+		if (n < arr[i])
+			n = arr[i];
+		i++;
+	}
+	return (n);
+}
+double max(double *arr, int size)
+{
+	double n;
+	int i;
+
+	i = 0;
+	n = arr[0];
+	while (i < size)
+	{
+		if (n > arr[i])
+			n = arr[i];
+		i++;
+	}
+	return (n);
+}
+
 void			raycast(t_args *s_args, t_mlx *s_mlx)
 {
 	t_ray ray;
@@ -291,17 +327,19 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	add_floor_ceil(&s_mlx->img, s_args);
 	ray = set_ray(s_args);
 	line.x = 0;
+	int i = 0;
 	while (line.x < s_args->win_w)
 	{
 		ray.c = 0.1;
 		while (!ray_pos(&ray, s_args, line.x))
 		{
-			if (ray.c < 1)
-				ray.c += 0.011;
+			if (ray.c < 4)
+				ray.c *= 1.0005;
 			else
-				ray.c = pow(ray.c, 1.5);
+				ray.c += 0.003;
 			if (!find_sprite(&ray, s_args, &sprites))
 				ft_exit(0, s_args, s_mlx, 2);
+			++i;
 		}
 		drawing_params(s_args, s_mlx, &ray, &line);
 		++line.x;
@@ -309,6 +347,9 @@ void			raycast(t_args *s_args, t_mlx *s_mlx)
 	}
 	draw_sprites(s_args, s_mlx, sprites, &ray);
 	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->img.img, 0, 0);
+
+	printf("%f\t%f\n", min(ray.walls, s_args->win_w), max(ray.walls, s_args->win_w));
+	printf("%d\n", i);
 	free(ray.walls);
 	free_sprites(sprites);
 }

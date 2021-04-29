@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:15 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 17:45:19 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/29 02:57:45 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,29 +79,36 @@ int		get_path(char **path, char *line)
 	return (1);
 }
 
-int		get_color(char *line, unsigned int *color)
+int get_one_color(char **line, unsigned int *rgb, int bit)
 {
-	skip_spaces(&line);
-	if (!ft_isdigit(*line))
+	int color;
+
+	skip_spaces(line);
+	if (!ft_isdigit(**line))
 		return (-1);
-	*color += ft_atoi(line) << 16;
-	skip_numbers(&line);
-	line = ft_strnstr(line, ",", 1);
-	if (line == NULL)
+	color = ft_atoi(*line);
+	if (color < 0 || color > 255)
+		return (0);
+	*rgb += color << bit;
+	skip_numbers(line);
+	if (bit == 0)
+		return (1);
+	*line = ft_strnstr(*line, ",", 1);
+	if (*line == NULL)
+		return (0);
+	++(*line);
+	return (1);
+}
+
+int		get_color(char *line, unsigned int *rgb)
+{
+	if (!get_one_color(&line, rgb, 16))
 		return (-1);
-	++line;
-	skip_spaces(&line);
-	if (!ft_isdigit(*line))
+	if (!get_one_color(&line, rgb, 8))
 		return (-1);
-	*color += ft_atoi(line) << 8;
-	skip_numbers(&line);
-	line = ft_strnstr(line, ",", 1);
-	if (line == NULL)
+	if (!get_one_color(&line, rgb, 0))
 		return (-1);
-	++line;
-	skip_spaces(&line);
-	if (!ft_isdigit(*line))
+	if (*line != '\0')
 		return (-1);
-	*color += ft_atoi(line);
 	return (1);
 }

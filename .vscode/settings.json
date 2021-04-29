@@ -30,6 +30,7 @@
         "utility": "cpp",
         "vector": "cpp",
         "complex": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "ostream": "c"
     }
 }

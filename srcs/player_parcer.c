@@ -6,14 +6,16 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:24 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/21 03:27:22 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/29 03:18:16 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int		set_pos(int c, t_player *player, int y, int x)
+static int	set_pos(int c, t_player *player, int y, int x)
 {
+	if (player->x)
+		player->x = -1;
 	if (is_side_of_world(c))
 	{
 		player->x = x + 0.5;
@@ -35,7 +37,7 @@ static void		set_aov(t_player *player, char cp)
 		player->aov = M_PI;
 }
 
-t_player		find_player(t_args *s_args)
+t_player	find_player(t_args *s_args)
 {
 	int			i;
 	int			j;

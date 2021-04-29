@@ -6,61 +6,83 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 16:17:47 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/28 19:55:30 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/29 03:24:54 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	parcer_errors(int err_no)
+static void	parcer_list1(int err_no)
 {
 	if (err_no == 3)
-		perror("Can't open file, friend.\n");
+		write(1, "Error: Can't open file, friend.\n", 33);
 	else if (err_no == 5)
-		perror("Can't read from file.\n");
+		write(1, "Error: Can't read from file.\n", 30);
 	else if (err_no == 6)
-		perror("Map too small.");
+		write(1, "Error: Map too small.\n", 23);
 	else if (err_no == 7)
-		perror("There is no player on map.\n");
+		write(1, "Error: There is no player on map.\n", 35);
 	else if (err_no == 8)
-		perror("Map is not valid.\n");
+		write(1, "Error: Map is not valid.\n", 26);
 	else if (err_no == 9)
-		perror("File is not valid.\n");
+		write(1, "Error: File is not valid.\n", 27);
 }
 
-void	mlx_list(int err_no)
+static void	parcer_list2(int err_no)
+{
+	if (err_no == 24)
+		write(1, "Error: Resolution is wrong.\n", 29);
+	if (err_no == 25)
+		write(1, "Error: Path to the north texture is wrong.\n", 44);
+	if (err_no == 26)
+		write(1, "Error: Path to the south texture is wrong.\n", 44);
+	if (err_no == 27)
+		write(1, "Error: Path to the east texture is wrong.\n", 43);
+	if (err_no == 28)
+		write(1, "Error: Path to the west texture is wrong.\n", 43);
+	if (err_no == 29)
+		write(1, "Error: Path to the sprite is wrong.\n", 37);
+	if (err_no == 30)
+		write(1, "Error: Floor color is wrong.\n", 30);
+	if (err_no == 31)
+		write(1, "Error: Ceil color is wrong.\n", 29);
+}
+
+static void	mlx_list(int err_no)
 {
 	if (err_no == 11)
-		perror("Cant init mlx.\n");
+		write(1, "Error: Cant init mlx.\n", 23);
 	if (err_no == 12)
-		perror("Can't create window\n");
+		write(1, "Error: Can't create window\n", 28);
 	if (err_no == 13)
-		perror("Can't create image.\n");
+		write(1, "Error: Can't create image.\n", 28);
 	if (err_no == 14)
-		perror("Can't take image addr.\n");
+		write(1, "Error: Can't take image addr.\n", 31);
 	if (err_no == 15)
-		perror("Can't load north texture.\n");
+		write(1, "Error: Can't load north texture.\n", 34);
 	if (err_no == 16)
-		perror("Can't load south texture.\n");
+		write(1, "Error: Can't load south texture.\n", 34);
 	if (err_no == 17)
-		perror("Can't load east texture.\n");
+		write(1, "Error: Can't load east texture.\n", 33);
 	if (err_no == 18)
-		perror("Can't load west texture.\n");
+		write(1, "Error: Can't load west texture.\n", 33);
 	if (err_no == 19)
-		perror("Can't load sprite.\n");
+		write(1, "Error: Can't load sprite.\n", 27);
 	if (err_no == 20)
-		perror("Can't create file.\n");
+		write(1, "Error: Can't create file.\n", 27);
 	if (err_no == 21)
-		perror("Can't write to file.\n");
+		write(1, "Error: Can't write to file.\n", 29);
 }
 
 int	display_error(int err_no)
 {
 	if (err_no == 2)
-		perror("Malloc error.\n");
-	else if (err_no > 2 && err_no <= 10)
-		parcer_errors(err_no);
+		write(1, "Malloc error.\n", 15);
+	else if (err_no <= 10)
+		parcer_list1(err_no);
 	else if (err_no <= 23)
 		mlx_list(err_no);
+	else if (err_no <= 35)
+		parcer_list2(err_no);
 	return (err_no);
 }

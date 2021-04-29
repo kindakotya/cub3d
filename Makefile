@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/28 21:55:07 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/29 03:12:52 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,11 +56,11 @@ libmlx.dylib:
 
 $(NAME): $(LIBFT) libmlx.dylib $(OBJDIR) $(OBJS)
 	rm -rf meow.bmp
-	clang -g -O3 -Iincludes -Ilibft -framework OpenGL -framework AppKit -Wall -Wextra -Werror\
+	clang -g  -Iincludes -Ilibft -framework OpenGL -framework AppKit -Wall -Wextra -Werror\
 		-o $(NAME) $(OBJSPATH) libft/libft.a libmlx.dylib
 
 %.o : %.c $(HEAD)
-	clang -g -Wall -Wextra -Werror -Ilibft -Iincludes -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
+	clang -g -O3 -Wall -Wextra -Werror -Ilibft -Iincludes -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
