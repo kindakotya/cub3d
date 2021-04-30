@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 16:17:47 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/29 03:24:54 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/29 19:39:52 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static void	parcer_list1(int err_no)
 	if (err_no == 3)
 		write(1, "Error: Can't open file, friend.\n", 33);
 	else if (err_no == 5)
-		write(1, "Error: Can't read from file.\n", 30);
+		write(1, "Error: Can't read map from file.\n", 30);
 	else if (err_no == 6)
 		write(1, "Error: Map too small.\n", 23);
 	else if (err_no == 7)
-		write(1, "Error: There is no player on map.\n", 35);
+		write(1, "Error: There is no player or two players on map.\n", 50);
 	else if (err_no == 8)
 		write(1, "Error: Map is not valid.\n", 26);
 	else if (err_no == 9)
@@ -46,6 +46,8 @@ static void	parcer_list2(int err_no)
 		write(1, "Error: Floor color is wrong.\n", 30);
 	if (err_no == 31)
 		write(1, "Error: Ceil color is wrong.\n", 29);
+	if (err_no == 32)
+		write(1, "Error: Map too small.\n", 23);
 }
 
 static void	mlx_list(int err_no)

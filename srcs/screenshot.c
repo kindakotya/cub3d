@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/15 17:08:52 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/28 19:59:51 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 01:13:00 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	write_four_bites(unsigned char *point, int value)
 	point[3] = (unsigned char)(value >> 24);
 }
 
-int	write_header(int fd, t_args *s_args)
+static int	write_header(int fd, t_args *s_args)
 {
 	int				i;
 	int				size;
@@ -69,7 +69,7 @@ void	screenshot(t_args *s_args, t_mlx *s_mlx)
 
 	if (!*s_args->screenshot)
 	{
-		perror("You did screenshot earlier.\n");
+		write(1, "You did screenshot earlier.\n", 29);
 		return ;
 	}
 	fd = 0;
@@ -79,6 +79,8 @@ void	screenshot(t_args *s_args, t_mlx *s_mlx)
 	if (write_header(fd, s_args) < 0)
 		ft_exit(fd, s_args, s_mlx, 21);
 	write_array(fd, s_args, s_mlx);
+	if (ft_strnstr(s_args->screenshot, "first_rendered_image.bmp", 25))
+		ft_exit(fd, s_args, s_mlx, 0);
 	close(fd);
 	s_args->screenshot = "\0";
 }

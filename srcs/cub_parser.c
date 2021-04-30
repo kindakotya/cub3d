@@ -60,7 +60,7 @@ static int	read_file(int fd, t_args *s_args, char check[8])
 	{
 		i = get_next_line(fd, &line);
 		if (i == -1 || i == 0)
-			ft_exit(fd, s_args, 0, 4);
+			ft_exit(fd, s_args, 0, 5);
 		if (check_all(fd, s_args, check) && *line)
 			break ;
 		if (*line)

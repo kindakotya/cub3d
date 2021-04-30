@@ -6,19 +6,30 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:06 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/23 01:49:05 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 02:49:37 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void		set_img_black(t_img *img, int w, int h)
+static t_sqr	fill_sqr(int x, int y, int side, int color)
 {
-	int i;
-	int j;
+	t_sqr	sqr;
+
+	sqr.x = x;
+	sqr.y = y;
+	sqr.side = side;
+	sqr.color = color;
+	return (sqr);
+}
+
+static void	set_img_black(t_img *img, int w, int h)
+{
+	int	i;
+	int	j;
 
 	i = 0;
-	while(i < h)
+	while (i < h)
 	{
 		j = 0;
 		while (j < w)
@@ -30,62 +41,61 @@ static void		set_img_black(t_img *img, int w, int h)
 	}
 }
 
-void map(t_args *s_args, t_mlx *s_mlx)
+static void	draw_sqr(t_args *s_args, t_sqr sqr, t_img *img)
 {
-	int x;
-	int y;
-//	t_sqr s_sqr;
+	int	i;
+	int	j;
 
-	y = 0;
-//	s_sqr.side = s_args->win_h / s_args->map_h - 1;
-	set_img_black(&s_mlx->map, s_args->win_w, s_args->win_h);
-	while (s_args->win[y])
-    {
-		x = 0;
-		while (s_args->win[y][x])
+	i = 0;
+	while (i < sqr.side)
+	{
+		j = 0;
+		while (j < sqr.side)
 		{
-			if (s_args->win[y][x] == '1')
-				put_pixel(&s_mlx->map, x, y, 0x0000FF00);
-				// draw_sqr(s_args, fill_sqr(
-				// (x) * s_sqr.side,
-				// (y) * s_sqr.side , s_sqr.side,
-				// 0x00FF00FF), &s_mlx->map);
-			++x;
+			if (sqr.x + i < s_args->win_w && sqr.y + j < s_args->win_h)
+			{
+				put_pixel(img, sqr.x + i, sqr.y + j, sqr.color);
+			}
+			++j;
 		}
-		++y;
-    }
-	//draw_sqr(s_args, fill_sqr(x * (s_args->win_h / s_args->map_h - 1),
-	//y * (s_args->win_h / s_args->map_h - 1), 5, 1000), &s_mlx->minimap);
-	mlx_put_image_to_window(s_mlx->mlx, s_mlx->winmap, s_mlx->map.img, 0, 0);
+		++i;
+	}
 }
 
-int				draw_minimap(t_args *s_args, t_mlx *s_mlx)
+static void	draw_minimap(t_args *s_args, t_mlx *s_mlx, t_sqr *sqr)
 {
-	int		x;
-	int		y;
-	t_sqr	s_sqr;
+	int	x;
+	int	y;
 
-	s_sqr.side = s_args->win_h / 100;
-	set_img_black(&s_mlx->minimap, s_mlx->m_size, s_mlx->m_size);
 	y = 0;
 	while (s_args->map[y])
 	{
 		x = 0;
 		while (s_args->map[y][x])
 		{
-			if (s_args->map[y][x] == '1' && fabs(s_args->player.x - x) < 10 && 
-			fabs(s_args->player.y - y) < 10)
+			if (s_args->map[y][x] == '1' && fabs(s_args->player.x - x) < 10
+				&& fabs(s_args->player.y - y) < 10)
 				draw_sqr(s_args, fill_sqr(
-				(x - s_args->player.x + 10) * s_sqr.side, 
-				(y - s_args->player.y + 10) * s_sqr.side , s_sqr.side, 
-				0x00FF00FF), &s_mlx->minimap);
+						(x - s_args->player.x + 10) * sqr->side,
+						(y - s_args->player.y + 10) * sqr->side, sqr->side,
+						0x00FF00FF), &s_mlx->minimap);
 			++x;
 		}
 		++y;
 	}
-	draw_sqr(s_args, fill_sqr(s_args->win_h / 10 - s_sqr.side * 1.5, 
-	s_args->win_h / 10 - s_sqr.side * 1.5, s_sqr.side / 2, 0x00FFFFFF), &s_mlx->minimap);
-	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->minimap.img, 
-	s_args->win_w - s_mlx->m_size, s_mlx->m_size * 4);
+}
+
+int	minimap(t_args *s_args, t_mlx *s_mlx)
+{
+	t_sqr	sqr;
+
+	sqr.side = s_mlx->m_size / 20;
+	set_img_black(&s_mlx->minimap, s_mlx->m_size, s_mlx->m_size);
+	draw_minimap(s_args, s_mlx, &sqr);
+	draw_sqr(s_args, fill_sqr(s_mlx->m_size / 2 - sqr.side * 6 / 5,
+			s_mlx->m_size / 2 - sqr.side * 6 / 5, sqr.side / 2,
+			0x00FFFFFF), &s_mlx->minimap);
+	mlx_put_image_to_window(s_mlx->mlx, s_mlx->win, s_mlx->minimap.img,
+		s_args->win_w - s_mlx->m_size, s_mlx->m_size * 4);
 	return (1);
 }

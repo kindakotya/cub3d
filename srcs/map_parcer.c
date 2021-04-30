@@ -6,29 +6,30 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:22:44 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/24 03:44:27 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 01:16:25 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	check_y(char **map, int space_x, int space_y, int walls)
+static int	check_y(char **map, int zero_x, int zero_y, int walls)
 {
-	while (space_y > 0)
+	while (map[zero_y])
 	{
-		if (!is_valid_char(map[--space_y][space_x]))
+		if (!is_valid_char(map[zero_y][zero_x]))
 			break ;
-		if (map[space_y--][space_x] == '1')
+		if (map[zero_y++][zero_x] == '1')
 		{
 			++walls;
 			break ;
 		}
 	}
-	while (map[space_y])
+	--zero_y;
+	while (zero_y > 0)
 	{
-		if (!is_valid_char(map[space_y][space_x]))
+		if (!is_valid_char(map[zero_y][zero_x]))
 			break ;
-		if (map[++space_y][space_x] == '1')
+		if (map[--zero_y][zero_x] == '1')
 		{
 			++walls;
 			break ;
@@ -39,23 +40,24 @@ static int	check_y(char **map, int space_x, int space_y, int walls)
 	return (0);
 }
 
-static int	check_x(char **map, int space_x, int space_y, int walls)
+static int	check_x(char **map, int zero_x, int zero_y, int walls)
 {
-	while (space_x > 0)
+	while (map[zero_y][zero_x])
 	{
-		if (!is_valid_char(map[space_y][space_x]))
+		if (!is_valid_char(map[zero_y][zero_x]))
 			break ;
-		if (map[space_y][--space_x] == '1')
+		if (map[zero_y][zero_x++] == '1')
 		{
 			++walls;
 			break ;
 		}
 	}
-	while (map[space_y][space_x])
+	--zero_x;
+	while (zero_x > 0)
 	{
-		if (!is_valid_char(map[space_y][space_x]))
+		if (!is_valid_char(map[zero_y][zero_x]))
 			break ;
-		if (map[space_y][++space_x] == '1')
+		if (map[zero_y][--zero_x] == '1')
 		{
 			++walls;
 			break ;
@@ -78,10 +80,12 @@ static int	check_map(t_args *s_args)
 		x = 0;
 		while (s_args->map[y][x])
 		{
+			if (!is_valid_char(s_args->map[y][x]) && s_args->map[y][x] != ' ')
+				return (0);
 			if ((s_args->map[y][x] == '0'
 				|| is_side_of_world(s_args->map[y][x]))
-				&& !check_x(s_args->map, x, y, 0)
-				&& !check_y(s_args->map, x, y, 0))
+				&& (!check_x(s_args->map, x, y, 0)
+				|| !check_y(s_args->map, x, y, 0)))
 				return (0);
 			++x;
 		}

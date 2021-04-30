@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/29 03:12:52 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/30 04:38:07 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,11 @@ SRCS =					cub3d.c\
 						screenshot.c\
 						cub_errors.c\
 						cub_mlx.c\
+						sprites_utils.c\
+						struct_clear.c\
+						draw_utils.c\
+						raycast.c\
+						sprites.c\
 						gnl/get_next_line.c\
 						gnl/get_next_line_utils.c\
 						main.c
@@ -38,6 +43,8 @@ OBJS = $(SRCS:.c=.o)
 OBJDIR = objs
 
 OBJSPATH = $(patsubst objs/gnl%, gnl%, $(addprefix objs/, $(OBJS)))
+
+FLAGS = -O3 -Wall -Wextra -Werror -Imlx -Ilibft -Iincludes
 
 vpath %.o objs
 vpath %.c srcs
@@ -55,12 +62,11 @@ libmlx.dylib:
 	cp mlx/libmlx.dylib .
 
 $(NAME): $(LIBFT) libmlx.dylib $(OBJDIR) $(OBJS)
-	rm -rf meow.bmp
-	clang -g  -Iincludes -Ilibft -framework OpenGL -framework AppKit -Wall -Wextra -Werror\
+	clang $(FLAGS) -framework OpenGL -framework AppKit\
 		-o $(NAME) $(OBJSPATH) libft/libft.a libmlx.dylib
 
 %.o : %.c $(HEAD)
-	clang -g -O3 -Wall -Wextra -Werror -Ilibft -Iincludes -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
+	clang $(FLAGS) -o $(patsubst srcs/%, objs/%, $(patsubst %.c, %.o, $<)) -c $<
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
@@ -73,6 +79,6 @@ clean:
 fclean:
 	$(MAKE) -C libft fclean
 	$(MAKE) -C mlx clean
-	rm -rf $(OBJSPATH) $(NAME) libmlx.dylib
+	rm -rf $(OBJDIR) $(OBJSPATH) $(NAME) libmlx.dylib
 
 re: fclean all

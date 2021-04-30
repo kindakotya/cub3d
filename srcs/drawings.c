@@ -6,55 +6,90 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/28 21:10:05 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 05:19:23 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	put_pixel(t_img *img, int x, int y, int color)
+void	draw_floor_ceil(t_img *img, t_args *s_args)
 {
-	char *dst;
-	if (x > 0 && y > 0)
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < s_args->win_h)
 	{
-		dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
-		*(unsigned int *) dst = color;
+		x = 0;
+		while (x < s_args->win_w)
+		{	
+			if (y < s_args->win_h / 2)
+				put_pixel(img, x++, y, s_args->floor);
+			else
+				put_pixel(img, x++, y, s_args->ceil);
+		}
+		++y;
 	}
 }
 
-unsigned int	take_color(t_img *img, int x, int y)
+void	fill_line(t_line *line, t_args *s_args, t_ray *ray, t_tex *tex)
 {
-	char *dst;
-
-	if (x >= 0 && y >= 0)
-	{
-		dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
-		return(*(unsigned int *) dst);
-	}
-	return (0);
+	line->y = s_args->win_h / 2 - s_args->win_h
+		/ (ray->c * cos(ray->fov - s_args->player.aov)) / 2;
+	line->length = s_args->win_h
+		/ (ray->c * cos(ray->fov - s_args->player.aov));
+	line->tex = tex;
+	line->tex_x = ray->x - floor(ray->x + 0.5);
+	line->tex_y = ray->y - floor(ray->y + 0.5);
 }
 
-unsigned int	*line_colors(t_img *img, int x, int tex_size, int line_size)
+static int	prev_choose_set(t_ray *ray, int flag)
 {
-	unsigned int	*color;
+	if (flag)
+	{
+		ray->prev_x[0] = ray->prev_x[1];
+		ray->prev_y[0] = ray->prev_y[1];
+		ray->prev_x[1] = ray->prev_x[2];
+		ray->prev_y[1] = ray->prev_y[2];
+		ray->prev_x[2] = ray->x;
+		ray->prev_y[2] = ray->y;
+	}
+	if (fabs(fabs(ray->prev_x[2] - ray->x) - fabs(ray->prev_y[2] - ray->y)) > 0.008)
+		return (2);
+	else
+		return (0);
+}
+
+void	drawing_params(t_args *s_args, t_mlx *s_mlx, t_ray *ray, t_line *line)
+{
+	int	prev;
+
+	prev = prev_choose_set(ray, 0);
+	if (fabs(ray->prev_x[prev] - ray->x) > fabs(ray->prev_y[prev] - ray->y))
+	{
+		if (s_args->player.y < ray->y)
+			fill_line(line, s_args, ray, &s_args->tex_no);
+		else
+			fill_line(line, s_args, ray, &s_args->tex_so);
+	}
+	else
+	{
+		if (s_args->player.x < ray->x)
+			fill_line(line, s_args, ray, &s_args->tex_we);
+		else
+			fill_line(line, s_args, ray, &s_args->tex_ea);
+	}
+	if (fabs(line->tex_x) < fabs(line->tex_y))
+		draw_line(s_args, line, s_mlx, line->tex_y * line->tex->w);
+	else
+		draw_line(s_args, line, s_mlx, line->tex_x * line->tex->w);
+	prev_choose_set(ray, 1);
+}
+
+void	draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)
+{
 	int				i;
-
-	color = malloc(line_size * sizeof(int));
-	if (color == NULL)
-		return (NULL);
-	i = 0;
-	while (i < line_size)
-	{
-		color[i] = take_color(img, x, i * tex_size / line_size);
-		++i;
-	}
-	return (color);
-}
-
-void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)
-{
-	int i;
-	unsigned int *color;
+	unsigned int	*color;
 
 	if (x < 0)
 		x += line->tex->w;
@@ -69,27 +104,4 @@ void			draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)
 		++i;
 	}
 	free(color);
-	// if (line->is_sprite)
-	// 	draw_sprite(s_args, line, s_mlx);
-}
-
-void		draw_sqr(t_args *s_args, t_sqr s_sqr, t_img *img)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < s_sqr.side)
-	{
-		j = 0;
-		while (j < s_sqr.side)
-		{
-			if (s_sqr.x + i < s_args->win_w && s_sqr.y + j < s_args->win_h)
-			{
-				put_pixel(img, s_sqr.x + i, s_sqr.y + j, s_sqr.color);
-			}
-			++j;
-		}
-		++i;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 16:51:03 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/28 19:57:35 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 05:01:50 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static void	tex_push(t_args *s_args)
 {
 	if (s_args->map[(int)s_args->player.y]
-		[(int)(s_args->player.x + 0.25)] == '1')
-		s_args->player.x -=0.1;
+		[(int)(s_args->player.x + 0.2)] == '1')
+		s_args->player.x -= 0.1;
 	if (s_args->map[(int)s_args->player.y]
-		[(int)(s_args->player.x - 0.25)] == '1')
-		s_args->player.x +=0.1;
-	if (s_args->map[(int)(s_args->player.y + 0.25)]
+		[(int)(s_args->player.x - 0.2)] == '1')
+		s_args->player.x += 0.1;
+	if (s_args->map[(int)(s_args->player.y + 0.2)]
 		[(int)s_args->player.x] == '1')
-		s_args->player.y -=0.1;
-	if (s_args->map[(int)(s_args->player.y - 0.25)]
+		s_args->player.y -= 0.1;
+	if (s_args->map[(int)(s_args->player.y - 0.2)]
 		[(int)s_args->player.x] == '1')
-		s_args->player.y +=0.1;
+		s_args->player.y += 0.1;
 }
 
 static void	step(t_args *s_args, double angle)
@@ -66,7 +66,7 @@ int	key_pressed(int keycode, t_all *s_all)
 		screenshot(s_all->s_args, s_all->s_mlx);
 	else if (keycode == KEY_ESC)
 		ft_exit(0, s_all->s_args, s_all->s_mlx, 0);
-	raycast(s_all->s_args, s_all->s_mlx);
-	draw_minimap(s_all->s_args, s_all->s_mlx);
+	raycast(s_all);
+	minimap(s_all->s_args, s_all->s_mlx);
 	return (1);
 }

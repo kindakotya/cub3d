@@ -6,20 +6,20 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:25:36 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/09 03:52:16 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 01:59:04 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int		is_valid_char(int c)
+int	is_valid_char(int c)
 {
 	if (c == '0' || c == '1' || c == '2' || is_side_of_world(c))
 		return (1);
 	return (0);
 }
 
-int		is_side_of_world(int c)
+int	is_side_of_world(int c)
 {
 	if (c == 'N' || c == 'W' || c == 'S' || c == 'E')
 		return (1);
@@ -46,12 +46,9 @@ char	**add_string(char **arr1, char *str)
 	i = 0;
 	while (arr1[i])
 		++i;
-	arr2 = malloc((i + 2) * sizeof(char*));
+	arr2 = malloc((i + 2) * sizeof(char *));
 	if (arr2 == NULL)
-	{
-		perror("Malloc error.\n");
-		return(NULL);
-	}
+		return (NULL);
 	i = 0;
 	while (arr1[i])
 	{

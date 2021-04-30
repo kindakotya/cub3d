@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:40 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/26 02:56:52 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 03:18:25 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void	ft_exit(int fd, t_args *s_args, t_mlx *s_mlx, int return_val)
 		close(fd);
 	if (s_args->map)
 		ft_free(s_args->map);
-	if (s_args->win)
-		ft_free(s_args->win);
 	if (s_mlx)
 	{
 		if (s_mlx->mlx)
