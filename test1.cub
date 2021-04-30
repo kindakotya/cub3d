@@ -1,4 +1,4 @@
-R 1024 768
+R 2 2
 
 NO /Users/gmayweat/Desktop/cub3d/textures/van.xpm
 
@@ -6,7 +6,7 @@ SO /Users/gmayweat/Desktop/cub3d/textures/WALL2.xpm
 
 WE /Users/gmayweat/Desktop/cub3d/textures/WALL10.xpm
 
-EA /Users/gmayweat/Desktop/cub3d/textures/WALL14.xpm
+EA /Users/gmayweat/Desktop/cub3d/textures/WALL35.xpm
 
 S /Users/gmayweat/Desktop/cub3d/textures/sprite.xpm
 

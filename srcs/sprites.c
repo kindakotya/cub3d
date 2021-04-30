@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 00:47:04 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/30 03:56:29 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 17:57:12 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ static int	check_sprite(t_ray *ray, t_sprite *sprites, double *x, double *y)
 
 int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
 {
-	t_sprite	*sprite;
-	double		x;
-	double		y;
+	t_sprite		*sprite;
+	double			x;
+	double			y;
 
+	if (ray->c < 1)
+		return (1);
 	if (s_args->map[(int)ray->y][(int)ray->x] == '2'
-	&& check_sprite(ray, *sprites, &x, &y))
+		&& check_sprite(ray, *sprites, &x, &y))
 	{
 		sprite = create_sprite();
 		if (sprite == NULL)
@@ -62,7 +64,7 @@ int	find_sprite(t_ray *ray, t_args *s_args, t_sprite **sprites)
 		sprite->y = y;
 		sprite->dist = sqrt(pow(s_args->player.x - sprite->x, 2)
 				+ pow(s_args->player.y - sprite->y, 2));
-		if (sprite->dist > 0)
+		if (sprite->dist > 0.2)
 			add_sprite(s_args, sprite, sprites);
 		else
 			free(sprite);
@@ -84,9 +86,8 @@ static void	sprite_line(t_all *s_all, t_sprite *sprites, t_ray *ray, int i)
 			color = take_color(&s_all->s_args->sprite.img,
 					j * s_all->s_args->sprite.w / sprites->size,
 					i * s_all->s_args->sprite.h / sprites->size);
-			if (color >> 24 == 0)
-				put_pixel(&s_all->s_mlx->img, sprites->w + j,
-					sprites->h + i, color);
+			put_pixel(&s_all->s_mlx->img, sprites->w + j,
+				sprites->h + i, color);
 		}
 		++j;
 	}

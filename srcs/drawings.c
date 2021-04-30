@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 19:19:54 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/30 05:19:23 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 17:49:39 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,17 @@ void	fill_line(t_line *line, t_args *s_args, t_ray *ray, t_tex *tex)
 	line->tex_y = ray->y - floor(ray->y + 0.5);
 }
 
-static int	prev_choose_set(t_ray *ray, int flag)
+static int	prev_choose_set(t_ray *ray, t_line *line, int flag)
 {
 	if (flag)
 	{
 		ray->prev_x[0] = ray->prev_x[1];
 		ray->prev_y[0] = ray->prev_y[1];
-		ray->prev_x[1] = ray->prev_x[2];
-		ray->prev_y[1] = ray->prev_y[2];
-		ray->prev_x[2] = ray->x;
-		ray->prev_y[2] = ray->y;
+		ray->prev_x[1] = ray->x;
+		ray->prev_y[1] = ray->y;
 	}
-	if (fabs(fabs(ray->prev_x[2] - ray->x) - fabs(ray->prev_y[2] - ray->y)) > 0.008)
-		return (2);
+	if (line->x > 2 && fabs(ray->walls[line->x - 3] - ray->c) > 1)
+		return (1);
 	else
 		return (0);
 }
@@ -64,7 +62,7 @@ void	drawing_params(t_args *s_args, t_mlx *s_mlx, t_ray *ray, t_line *line)
 {
 	int	prev;
 
-	prev = prev_choose_set(ray, 0);
+	prev = prev_choose_set(ray, line, 0);
 	if (fabs(ray->prev_x[prev] - ray->x) > fabs(ray->prev_y[prev] - ray->y))
 	{
 		if (s_args->player.y < ray->y)
@@ -83,7 +81,7 @@ void	drawing_params(t_args *s_args, t_mlx *s_mlx, t_ray *ray, t_line *line)
 		draw_line(s_args, line, s_mlx, line->tex_y * line->tex->w);
 	else
 		draw_line(s_args, line, s_mlx, line->tex_x * line->tex->w);
-	prev_choose_set(ray, 1);
+	prev_choose_set(ray, line, 1);
 }
 
 void	draw_line(t_args *s_args, t_line *line, t_mlx *s_mlx, double x)

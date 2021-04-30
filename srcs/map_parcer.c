@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 00:22:44 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/30 01:16:25 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 18:28:58 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,8 @@ void	parce_map(t_args *s_args, int fd, char **line)
 	s_args->map = malloc(2 * sizeof(char *));
 	if (s_args->map == NULL)
 	{
-		free(*line);
+		if (*line)
+			free(*line);
 		ft_exit(fd, s_args, 0, 2);
 	}
 	s_args->map[0] = *line;

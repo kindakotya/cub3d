@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 03:34:40 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/30 03:18:25 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 18:27:26 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,5 @@ void	ft_exit(int fd, t_args *s_args, t_mlx *s_mlx, int return_val)
 			destroy_textures(s_mlx->mlx, s_args);
 		close_mlx(s_mlx);
 	}
-	//getchar();
 	exit(display_error(return_val));
 }

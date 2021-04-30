@@ -6,7 +6,7 @@
 /*   By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 00:46:38 by gmayweat          #+#    #+#             */
-/*   Updated: 2021/04/30 01:53:01 by gmayweat         ###   ########.fr       */
+/*   Updated: 2021/04/30 17:56:25 by gmayweat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	put_pixel(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x > 0 && y > 0)
+	if (x > 0 && y > 0 && (color >> 24) == 0)
 	{
 		dst = img->addr + (y * img->size_line + x * (img->bits_per_pixel / 8));
 		*(unsigned int *) dst = color;

@@ -6,7 +6,7 @@
 #    By: gmayweat <gmayweat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/25 22:40:29 by gmayweat          #+#    #+#              #
-#    Updated: 2021/04/30 04:38:07 by gmayweat         ###   ########.fr        #
+#    Updated: 2021/04/30 17:40:52 by gmayweat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ $(OBJDIR):
 clean:
 	$(MAKE) -C libft clean
 	$(MAKE) -C mlx clean
-	rm -rf $(OBJDIR)
+	rm -rf $(OBJDIR) $(OBJSPATH) libmlx.dylib
 
 fclean:
 	$(MAKE) -C libft fclean
