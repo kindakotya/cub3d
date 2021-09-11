@@ -1,6 +1,6 @@
 
 
-NO /Users/gmayweat/Desktop/cub3d/textures/sprite.xpm
+NO /Users/gmayweat/Desktop/cub3d/textures/van.xpm
 R 800 600
 
 
@@ -10,9 +10,9 @@ EA /Users/gmayweat/Desktop/cub3d/textures/WALL35.xpm
 
 S /Users/gmayweat/Desktop/cub3d/textures/sprite.xpm
 
-F 255,255,0
+F 0,0,0
 
-C 225,30,0
+C 130,130,130
 SO /Users/gmayweat/Desktop/cub3d/textures/WALL2.xpm
 
         1111111111111111111111111
